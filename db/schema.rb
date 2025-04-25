@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_25_130428) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_25_132603) do
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -18,6 +18,31 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_25_130428) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "trade_logs", force: :cascade do |t|
+    t.date "trade_date"
+    t.string "product_name"
+    t.string "contract_month"
+    t.string "position"
+    t.integer "quantity"
+    t.decimal "entry_price", precision: 10, scale: 2
+    t.decimal "exit_price", precision: 10, scale: 2
+    t.decimal "gross_pnl", precision: 10, scale: 2
+    t.decimal "commission", precision: 10, scale: 2
+    t.decimal "tax", precision: 10, scale: 2
+    t.decimal "net_pnl", precision: 10, scale: 2
+    t.string "currency"
+    t.string "entry_order_id"
+    t.string "exit_order_id"
+    t.text "raw_csv_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["contract_month"], name: "index_trade_logs_on_contract_month"
+    t.index ["product_name"], name: "index_trade_logs_on_product_name"
+    t.index ["trade_date"], name: "index_trade_logs_on_trade_date"
+    t.index ["user_id"], name: "index_trade_logs_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -29,4 +54,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_25_130428) do
   end
 
   add_foreign_key "sessions", "users"
+  add_foreign_key "trade_logs", "users"
 end
