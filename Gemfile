@@ -48,6 +48,7 @@ group :development, :test do
   gem "brakeman", require: false
 
   gem "standard", require: false
+  gem "annotaterb", require: false
 end
 
 group :development do
