@@ -35,3 +35,4 @@
 
 # Ignore system files
 .DS_Store
+tags.lock
