@@ -3,7 +3,7 @@
 # Table name: trade_logs
 #
 #  id                :integer          not null, primary key
-#  trade_date        :date
+#  trade_date        :date             not null
 #  product_name      :string
 #  contract_month    :string
 #  position          :string
@@ -13,8 +13,8 @@
 #  gross_pnl         :decimal(10, 2)
 #  commission        :decimal(10, 2)
 #  tax               :decimal(10, 2)
-#  net_pnl           :decimal(10, 2)
-#  currency          :string
+#  net_pnl           :decimal(10, 2)   not null
+#  currency          :string           not null
 #  entry_order_id    :string
 #  exit_order_id     :string
 #  raw_csv_data      :text
