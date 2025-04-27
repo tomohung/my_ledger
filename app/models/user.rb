@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :trade_logs, dependent: :destroy
+  has_many :broker_accounts, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 end
