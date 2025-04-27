@@ -20,6 +20,7 @@
 #
 class BrokerAccount < ApplicationRecord
   belongs_to :user
+  has_many :trade_logs
 
   validates :name, presence: true
   validates :account_number, presence: true, uniqueness: {scope: :user_id}
