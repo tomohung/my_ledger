@@ -38,6 +38,7 @@ require "rails_helper"
 RSpec.describe TradeLog, type: :model do
   describe ".import_from_csv_string" do
     let(:user) { create(:user) }
+    let(:session) { create(:session, user: user) }
     let(:broker_account) { create(:broker_account, user: user) }
     let(:csv_data) do
       <<~CSV
@@ -51,9 +52,7 @@ RSpec.describe TradeLog, type: :model do
     end
 
     before do
-      # Set the current user and broker account for the test
-      allow_any_instance_of(TradeLog).to receive(:user).and_return(user)
-      allow_any_instance_of(TradeLog).to receive(:broker_account).and_return(broker_account)
+      Current.session = session
     end
 
     it "creates trade logs from CSV data" do
