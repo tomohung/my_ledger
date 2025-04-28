@@ -43,6 +43,9 @@ class TradeLog < ApplicationRecord
     cleaned_csv = csv_string.gsub(/="([^"]*)"/, '\1')
     csv = CSV.parse(cleaned_csv, headers: true)
 
+    success_count = 0
+    failure_count = 0
+
     csv.each do |row|
       # Skip header and summary rows
       next if row["商品名稱"] == "台幣小計"
@@ -63,6 +66,12 @@ class TradeLog < ApplicationRecord
         user_id: broker_account.user_id,
         broker_account_id: broker_account.id
       )
+      success_count += 1
+    rescue => e
+      failure_count += 1
+      Rails.logger.error("Error importing trade log #{row["委託書號"]}: #{e.message}")
     end
+
+    {success_count: success_count, failure_count: failure_count}
   end
 end
