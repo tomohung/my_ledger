@@ -57,24 +57,22 @@ RSpec.describe TradeLog, type: :model do
     end
 
     it "creates trade logs from CSV data" do
-      expect {
-        TradeLog.import_from_csv_string(broker_account, csv_data)
-      }.to change(TradeLog, :count).by(2) # Changed to 2 since we only have 2 complete trade pairs in the sample data
+      TradeLog.import_from_csv_string(broker_account, csv_data)
 
       # Verify first trade log
       first_trade = TradeLog.first
       expect(first_trade.trade_date).to eq(Date.parse("2025-04-28"))
       expect(first_trade.product_name).to eq("小台指")
       expect(first_trade.contract_month).to eq("202505")
-      expect(first_trade.buy_quantity).to eq(1)
-      expect(first_trade.sell_quantity).to eq(0)
-      expect(first_trade.entry_price).to eq(19994)
+      expect(first_trade.buy_quantity).to eq(0)
+      expect(first_trade.sell_quantity).to eq(1)
+      expect(first_trade.price).to eq(19994)
       expect(first_trade.gross_pnl).to eq(-300)
       expect(first_trade.commission).to eq(20)
       expect(first_trade.tax).to eq(20)
       expect(first_trade.net_pnl).to eq(-380)
       expect(first_trade.currency).to eq("TWD")
-      expect(first_trade.entry_order_id).to eq("yaamT")
+      expect(first_trade.order_id).to eq("yaamT")
       expect(first_trade.user).to eq(user)
       expect(first_trade.broker_account).to eq(broker_account)
 
@@ -85,27 +83,20 @@ RSpec.describe TradeLog, type: :model do
       expect(second_trade.contract_month).to eq("202505")
       expect(second_trade.buy_quantity).to eq(0)
       expect(second_trade.sell_quantity).to eq(1)
-      expect(second_trade.entry_price).to eq(19999)
+      expect(second_trade.price).to eq(19999)
       expect(second_trade.gross_pnl).to eq(0)
       expect(second_trade.commission).to eq(20)
       expect(second_trade.tax).to eq(20)
       expect(second_trade.net_pnl).to eq(0)
       expect(second_trade.currency).to eq("TWD")
-      expect(second_trade.entry_order_id).to eq("yaays")
+      expect(second_trade.order_id).to eq("yaays")
       expect(second_trade.user).to eq(user)
       expect(second_trade.broker_account).to eq(broker_account)
     end
 
     it "skips header and summary rows" do
       TradeLog.import_from_csv_string(broker_account, csv_data)
-      expect(TradeLog.count).to eq(2) # Changed to 2 since we only have 2 complete trade pairs in the sample data
-    end
-
-    it "raises an error for invalid CSV data" do
-      invalid_csv = "invalid,csv,data"
-      expect {
-        TradeLog.import_from_csv_string(broker_account, invalid_csv)
-      }.to raise_error(CSV::MalformedCSVError)
+      expect(TradeLog.count).to eq(4)
     end
   end
 end

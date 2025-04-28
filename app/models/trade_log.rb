@@ -39,30 +39,27 @@ class TradeLog < ApplicationRecord
   belongs_to :broker_account
 
   def self.import_from_csv_string(broker_account, csv_string)
-    # Parse CSV data
-    csv = CSV.parse(csv_string, headers: true)
-
-    # Process trades sequentially
-    entry_trade = nil
+    # Clean up Excel-style formatting after successful parse
+    cleaned_csv = csv_string.gsub(/="([^"]*)"/, '\1')
+    csv = CSV.parse(cleaned_csv, headers: true)
 
     csv.each do |row|
-      next if row["項次"].blank? || row["商品名稱"] == "台幣小計"
+      # Skip header and summary rows
+      next if row["商品名稱"] == "台幣小計"
 
       create!(
         trade_date: Date.parse(row["交易日期"]),
         product_name: row["商品名稱"],
         contract_month: row["年月"],
-        entry_price: row["成交價格"].to_f,
+        price: row["成交價格"].to_f,
         gross_pnl: row["損益"].to_f,
-        commission: entry_trade["手續費"].to_f + row["手續費"].to_f,
-        tax: entry_trade["交易稅"].to_f + row["交易稅"].to_f,
+        commission: row["手續費"].to_f,
+        tax: row["交易稅"].to_f,
         net_pnl: row["淨損益"].to_f,
-        currency: entry_trade["幣別"],
-        entry_order_id: entry_trade["委託書號"],
-        exit_order_id: row["委託書號"],
-        buy_quantity: entry_trade["買口數"].to_i,
+        currency: row["幣別"],
+        order_id: row["委託書號"],
+        buy_quantity: row["買口數"].to_i,
         sell_quantity: row["賣口數"].to_i,
-        raw_csv_data: csv_string,
         user_id: broker_account.user_id,
         broker_account_id: broker_account.id
       )
