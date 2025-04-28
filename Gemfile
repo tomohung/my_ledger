@@ -52,11 +52,13 @@ group :development, :test do
   gem "standard", require: false
   gem "annotaterb", require: false
   gem "rspec-rails", "~> 7.0"
+  gem "factory_bot_rails", "~> 6.4"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "ruby-lsp-rspec", require: false
 end
 
 group :test do
