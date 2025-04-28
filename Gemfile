@@ -49,6 +49,7 @@ group :development, :test do
 
   gem "standard", require: false
   gem "annotaterb", require: false
+  gem "rspec-rails", "~> 7.0"
 end
 
 group :development do
