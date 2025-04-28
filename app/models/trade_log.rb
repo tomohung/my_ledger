@@ -6,22 +6,20 @@
 #  trade_date        :date             not null
 #  product_name      :string
 #  contract_month    :string
-#  position          :string
-#  quantity          :integer
 #  entry_price       :decimal(10, 2)
-#  exit_price        :decimal(10, 2)
 #  gross_pnl         :decimal(10, 2)
 #  commission        :decimal(10, 2)
 #  tax               :decimal(10, 2)
-#  net_pnl           :decimal(10, 2)   not null
+#  net_pnl           :decimal(10, 2)
 #  currency          :string           not null
 #  entry_order_id    :string
-#  exit_order_id     :string
 #  raw_csv_data      :text
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  user_id           :integer          not null
 #  broker_account_id :integer          not null
+#  buy_quantity      :integer
+#  sell_quantity     :integer
 #
 # Indexes
 #
