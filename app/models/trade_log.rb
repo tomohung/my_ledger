@@ -33,7 +33,45 @@
 #  broker_account_id  (broker_account_id => broker_accounts.id)
 #  user_id            (user_id => users.id)
 #
+
 class TradeLog < ApplicationRecord
   belongs_to :user
   belongs_to :broker_account
+
+  def self.import_from_csv_string(broker_account, csv_string)
+    # Clean up Excel-style formatting after successful parse
+    cleaned_csv = csv_string.gsub(/="([^"]*)"/, '\1')
+    csv = CSV.parse(cleaned_csv, headers: true)
+
+    success_count = 0
+    failure_count = 0
+
+    csv.each do |row|
+      # Skip header and summary rows
+      next if row["商品名稱"] == "台幣小計"
+
+      create!(
+        trade_date: Date.parse(row["交易日期"]),
+        product_name: row["商品名稱"],
+        contract_month: row["年月"],
+        price: row["成交價格"].to_f,
+        gross_pnl: row["損益"].to_f,
+        commission: row["手續費"].to_f,
+        tax: row["交易稅"].to_f,
+        net_pnl: row["淨損益"].to_f,
+        currency: row["幣別"],
+        order_id: row["委託書號"],
+        buy_quantity: row["買口數"].to_i,
+        sell_quantity: row["賣口數"].to_i,
+        user_id: broker_account.user_id,
+        broker_account_id: broker_account.id
+      )
+      success_count += 1
+    rescue => e
+      failure_count += 1
+      Rails.logger.error("Error importing trade log #{row["委託書號"]}: #{e.message}")
+    end
+
+    {success_count: success_count, failure_count: failure_count}
+  end
 end
