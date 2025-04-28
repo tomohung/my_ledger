@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_27_022413) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_28_072433) do
   create_table "broker_accounts", force: :cascade do |t|
     t.string "name"
     t.string "account_number"
@@ -34,22 +34,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_27_022413) do
     t.date "trade_date", null: false
     t.string "product_name"
     t.string "contract_month"
-    t.string "position"
-    t.integer "quantity"
     t.decimal "entry_price", precision: 10, scale: 2
-    t.decimal "exit_price", precision: 10, scale: 2
     t.decimal "gross_pnl", precision: 10, scale: 2
     t.decimal "commission", precision: 10, scale: 2
     t.decimal "tax", precision: 10, scale: 2
-    t.decimal "net_pnl", precision: 10, scale: 2, null: false
+    t.decimal "net_pnl", precision: 10, scale: 2
     t.string "currency", null: false
     t.string "entry_order_id"
-    t.string "exit_order_id"
     t.text "raw_csv_data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.integer "broker_account_id", null: false
+    t.integer "buy_quantity"
+    t.integer "sell_quantity"
     t.index ["broker_account_id"], name: "index_trade_logs_on_broker_account_id"
     t.index ["contract_month"], name: "index_trade_logs_on_contract_month"
     t.index ["product_name"], name: "index_trade_logs_on_product_name"
