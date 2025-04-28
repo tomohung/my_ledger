@@ -6,14 +6,13 @@
 #  trade_date        :date             not null
 #  product_name      :string
 #  contract_month    :string
-#  entry_price       :decimal(10, 2)
+#  price             :decimal(10, 2)
 #  gross_pnl         :decimal(10, 2)
 #  commission        :decimal(10, 2)
 #  tax               :decimal(10, 2)
 #  net_pnl           :decimal(10, 2)
 #  currency          :string           not null
-#  entry_order_id    :string
-#  raw_csv_data      :text
+#  order_id          :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  user_id           :integer          not null
@@ -67,36 +66,32 @@ RSpec.describe TradeLog, type: :model do
       expect(first_trade.trade_date).to eq(Date.parse("2025-04-28"))
       expect(first_trade.product_name).to eq("小台指")
       expect(first_trade.contract_month).to eq("202505")
-      expect(first_trade.position).to eq("long")
-      expect(first_trade.quantity).to eq(1)
+      expect(first_trade.buy_quantity).to eq(1)
+      expect(first_trade.sell_quantity).to eq(0)
       expect(first_trade.entry_price).to eq(19994)
-      expect(first_trade.exit_price).to eq(20000)
       expect(first_trade.gross_pnl).to eq(-300)
       expect(first_trade.commission).to eq(20)
       expect(first_trade.tax).to eq(20)
       expect(first_trade.net_pnl).to eq(-380)
       expect(first_trade.currency).to eq("TWD")
       expect(first_trade.entry_order_id).to eq("yaamT")
-      expect(first_trade.exit_order_id).to eq("yaauM")
       expect(first_trade.user).to eq(user)
       expect(first_trade.broker_account).to eq(broker_account)
 
-      # Verify second trade log
+      # Verify last trade log
       second_trade = TradeLog.last
       expect(second_trade.trade_date).to eq(Date.parse("2025-04-28"))
       expect(second_trade.product_name).to eq("小台指")
       expect(second_trade.contract_month).to eq("202505")
-      expect(second_trade.position).to eq("long")
-      expect(second_trade.quantity).to eq(1)
-      expect(second_trade.entry_price).to eq(20000)
-      expect(second_trade.exit_price).to eq(19999)
-      expect(second_trade.gross_pnl).to eq(-50)
+      expect(second_trade.buy_quantity).to eq(0)
+      expect(second_trade.sell_quantity).to eq(1)
+      expect(second_trade.entry_price).to eq(19999)
+      expect(second_trade.gross_pnl).to eq(0)
       expect(second_trade.commission).to eq(20)
       expect(second_trade.tax).to eq(20)
-      expect(second_trade.net_pnl).to eq(-130)
+      expect(second_trade.net_pnl).to eq(0)
       expect(second_trade.currency).to eq("TWD")
-      expect(second_trade.entry_order_id).to eq("yaauR")
-      expect(second_trade.exit_order_id).to eq("yaays")
+      expect(second_trade.entry_order_id).to eq("yaays")
       expect(second_trade.user).to eq(user)
       expect(second_trade.broker_account).to eq(broker_account)
     end
