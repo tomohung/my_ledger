@@ -1,26 +1,33 @@
-<%= link_to "返回交易紀錄列表", trade_logs_path %> |
-<h1>貼上 CSV 內容匯入交易紀錄</h1>
+<%= link_to "返回交易紀錄列表", trade_logs_path, class: "text-blue-600 hover:text-blue-800 mb-4 inline-block" %>
 
-<%= form_with url: trade_logs_path, method: :post, local: true do |form| %>
-  <div>
-    <%= form.label :broker_account_id, "選擇券商帳戶" %><br>
-    <%= form.collection_select :broker_account_id, @broker_accounts, :id, :name, { prompt: "請選擇券商帳戶", selected: @broker_accounts&.first&.id }, { required: true } %>
-  </div>
+<div class="max-w-4xl mx-auto">
+  <h1 class="text-2xl font-bold mb-6">貼上 CSV 內容匯入交易紀錄</h1>
 
-  <div>
-    <%= form.label :csv_content, "請貼上 CSV 內容" %><br>
-    <%= form.text_area :csv_content, rows: 20, cols: 100 %>
-  </div>
+  <%= form_with url: trade_logs_path, method: :post, local: true, class: "space-y-6" do |form| %>
+    <div class="space-y-2">
+      <%= form.label :broker_account_id, "選擇券商帳戶", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.collection_select :broker_account_id, @broker_accounts, :id, :name,
+          { prompt: "請選擇券商帳戶", selected: @broker_accounts&.first&.id },
+          { required: true, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" } %>
+    </div>
 
-  <div>
-    <%= form.submit "匯入" %>
-  </div>
-<% end %>
+    <div class="space-y-2">
+      <%= form.label :csv_content, "請貼上 CSV 內容", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_area :csv_content, rows: 20, cols: 100,
+          class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 font-mono" %>
+    </div>
 
-<% if flash[:notice] %>
-  <p style="color:green;"><%= flash[:notice] %></p>
-<% end %>
+    <div>
+      <%= form.submit "匯入",
+          class: "inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+    </div>
+  <% end %>
 
-<% if flash[:alert] %>
-  <p style="color:red;"><%= flash[:alert] %></p>
-<% end %>
+  <% if flash[:notice] %>
+    <p class="mt-4 text-green-600"><%= flash[:notice] %></p>
+  <% end %>
+
+  <% if flash[:alert] %>
+    <p class="mt-4 text-red-600"><%= flash[:alert] %></p>
+  <% end %>
+</div>

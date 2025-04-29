@@ -43,6 +43,8 @@ gem "thruster", require: false
 gem "csv", "~> 3.3.4"
 gem "pagy", "~> 9.3"
 
+gem "tailwindcss-rails"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
