@@ -1,5 +1,15 @@
 class TradeLogsController < ApplicationController
+  include Pagy::Backend
   before_action :set_broker_account, only: [:create]
+  before_action :set_trade_log, only: [:destroy]
+
+  def index
+    @pagy, @trade_logs = pagy(
+      current_user.trade_logs
+        .includes(:broker_account)
+        .order(trade_date: :desc)
+    )
+  end
 
   def new
     @broker_accounts = current_user.broker_accounts
@@ -21,8 +31,15 @@ class TradeLogsController < ApplicationController
       redirect_to new_trade_log_path
     else
       flash.now[:alert] = "匯入失敗"
+      @broker_accounts = current_user.broker_accounts
       render :new
     end
+  end
+
+  def destroy
+    @trade_log.destroy
+    flash[:notice] = "交易紀錄已刪除"
+    redirect_to trade_logs_path
   end
 
   private
@@ -32,5 +49,12 @@ class TradeLogsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     flash.now[:alert] = "券商帳戶不存在"
     redirect_to new_trade_log_path
+  end
+
+  def set_trade_log
+    @trade_log = current_user.trade_logs.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "交易紀錄不存在"
+    redirect_to trade_logs_path
   end
 end
