@@ -36,3 +36,6 @@
 # Ignore system files
 .DS_Store
 tags.lock
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
