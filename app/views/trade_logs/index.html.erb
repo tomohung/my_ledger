@@ -1,56 +1,62 @@
-<h1>交易紀錄列表</h1>
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">交易紀錄</h1>
+    <div class="flex gap-4">
+      <%= link_to "每日摘要", daily_trade_summaries_path, class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
+      <%= link_to "每週摘要", weekly_trade_summaries_path, class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
+      <%= link_to "每月摘要", monthly_trade_summaries_path, class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
+      <%= link_to "新增交易", new_trade_log_path, class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" %>
+    </div>
+  </div>
 
-<div class="mb-4">
-  <%= link_to "新增交易紀錄", new_trade_log_path, class: "btn btn-primary" %>
-</div>
-
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>交易日期</th>
-      <th>券商帳戶</th>
-      <th>商品名稱</th>
-      <th>合約月份</th>
-      <th>買口數</th>
-      <th>賣口數</th>
-      <th>成交價格</th>
-      <th>損益</th>
-      <th>手續費</th>
-      <th>交易稅</th>
-      <th>淨損益</th>
-      <th>幣別</th>
-      <th>委託書號</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @trade_logs.each_with_index do |trade_log, index| %>
+  <table class="table table-striped">
+    <thead>
       <tr>
-        <td><%= (@pagy.from + index) %></td>
-        <td><%= trade_log.trade_date %></td>
-        <td><%= trade_log.broker_account.name %></td>
-        <td><%= trade_log.product_name %></td>
-        <td><%= trade_log.contract_month %></td>
-        <td><%= trade_log.buy_quantity %></td>
-        <td><%= trade_log.sell_quantity %></td>
-        <td><%= number_with_precision(trade_log.price, precision: 2) %></td>
-        <td><%= number_with_precision(trade_log.gross_pnl, precision: 2) %></td>
-        <td><%= number_with_precision(trade_log.commission, precision: 2) %></td>
-        <td><%= number_with_precision(trade_log.tax, precision: 2) %></td>
-        <td><%= number_with_precision(trade_log.net_pnl, precision: 2) %></td>
-        <td><%= trade_log.currency %></td>
-        <td><%= trade_log.order_id %></td>
-        <td>
-          <%= button_to "刪除", trade_log_path(trade_log),
-              method: :delete,
-              class: "btn btn-danger btn-sm",
-              form: { data: { turbo_confirm: "確定要刪除這筆交易紀錄嗎？" } } %>
-        </td>
+        <th>#</th>
+        <th>交易日期</th>
+        <th>券商帳戶</th>
+        <th>商品名稱</th>
+        <th>合約月份</th>
+        <th>買口數</th>
+        <th>賣口數</th>
+        <th>成交價格</th>
+        <th>損益</th>
+        <th>手續費</th>
+        <th>交易稅</th>
+        <th>淨損益</th>
+        <th>幣別</th>
+        <th>委託書號</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @trade_logs.each_with_index do |trade_log, index| %>
+        <tr>
+          <td><%= (@pagy.from + index) %></td>
+          <td><%= trade_log.trade_date %></td>
+          <td><%= trade_log.broker_account.name %></td>
+          <td><%= trade_log.product_name %></td>
+          <td><%= trade_log.contract_month %></td>
+          <td><%= trade_log.buy_quantity %></td>
+          <td><%= trade_log.sell_quantity %></td>
+          <td><%= number_with_precision(trade_log.price, precision: 2) %></td>
+          <td><%= number_with_precision(trade_log.gross_pnl, precision: 2) %></td>
+          <td><%= number_with_precision(trade_log.commission, precision: 2) %></td>
+          <td><%= number_with_precision(trade_log.tax, precision: 2) %></td>
+          <td><%= number_with_precision(trade_log.net_pnl, precision: 2) %></td>
+          <td><%= trade_log.currency %></td>
+          <td><%= trade_log.order_id %></td>
+          <td>
+            <%= button_to "刪除", trade_log_path(trade_log),
+                method: :delete,
+                class: "btn btn-danger btn-sm",
+                form: { data: { turbo_confirm: "確定要刪除這筆交易紀錄嗎？" } } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<div class="d-flex justify-content-center">
-  <%== pagy_nav(@pagy) %>
+  <div class="d-flex justify-content-center">
+    <%== pagy_nav(@pagy) %>
+  </div>
 </div>
