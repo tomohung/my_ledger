@@ -17,4 +17,11 @@ Rails.application.routes.draw do
   root "trade_logs#new"
 
   resources :trade_logs, only: [:new, :create, :index, :destroy]
+  resources :trade_summaries, only: [] do
+    collection do
+      get :daily
+      get :weekly
+      get :monthly
+    end
+  end
 end

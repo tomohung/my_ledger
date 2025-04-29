@@ -1,0 +1,13 @@
+<%= form_tag url_for, method: :get, class: "mb-4" do %>
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2">
+      <%= label_tag :start_date, "開始日期" %>
+      <%= date_field_tag :start_date, @start_date, class: "rounded border-gray-300" %>
+    </div>
+    <div class="flex items-center gap-2">
+      <%= label_tag :end_date, "結束日期" %>
+      <%= date_field_tag :end_date, @end_date, class: "rounded border-gray-300" %>
+    </div>
+    <%= submit_tag "篩選", class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
+  </div>
+<% end %>
