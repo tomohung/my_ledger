@@ -1,41 +1,55 @@
 class TradeSummariesController < ApplicationController
   include Pagy::Backend
-  before_action :set_date_range, only: [:daily, :weekly, :monthly]
+  before_action :set_selected_date, only: [:daily, :weekly, :monthly]
 
   def daily
-    @pagy, @summaries = pagy(
-      current_user.trade_logs
-        .where(trade_date: @start_date..@end_date)
-        .group(:trade_date)
-        .select("trade_date, COUNT(*) as total_trades, SUM(profit_loss) as total_profit_loss")
-        .order(trade_date: :desc)
-    )
+    @trade_logs = current_user.trade_logs
+      .where(trade_date: @selected_date)
+      .includes(:broker_account)
+      .order(created_at: :desc)
   end
 
   def weekly
-    @pagy, @summaries = pagy(
-      current_user.trade_logs
-        .where(trade_date: @start_date..@end_date)
-        .group("DATE_TRUNC('week', trade_date)")
-        .select("DATE_TRUNC('week', trade_date) as week_start, COUNT(*) as total_trades, SUM(profit_loss) as total_profit_loss")
-        .order("week_start DESC")
-    )
+    week_start = @selected_date.beginning_of_week
+    week_end = @selected_date.end_of_week
+
+    @summary = current_user.trade_logs
+      .where(trade_date: week_start..week_end)
+      .select(
+        "COUNT(*) as total_trades",
+        "SUM(gross_pnl) as total_gross_pnl",
+        "SUM(commission) as total_commission",
+        "SUM(tax) as total_tax",
+        "SUM(net_pnl) as total_net_pnl",
+        "AVG(net_pnl) as average_net_pnl",
+        "COUNT(CASE WHEN net_pnl > 0 THEN 1 END) as winning_trades",
+        "COUNT(CASE WHEN net_pnl < 0 THEN 1 END) as losing_trades"
+      )
+      .first
   end
 
   def monthly
-    @pagy, @summaries = pagy(
-      current_user.trade_logs
-        .where(trade_date: @start_date..@end_date)
-        .group("DATE_TRUNC('month', trade_date)")
-        .select("DATE_TRUNC('month', trade_date) as month_start, COUNT(*) as total_trades, SUM(profit_loss) as total_profit_loss")
-        .order("month_start DESC")
-    )
+    month_start = @selected_date.beginning_of_month
+    month_end = @selected_date.end_of_month
+
+    @summary = current_user.trade_logs
+      .where(trade_date: month_start..month_end)
+      .select(
+        "COUNT(*) as total_trades",
+        "SUM(gross_pnl) as total_gross_pnl",
+        "SUM(commission) as total_commission",
+        "SUM(tax) as total_tax",
+        "SUM(net_pnl) as total_net_pnl",
+        "AVG(net_pnl) as average_net_pnl",
+        "COUNT(CASE WHEN net_pnl > 0 THEN 1 END) as winning_trades",
+        "COUNT(CASE WHEN net_pnl < 0 THEN 1 END) as losing_trades"
+      )
+      .first
   end
 
   private
 
-  def set_date_range
-    @start_date = params[:start_date]&.to_date || 1.year.ago.to_date
-    @end_date = params[:end_date]&.to_date || Date.today
+  def set_selected_date
+    @selected_date = params[:date]&.to_date || Date.today
   end
 end

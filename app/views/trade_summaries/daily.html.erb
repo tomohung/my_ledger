@@ -1,36 +1,95 @@
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-6">每日交易摘要</h1>
-
-  <%= render 'date_filter' %>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">每日交易紀錄</h1>
+    <%= form_tag daily_trade_summaries_path, method: :get, class: "flex items-center gap-4" do %>
+      <div class="flex items-center gap-2">
+        <%= link_to "前一天", daily_trade_summaries_path(date: @selected_date - 1.day), class: "px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" %>
+        <%= label_tag :date, "選擇日期" %>
+        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300" %>
+        <%= link_to "後一天", daily_trade_summaries_path(date: @selected_date + 1.day), class: "px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" %>
+      </div>
+      <%= submit_tag "查詢", class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
+    <% end %>
+  </div>
 
   <div class="bg-white rounded-lg shadow overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
         <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">交易次數</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">券商帳戶</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">商品名稱</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">合約月份</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">買口數</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">賣口數</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">成交價格</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">損益</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">手續費</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">交易稅</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">淨損益</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">幣別</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">委託書號</th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <% @summaries.each do |summary| %>
+        <% @trade_logs.each do |trade_log| %>
           <tr>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= summary.trade_date.strftime("%Y-%m-%d") %>
+              <%= trade_log.broker_account.name %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= summary.total_trades %>
+              <%= trade_log.product_name %>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm <%= summary.total_profit_loss >= 0 ? 'text-green-600' : 'text-red-600' %>">
-              <%= number_to_currency(summary.total_profit_loss) %>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= trade_log.contract_month %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= trade_log.buy_quantity %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= trade_log.sell_quantity %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= number_with_precision(trade_log.price, precision: 2) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= number_with_precision(trade_log.gross_pnl, precision: 2) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= number_with_precision(trade_log.commission, precision: 2) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= number_with_precision(trade_log.tax, precision: 2) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm <%= trade_log.net_pnl >= 0 ? 'text-green-600' : 'text-red-600' %>">
+              <%= number_with_precision(trade_log.net_pnl, precision: 2) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= trade_log.currency %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= trade_log.order_id %>
             </td>
           </tr>
         <% end %>
       </tbody>
+      <tfoot class="bg-gray-50">
+        <tr>
+          <td colspan="6" class="px-6 py-4 text-right text-sm font-medium text-gray-900">總計：</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <%= number_with_precision(@trade_logs.sum(&:gross_pnl), precision: 2) %>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <%= number_with_precision(@trade_logs.sum(&:commission), precision: 2) %>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <%= number_with_precision(@trade_logs.sum(&:tax), precision: 2) %>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm <%= @trade_logs.sum(&:net_pnl) >= 0 ? 'text-green-600' : 'text-red-600' %>">
+            <%= number_with_precision(@trade_logs.sum(&:net_pnl), precision: 2) %>
+          </td>
+          <td colspan="2"></td>
+        </tr>
+      </tfoot>
     </table>
-  </div>
-
-  <div class="mt-4">
-    <%== pagy_nav(@pagy) %>
   </div>
 </div>
