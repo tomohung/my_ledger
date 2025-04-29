@@ -1,9 +1,10 @@
+<%= link_to "返回交易紀錄列表", trade_logs_path %> |
 <h1>貼上 CSV 內容匯入交易紀錄</h1>
 
 <%= form_with url: trade_logs_path, method: :post, local: true do |form| %>
   <div>
     <%= form.label :broker_account_id, "選擇券商帳戶" %><br>
-    <%= form.collection_select :broker_account_id, @broker_accounts, :id, :name, { prompt: "請選擇券商帳戶", selected: @broker_accounts.first&.id }, { required: true } %>
+    <%= form.collection_select :broker_account_id, @broker_accounts, :id, :name, { prompt: "請選擇券商帳戶", selected: @broker_accounts&.first&.id }, { required: true } %>
   </div>
 
   <div>

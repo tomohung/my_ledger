@@ -7,6 +7,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th>#</th>
       <th>交易日期</th>
       <th>券商帳戶</th>
       <th>商品名稱</th>
@@ -23,8 +24,9 @@
     </tr>
   </thead>
   <tbody>
-    <% @trade_logs.each do |trade_log| %>
+    <% @trade_logs.each_with_index do |trade_log, index| %>
       <tr>
+        <td><%= (@pagy.from + index) %></td>
         <td><%= trade_log.trade_date %></td>
         <td><%= trade_log.broker_account.name %></td>
         <td><%= trade_log.product_name %></td>
@@ -38,11 +40,17 @@
         <td><%= number_with_precision(trade_log.net_pnl, precision: 2) %></td>
         <td><%= trade_log.currency %></td>
         <td><%= trade_log.order_id %></td>
+        <td>
+          <%= button_to "刪除", trade_log_path(trade_log),
+              method: :delete,
+              class: "btn btn-danger btn-sm",
+              form: { data: { turbo_confirm: "確定要刪除這筆交易紀錄嗎？" } } %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <div class="d-flex justify-content-center">
-  <%= pagy_nav(@pagy) %>
+  <%== pagy_nav(@pagy) %>
 </div>
