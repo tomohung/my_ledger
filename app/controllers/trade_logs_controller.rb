@@ -1,6 +1,14 @@
 class TradeLogsController < ApplicationController
   before_action :set_broker_account, only: [:create]
 
+  def index
+    @pagy, @trade_logs = pagy(
+      current_user.trade_logs
+        .includes(:broker_account)
+        .order(trade_date: :desc)
+    )
+  end
+
   def new
     @broker_accounts = current_user.broker_accounts
   end

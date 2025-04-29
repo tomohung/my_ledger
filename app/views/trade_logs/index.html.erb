@@ -1,0 +1,48 @@
+<h1>交易紀錄列表</h1>
+
+<div class="mb-4">
+  <%= link_to "新增交易紀錄", new_trade_log_path, class: "btn btn-primary" %>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>交易日期</th>
+      <th>券商帳戶</th>
+      <th>商品名稱</th>
+      <th>合約月份</th>
+      <th>買口數</th>
+      <th>賣口數</th>
+      <th>成交價格</th>
+      <th>損益</th>
+      <th>手續費</th>
+      <th>交易稅</th>
+      <th>淨損益</th>
+      <th>幣別</th>
+      <th>委託書號</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @trade_logs.each do |trade_log| %>
+      <tr>
+        <td><%= trade_log.trade_date %></td>
+        <td><%= trade_log.broker_account.name %></td>
+        <td><%= trade_log.product_name %></td>
+        <td><%= trade_log.contract_month %></td>
+        <td><%= trade_log.buy_quantity %></td>
+        <td><%= trade_log.sell_quantity %></td>
+        <td><%= number_with_precision(trade_log.price, precision: 2) %></td>
+        <td><%= number_with_precision(trade_log.gross_pnl, precision: 2) %></td>
+        <td><%= number_with_precision(trade_log.commission, precision: 2) %></td>
+        <td><%= number_with_precision(trade_log.tax, precision: 2) %></td>
+        <td><%= number_with_precision(trade_log.net_pnl, precision: 2) %></td>
+        <td><%= trade_log.currency %></td>
+        <td><%= trade_log.order_id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-center">
+  <%= pagy_nav(@pagy) %>
+</div>
