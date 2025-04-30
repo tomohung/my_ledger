@@ -38,8 +38,6 @@ class TradeLog < ApplicationRecord
   belongs_to :user
   belongs_to :broker_account
 
-  validates :order_id, uniqueness: {scope: [:broker_account_id, :trade_date]}, allow_nil: true
-
   def self.import_from_csv_string(broker_account, csv_string)
     # Clean up Excel-style formatting after successful parse
     cleaned_csv = csv_string.gsub(/="([^"]*)"/, '\1')
