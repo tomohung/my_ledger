@@ -26,4 +26,5 @@ Rails.application.routes.draw do
       get :monthly
     end
   end
+  resource :user, only: [:edit, :update]
 end
