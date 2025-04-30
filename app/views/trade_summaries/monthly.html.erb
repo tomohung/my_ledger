@@ -45,7 +45,7 @@
       <div class="space-y-4">
         <div class="flex justify-between">
           <span class="text-gray-600">總損益</span>
-          <span class="<%= @summary.total_gross_pnl >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
+          <span class="<%= @summary.total_gross_pnl.to_i >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
             <%= number_with_precision(@summary.total_gross_pnl, precision: 2) %>
           </span>
         </div>
@@ -59,15 +59,47 @@
         </div>
         <div class="flex justify-between">
           <span class="text-gray-600">淨損益</span>
-          <span class="<%= @summary.total_net_pnl >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
+          <span class="<%= @summary.total_net_pnl.to_i >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
             <%= number_with_precision(@summary.total_net_pnl, precision: 2) %>
           </span>
         </div>
         <div class="flex justify-between">
           <span class="text-gray-600">平均每筆損益</span>
-          <span class="<%= @summary.average_net_pnl >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
+          <span class="<%= @summary.average_net_pnl.to_i >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
             <%= number_with_precision(@summary.average_net_pnl, precision: 2) %>
           </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-lg font-semibold mb-4">資金與風險管理</h2>
+      <div class="space-y-4">
+        <div class="flex justify-between">
+          <span class="text-gray-600">期初資金</span>
+          <span class="font-medium"><%= number_with_precision(@summary.initial_capital, precision: 2) %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">剩餘資金</span>
+          <span class="font-medium"><%= number_with_precision(@summary.remaining_capital, precision: 2) %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">每筆交易風險金額</span>
+          <span class="font-medium"><%= number_with_precision(@summary.risk_amount_per_trade, precision: 2) %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">每日風險金額</span>
+          <span class="font-medium"><%= number_with_precision(@summary.risk_amount_per_day, precision: 2) %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">每週風險金額</span>
+          <span class="font-medium"><%= number_with_precision(@summary.risk_amount_per_week, precision: 2) %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">每月風險金額</span>
+          <span class="font-medium"><%= number_with_precision(@summary.risk_amount_per_month, precision: 2) %></span>
         </div>
       </div>
     </div>

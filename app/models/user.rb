@@ -30,6 +30,27 @@ class User < ApplicationRecord
     :risk_amount_percentage_per_month
   ], coder: JSON
 
+  # Add type casting for risk settings
+  def risk_amount_percentage_per_trade
+    value = super
+    value.is_a?(String) ? value.to_f : value
+  end
+
+  def risk_amount_percentage_per_day
+    value = super
+    value.is_a?(String) ? value.to_f : value
+  end
+
+  def risk_amount_percentage_per_week
+    value = super
+    value.is_a?(String) ? value.to_f : value
+  end
+
+  def risk_amount_percentage_per_month
+    value = super
+    value.is_a?(String) ? value.to_f : value
+  end
+
   after_initialize :set_default_risk_settings, if: :new_record?
   after_initialize :set_default_initial_capital, if: :new_record?
 
