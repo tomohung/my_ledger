@@ -16,7 +16,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "trade_logs#new"
 
-  resources :trade_logs, only: [:new, :create, :index, :destroy]
+  resources :trade_logs, only: [:new, :create, :index, :destroy] do
+    post :reset, on: :collection
+  end
   resources :trade_summaries, only: [] do
     collection do
       get :daily
