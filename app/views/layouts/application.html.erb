@@ -29,6 +29,7 @@
             <span class="text-gray-600 italic">我是來交易的，不是來寫程式的</span>
           </div>
           <div class="flex items-center space-x-6">
+            <%= link_to "Reports", month_report_path(Date.today.to_s), class: "text-gray-600 hover:text-gray-900" %>
             <%= link_to "Trade Logs", trade_logs_path, class: "text-gray-600 hover:text-gray-900" %>
             <div class="flex space-x-4">
               <%= link_to "Daily", daily_trade_summaries_path, class: "text-gray-600 hover:text-gray-900" %>

@@ -55,7 +55,7 @@ class MonthReport < ApplicationRecord
     trades = user.trade_logs.where(trade_date: month_start..month_end)
 
     # Calculate statistics
-    report.total_trades = trades.count
+    report.total_trades = trades.count { |trade| trade.net_pnl.present? }
     report.winning_trades = trades.where("net_pnl > 0").count
     report.losing_trades = trades.where("net_pnl <= 0").count
     report.total_gross_pnl = trades.sum(:gross_pnl) || 0
