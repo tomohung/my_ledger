@@ -9,6 +9,7 @@
         <%= link_to "前一天", daily_trade_summaries_path(date: @selected_date - 1.day), class: "px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" %>
         <%= label_tag :date, "選擇日期" %>
         <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300" %>
+        <span class="text-gray-700 font-bold"><%= t('date.day_names')[@selected_date.wday] %></span>
         <%= link_to "後一天", daily_trade_summaries_path(date: @selected_date + 1.day), class: "px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" %>
       </div>
       <%= submit_tag "查詢", class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
