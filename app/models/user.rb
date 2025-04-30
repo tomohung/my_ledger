@@ -19,4 +19,8 @@ class User < ApplicationRecord
   has_many :broker_accounts, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  def name
+    email_address.split("@").first
+  end
 end
