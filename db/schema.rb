@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_30_070836) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_30_080000) do
   create_table "broker_accounts", force: :cascade do |t|
     t.string "name"
     t.string "account_number"
@@ -19,6 +19,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_070836) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_broker_accounts_on_user_id"
+  end
+
+  create_table "month_reports", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.date "report_date", null: false
+    t.decimal "initial_capital", precision: 10, scale: 2, null: false
+    t.decimal "ending_capital", precision: 10, scale: 2, null: false
+    t.decimal "total_gross_pnl", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_commission", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_tax", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_net_pnl", precision: 10, scale: 2, default: "0.0", null: false
+    t.integer "total_trades", default: 0, null: false
+    t.integer "winning_trades", default: 0, null: false
+    t.integer "losing_trades", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "report_date"], name: "index_month_reports_on_user_id_and_report_date", unique: true
+    t.index ["user_id"], name: "index_month_reports_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -65,6 +83,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_070836) do
   end
 
   add_foreign_key "broker_accounts", "users"
+  add_foreign_key "month_reports", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "trade_logs", "broker_accounts"
   add_foreign_key "trade_logs", "users"
