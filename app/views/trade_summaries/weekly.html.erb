@@ -45,28 +45,28 @@
       <div class="space-y-4">
         <div class="flex justify-between">
           <span class="text-gray-600">總損益</span>
-          <span class="<%= @summary.total_gross_pnl >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
-            <%= number_with_precision(@summary.total_gross_pnl, precision: 2) %>
+          <span class="<%= @summary.total_gross_pnl.to_f >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
+            <%= number_with_precision(@summary.total_gross_pnl, precision: 0) %>
           </span>
         </div>
         <div class="flex justify-between">
           <span class="text-gray-600">手續費</span>
-          <span class="font-medium"><%= number_with_precision(@summary.total_commission, precision: 2) %></span>
+          <span class="font-medium"><%= number_with_precision(@summary.total_commission, precision: 0) %></span>
         </div>
         <div class="flex justify-between">
           <span class="text-gray-600">交易稅</span>
-          <span class="font-medium"><%= number_with_precision(@summary.total_tax, precision: 2) %></span>
+          <span class="font-medium"><%= number_with_precision(@summary.total_tax, precision: 0) %></span>
         </div>
         <div class="flex justify-between">
           <span class="text-gray-600">淨損益</span>
-          <span class="<%= @summary.total_net_pnl >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
-            <%= number_with_precision(@summary.total_net_pnl, precision: 2) %>
+          <span class="<%= @summary.total_net_pnl.to_f >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
+            <%= number_with_precision(@summary.total_net_pnl, precision: 0) %>
           </span>
         </div>
         <div class="flex justify-between">
           <span class="text-gray-600">平均每筆損益</span>
-          <span class="<%= @summary.average_net_pnl >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
-            <%= number_with_precision(@summary.average_net_pnl, precision: 2) %>
+          <span class="<%= @summary.average_net_pnl.to_f >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
+            <%= number_with_precision(@summary.average_net_pnl, precision: 0) %>
           </span>
         </div>
       </div>

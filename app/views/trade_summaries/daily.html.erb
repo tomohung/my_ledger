@@ -20,16 +20,16 @@
       <div class="px-6 py-4 flex justify-end">
         <div class="flex items-center gap-8">
           <div class="text-sm text-gray-900">
-            損益：<%= number_with_precision(@trade_logs.sum(&:gross_pnl), precision: 2) %>
+            損益：<%= number_with_precision(@trade_logs.sum { |log| log.gross_pnl || 0 }, precision: 0) %>
           </div>
           <div class="text-sm text-gray-900">
-            手續費：<%= number_with_precision(@trade_logs.sum(&:commission), precision: 2) %>
+            手續費：<%= number_with_precision(@trade_logs.sum { |log| log.commission || 0 }, precision: 0) %>
           </div>
           <div class="text-sm text-gray-900">
-            交易稅：<%= number_with_precision(@trade_logs.sum(&:tax), precision: 2) %>
+            交易稅：<%= number_with_precision(@trade_logs.sum { |log| log.tax || 0 }, precision: 0) %>
           </div>
-          <div class="text-sm <%= @trade_logs.sum(&:net_pnl) >= 0 ? 'text-green-600' : 'text-red-600' %>">
-            淨損益：<%= number_with_precision(@trade_logs.sum(&:net_pnl), precision: 2) %>
+          <div class="text-sm <%= @trade_logs.sum { |log| log.net_pnl || 0 } >= 0 ? 'text-green-600' : 'text-red-600' %>">
+            淨損益：<%= number_with_precision(@trade_logs.sum { |log| log.net_pnl || 0 }, precision: 0) %>
           </div>
         </div>
       </div>
@@ -70,19 +70,19 @@
               <%= trade_log.sell_quantity %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= number_with_precision(trade_log.price, precision: 2) %>
+              <%= number_with_precision(trade_log.price) %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= number_with_precision(trade_log.gross_pnl, precision: 2) %>
+              <%= trade_log.gross_pnl ? number_with_precision(trade_log.gross_pnl, precision: 0) : '' %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= number_with_precision(trade_log.commission, precision: 2) %>
+              <%= trade_log.commission ? number_with_precision(trade_log.commission, precision: 0) : '' %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= number_with_precision(trade_log.tax, precision: 2) %>
+              <%= trade_log.tax ? number_with_precision(trade_log.tax, precision: 0) : '' %>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm <%= trade_log.net_pnl >= 0 ? 'text-green-600' : 'text-red-600' %>">
-              <%= number_with_precision(trade_log.net_pnl, precision: 2) %>
+            <td class="px-6 py-4 whitespace-nowrap text-sm <%= trade_log.net_pnl.to_f >= 0 ? 'text-green-600' : 'text-red-600' %>">
+              <%= trade_log.net_pnl ? number_with_precision(trade_log.net_pnl, precision: 0) : '' %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
               <%= trade_log.currency %>
