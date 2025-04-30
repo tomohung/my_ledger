@@ -8,6 +8,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  risk_settings   :text             default({}), not null
+#  initial_capital :decimal(10, 2)   default(0.0), not null
 #
 # Indexes
 #
