@@ -16,6 +16,24 @@
   </div>
 
   <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="bg-gray-50 border-b border-gray-200">
+      <div class="px-6 py-4 flex justify-end">
+        <div class="flex items-center gap-8">
+          <div class="text-sm text-gray-900">
+            損益：<%= number_with_precision(@trade_logs.sum(&:gross_pnl), precision: 2) %>
+          </div>
+          <div class="text-sm text-gray-900">
+            手續費：<%= number_with_precision(@trade_logs.sum(&:commission), precision: 2) %>
+          </div>
+          <div class="text-sm text-gray-900">
+            交易稅：<%= number_with_precision(@trade_logs.sum(&:tax), precision: 2) %>
+          </div>
+          <div class="text-sm <%= @trade_logs.sum(&:net_pnl) >= 0 ? 'text-green-600' : 'text-red-600' %>">
+            淨損益：<%= number_with_precision(@trade_logs.sum(&:net_pnl), precision: 2) %>
+          </div>
+        </div>
+      </div>
+    </div>
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
         <tr>
@@ -75,24 +93,6 @@
           </tr>
         <% end %>
       </tbody>
-      <tfoot class="bg-gray-50">
-        <tr>
-          <td colspan="6" class="px-6 py-4 text-right text-sm font-medium text-gray-900">總計：</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-            <%= number_with_precision(@trade_logs.sum(&:gross_pnl), precision: 2) %>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-            <%= number_with_precision(@trade_logs.sum(&:commission), precision: 2) %>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-            <%= number_with_precision(@trade_logs.sum(&:tax), precision: 2) %>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm <%= @trade_logs.sum(&:net_pnl) >= 0 ? 'text-green-600' : 'text-red-600' %>">
-            <%= number_with_precision(@trade_logs.sum(&:net_pnl), precision: 2) %>
-          </td>
-          <td colspan="2"></td>
-        </tr>
-      </tfoot>
     </table>
   </div>
 </div>
