@@ -19,6 +19,7 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :trade_logs, dependent: :destroy
   has_many :broker_accounts, dependent: :destroy
+  has_many :month_reports, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
