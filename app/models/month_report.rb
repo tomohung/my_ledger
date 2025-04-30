@@ -52,12 +52,12 @@ class MonthReport < ApplicationRecord
     report = find_or_initialize_by(user: user, report_date: month_start)
 
     # Get all trades for the month
-    trades = user.trade_logs.active.where(trade_date: month_start..month_end)
+    trades = user.trade_logs.where(trade_date: month_start..month_end)
 
     # Calculate statistics
     report.total_trades = trades.count
-    report.winning_trades = trades.where("net_pnl >= 0").count
-    report.losing_trades = trades.where("net_pnl < 0").count
+    report.winning_trades = trades.where("net_pnl > 0").count
+    report.losing_trades = trades.where("net_pnl <= 0").count
     report.total_gross_pnl = trades.sum(:gross_pnl) || 0
     report.total_commission = trades.sum(:commission) || 0
     report.total_tax = trades.sum(:tax) || 0
