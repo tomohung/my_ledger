@@ -9,6 +9,8 @@ class TradeSummariesController < ApplicationController
       .where(trade_date: @selected_date)
       .includes(:broker_account)
       .order(created_at: :desc)
+
+    @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
   end
 
   def weekly
