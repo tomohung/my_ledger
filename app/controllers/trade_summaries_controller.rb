@@ -11,6 +11,7 @@ class TradeSummariesController < ApplicationController
       .order(created_at: :desc)
 
     @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
+    @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
   def weekly
@@ -23,6 +24,7 @@ class TradeSummariesController < ApplicationController
       .order(created_at: :desc)
 
     @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
+    @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
   def monthly
@@ -35,6 +37,7 @@ class TradeSummariesController < ApplicationController
       .order(created_at: :desc)
 
     @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
+    @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
   private
