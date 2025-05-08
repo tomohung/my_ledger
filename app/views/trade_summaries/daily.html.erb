@@ -16,7 +16,17 @@
     <% end %>
   </div>
 
-  <div class="bg-white rounded-lg shadow overflow-hidden">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+    <!-- Capital & Risk Management -->
+    <%= render 'capital_risk_management' %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+    <!-- Trading Performance -->
+    <%= render 'trading_performance' %>
+  </div>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
     <div class="bg-gray-50 border-b border-gray-200">
       <div class="px-6 py-4 flex justify-end">
         <div class="flex items-center gap-8">

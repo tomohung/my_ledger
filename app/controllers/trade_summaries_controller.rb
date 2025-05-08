@@ -9,45 +9,35 @@ class TradeSummariesController < ApplicationController
       .where(trade_date: @selected_date)
       .includes(:broker_account)
       .order(created_at: :desc)
+
+    @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
+    @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
   def weekly
     week_start = @selected_date.beginning_of_week
     week_end = @selected_date.end_of_week
 
-    @summary = current_user.trade_logs
+    @trade_logs = current_user.trade_logs
       .where(trade_date: week_start..week_end)
-      .select(
-        "COUNT(CASE WHEN net_pnl IS NOT NULL THEN 1 END) as total_trades",
-        "SUM(gross_pnl) as total_gross_pnl",
-        "SUM(commission) as total_commission",
-        "SUM(tax) as total_tax",
-        "SUM(net_pnl) as total_net_pnl",
-        "AVG(net_pnl) as average_net_pnl",
-        "COUNT(CASE WHEN net_pnl > 0 THEN 1 END) as winning_trades",
-        "COUNT(CASE WHEN net_pnl < 0 THEN 1 END) as losing_trades"
-      )
-      .first
+      .includes(:broker_account)
+      .order(created_at: :desc)
+
+    @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
+    @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
   def monthly
     month_start = @selected_date.beginning_of_month
     month_end = @selected_date.end_of_month
 
-    # Get trade statistics
-    @summary = current_user.trade_logs
+    @trade_logs = current_user.trade_logs
       .where(trade_date: month_start..month_end)
-      .select(
-        "COUNT(CASE WHEN net_pnl IS NOT NULL THEN 1 END) as total_trades",
-        "SUM(gross_pnl) as total_gross_pnl",
-        "SUM(commission) as total_commission",
-        "SUM(tax) as total_tax",
-        "SUM(net_pnl) as total_net_pnl",
-        "AVG(net_pnl) as average_net_pnl",
-        "COUNT(CASE WHEN net_pnl > 0 THEN 1 END) as winning_trades",
-        "COUNT(CASE WHEN net_pnl < 0 THEN 1 END) as losing_trades"
-      )
-      .first
+      .includes(:broker_account)
+      .order(created_at: :desc)
+
+    @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
+    @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
   private
