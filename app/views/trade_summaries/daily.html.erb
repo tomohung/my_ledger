@@ -18,75 +18,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Trading Performance -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">交易表現</h2>
-      <div class="space-y-4">
-        <div class="flex justify-between">
-          <span class="text-gray-600">總交易次數</span>
-          <span class="font-medium"><%= @statistics[:trade_count] %></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">獲利交易</span>
-          <span class="text-green-600 font-medium"><%= @statistics[:profit_count] %></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">虧損交易</span>
-          <span class="text-red-600 font-medium"><%= @statistics[:lose_count] %></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">勝率</span>
-          <span class="font-medium"><%= number_to_percentage(@statistics[:win_rate], precision: 1) %></span>
-        </div>
-        <div class="border-t border-gray-200 my-4"></div>
-
-        <div class="flex justify-between">
-          <span class="text-gray-600">總獲利</span>
-          <span class="text-green-600 font-medium"><%= number_with_precision(@statistics[:total_gross_profit], precision: 0) %></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">總手續費</span>
-          <span class="font-medium"><%= number_with_precision(@statistics[:total_commission], precision: 0) %></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">總交易稅</span>
-          <span class="font-medium"><%= number_with_precision(@statistics[:total_tax], precision: 0) %></span>
-        </div>
-        <div class="border-t border-gray-200 my-4"></div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">總淨利</span>
-          <span class="<%= @statistics[:total_net_profit] >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
-            <%= number_with_precision(@statistics[:total_net_profit], precision: 0) %>
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <!-- P&L Statistics -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">損益統計</h2>
-      <div class="space-y-4">
-        <div class="flex justify-between">
-          <span class="text-gray-600">平均獲利</span>
-          <span class="text-green-600 font-medium"><%= number_with_precision(@statistics[:avg_profit], precision: 0) %></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">平均虧損</span>
-          <span class="text-red-600 font-medium"><%= number_with_precision(@statistics[:avg_lose], precision: 0) %></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">最大獲利</span>
-          <span class="text-green-600 font-medium"><%= number_with_precision(@statistics[:max_profit], precision: 0) %></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">最大虧損</span>
-          <span class="text-red-600 font-medium"><%= number_with_precision(@statistics[:max_lose], precision: 0) %></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">盈虧比</span>
-          <span class="font-medium"><%= @statistics[:profit_lose_ratio] %></span>
-        </div>
-      </div>
-    </div>
+    <%= render 'trading_performance' %>
   </div>
 
   <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
