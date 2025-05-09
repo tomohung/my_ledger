@@ -52,7 +52,7 @@ class TradeLogStatisticsService
 
   def calculate_profit_lose_ratio
     return 0 if lose_trades.empty? || profit_trades.empty?
-    (profit_trades.sum(&:gross_pnl).abs / lose_trades.sum(&:gross_pnl).abs).round(2)
+    (calculate_avg_profit.abs / calculate_avg_lose.abs).round(2)
   end
 
   def calculate_total_commission
