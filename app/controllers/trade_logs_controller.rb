@@ -42,12 +42,6 @@ class TradeLogsController < ApplicationController
     redirect_to trade_logs_path
   end
 
-  def reset
-    current_user.trade_logs.destroy_all
-    flash[:notice] = "所有交易紀錄已重置"
-    redirect_to trade_logs_path
-  end
-
   private
 
   def set_broker_account
