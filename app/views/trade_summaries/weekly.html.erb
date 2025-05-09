@@ -44,6 +44,25 @@
             <% end %>
           </span>
         </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-700">當週單筆最大虧損:</span>
+          <% max_loss = @statistics[:max_loss] %>
+          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100) * 100).round %>
+          <span class="font-medium <%=
+            if risk_percentage >= 100
+              'text-red-600 font-bold'
+            elsif risk_percentage >= 75
+              'text-yellow-600 font-bold'
+            else
+              'text-gray-900'
+            end
+          %>">
+            <%= number_with_precision(max_loss, precision: 0) %>
+            <% if @month_report.ending_capital > 0 %>
+              (<%= risk_percentage %>% of risk)
+            <% end %>
+          </span>
+        </div>
         <div class="flex justify-between">
           <% total_net_pnl = @trade_logs.sum { |log| log.net_pnl.to_f } %>
           <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (total_net_pnl.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_week / 100) * 100).round %>
@@ -72,5 +91,9 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Trading Performance -->
     <%= render 'trading_performance' %>
+  </div>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
+    <%= render 'trade_logs_table', active_logs: @trade_logs.select { |log| log.net_pnl.to_f.abs > 0.5 * @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 }.sort_by(&:net_pnl) %>
   </div>
 </div>

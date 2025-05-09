@@ -25,22 +25,33 @@
     <!-- Daily Risk Highlights -->
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-lg font-semibold mb-4">風險指標</h2>
+
       <div class="space-y-4">
-        <!-- Add spacing with CSS margin instead of empty divs -->
-        <div class="mt-14"></div>
         <div class="flex justify-between items-center">
-          <span class="text-gray-700">最大連續虧損次數:</span>
-          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= 3 ? 'text-red-600 font-bold' : 'text-gray-900' %>">
-            <%= @statistics[:max_consecutive_losses] %>
-            <% if @statistics[:max_consecutive_losses] >= 3 %>
-              (>= 3)
+          <% max_daily_trades = 8 %>
+          <span class="text-gray-700">交易次數: (<= <%= max_daily_trades %>)</span>
+          <span class="font-medium <%= @statistics[:trade_count] >= max_daily_trades ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+            <%= @statistics[:trade_count] %>
+            <% if @statistics[:trade_count] >= max_daily_trades %>
+              (>= <%= max_daily_trades %>)
             <% end %>
           </span>
         </div>
         <div class="flex justify-between items-center">
-          <span class="text-gray-700">當日單筆最大虧損:</span>
+          <% max_consecutive_losses = 3 %>
+          <span class="text-gray-700">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
+          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+            <%= @statistics[:max_consecutive_losses] %>
+            <% if @statistics[:max_consecutive_losses] >= max_consecutive_losses %>
+              (>= <%= max_consecutive_losses %>)
+            <% end %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
           <% max_loss = @statistics[:max_loss] %>
-          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100) * 100).round %>
+          <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
+          <span class="text-gray-700">當日單筆最大虧損: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
+          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / risk_amount * 100).round %>
           <span class="font-medium <%=
             if risk_percentage >= 100
               'text-red-600 font-bold'
@@ -51,16 +62,17 @@
             end
           %>">
             <%= number_with_precision(max_loss, precision: 0) %>
-            <% if @month_report.ending_capital > 0 %>
+            <% if risk_amount > 0 %>
               (<%= risk_percentage %>% of risk)
             <% end %>
           </span>
         </div>
 
         <div class="flex justify-between items-center">
-          <span class="text-gray-700">當日淨損益:</span>
           <% total_net_pnl = @statistics[:total_net_profit] %>
-          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (total_net_pnl.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100) * 100).round %>
+          <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100 %>
+          <span class="text-gray-700">當日淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
+          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (total_net_pnl.abs.to_f / risk_amount * 100).round %>
           <span class="font-medium <%=
             if total_net_pnl < 0 && risk_percentage >= 100
               'text-red-600 font-bold'
@@ -73,7 +85,7 @@
             end
           %>">
             <%= number_with_precision(total_net_pnl, precision: 0) %>
-            <% if total_net_pnl < 0 && @month_report.ending_capital > 0 %>
+            <% if total_net_pnl < 0 && risk_amount > 0 %>
               (<%= risk_percentage %>% of risk)
             <% end %>
           </span>
