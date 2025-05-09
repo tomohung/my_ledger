@@ -29,11 +29,11 @@
             <span class="text-gray-600 italic">我是來交易的，不是來寫程式的</span>
           </div>
           <div class="flex items-center space-x-6">
-            <%= link_to "Trade Logs", trade_logs_path, class: "text-gray-600 hover:text-gray-900" %>
             <div class="flex space-x-4">
-              <%= link_to "Daily", daily_trade_summaries_path, class: "text-gray-600 hover:text-gray-900" %>
-              <%= link_to "Weekly", weekly_trade_summaries_path, class: "text-gray-600 hover:text-gray-900" %>
-              <%= link_to "Monthly", monthly_trade_summaries_path, class: "text-gray-600 hover:text-gray-900" %>
+              <%= link_to "Daily", daily_trade_summaries_path, class: "#{current_page?(daily_trade_summaries_path) ? 'bg-blue-50 text-blue-700 rounded px-3 py-1' : ''} text-gray-600 hover:text-gray-900" %>
+              <%= link_to "Weekly", weekly_trade_summaries_path, class: "#{current_page?(weekly_trade_summaries_path) ? 'bg-blue-50 text-blue-700 rounded px-3 py-1' : ''} text-gray-600 hover:text-gray-900" %>
+              <%= link_to "Monthly", monthly_trade_summaries_path, class: "#{current_page?(monthly_trade_summaries_path) ? 'bg-blue-50 text-blue-700 rounded px-3 py-1' : ''} text-gray-600 hover:text-gray-900" %>
+              <%= link_to "Trade Logs", trade_logs_path, class: "#{current_page?(trade_logs_path) ? 'bg-blue-50 text-blue-700 rounded px-3 py-1' : ''} text-gray-600 hover:text-gray-900" %>
             </div>
             <div class="relative" data-controller="dropdown">
               <button class="text-gray-600 hover:text-gray-900 flex items-center space-x-1" data-action="click->dropdown#toggle">
