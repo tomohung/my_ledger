@@ -14,6 +14,10 @@
     <% end %>
   </div>
 
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <%= render 'calendar' %>
+  </div>
+
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Capital & Risk Management -->
     <%= render 'capital_risk_management' %>
@@ -22,13 +26,11 @@
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-lg font-semibold mb-4">本週風險管理</h2>
       <div class="space-y-4">
-        <!-- Add spacing with CSS margin instead of empty divs -->
-        <div class="mt-24"></div>
         <div class="flex justify-between items-center">
           <span class="text-gray-700">最大連續虧損次數:</span>
-          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= 3 ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= 6 ? 'text-red-600 font-bold' : 'text-gray-900' %>">
             <%= @statistics[:max_consecutive_losses] %>
-            <% if @statistics[:max_consecutive_losses] >= 3 %>
+            <% if @statistics[:max_consecutive_losses] >= 6 %>
               (>= 6)
             <% end %>
           </span>
@@ -70,13 +72,5 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Trading Performance -->
     <%= render 'trading_performance' %>
-  </div>
-
-  <div class="bg-white rounded-lg shadow p-6">
-    <h2 class="text-lg font-semibold mb-4">本週交易區間</h2>
-    <p class="text-gray-600">
-      <%= @selected_date.beginning_of_week.strftime("%Y-%m-%d") %> 至
-      <%= @selected_date.end_of_week.strftime("%Y-%m-%d") %>
-    </p>
   </div>
 </div>

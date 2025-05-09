@@ -1,0 +1,40 @@
+<%
+  today = Date.today
+  start_date = @selected_date.beginning_of_month.beginning_of_week
+  end_date = @selected_date.end_of_month.end_of_week
+  selected_week_start = @selected_date.beginning_of_week
+  selected_week_end = @selected_date.end_of_week
+%>
+
+<div class="bg-white rounded-lg shadow p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-lg font-semibold"><%= @selected_date.strftime("%Y年%m月") %></h2>
+    <div class="flex gap-2">
+      <%= link_to "上個月", weekly_trade_summaries_path(date: @selected_date - 1.month), class: "px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded" %>
+      <%= link_to "下個月", weekly_trade_summaries_path(date: @selected_date + 1.month), class: "px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-7 gap-1">
+    <% %w[日 一 二 三 四 五 六].each do |day| %>
+      <div class="text-center text-sm font-medium text-gray-500 py-2"><%= day %></div>
+    <% end %>
+
+    <% (start_date..end_date).each do |date| %>
+      <%
+        is_selected_week = date >= selected_week_start && date <= selected_week_end
+        is_current_month = date.month == @selected_date.month
+        is_today = date == today
+      %>
+      <div class="relative">
+        <%= link_to weekly_trade_summaries_path(date: date),
+            class: "block text-center py-2 rounded #{is_selected_week ? 'bg-indigo-100' : ''} #{!is_current_month ? 'text-gray-400' : ''} #{is_today ? 'font-bold' : ''}" do %>
+          <span class="relative z-10"><%= date.day %></span>
+          <% if is_selected_week %>
+            <div class="absolute inset-0 bg-indigo-100 rounded"></div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
