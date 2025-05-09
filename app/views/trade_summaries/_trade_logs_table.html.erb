@@ -1,0 +1,64 @@
+<table class="min-w-full divide-y divide-gray-200">
+  <thead class="bg-gray-50">
+    <tr>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">券商帳戶</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">交易日期</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">商品名稱</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">合約月份</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">買口數</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">賣口數</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">成交價格</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">損益</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">手續費</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">交易稅</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">淨損益</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">幣別</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">委託書號</th>
+    </tr>
+  </thead>
+  <tbody class="bg-white divide-y divide-gray-200">
+    <% active_logs.each do |trade_log| %>
+      <tr>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.broker_account.name %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= link_to trade_log.trade_date&.strftime('%Y/%m/%d'), daily_trade_summaries_path(date: trade_log.trade_date), class: "text-indigo-500 hover:underline" %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.product_name %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.contract_month %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.buy_quantity %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.sell_quantity %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= number_with_precision(trade_log.price) %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.gross_pnl ? number_with_precision(trade_log.gross_pnl, precision: 0) : '' %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.commission ? number_with_precision(trade_log.commission, precision: 0) : '' %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.tax ? number_with_precision(trade_log.tax, precision: 0) : '' %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm <%= trade_log.net_pnl.to_f >= 0 ? 'text-green-600' : 'text-red-600' %>">
+          <%= trade_log.net_pnl ? number_with_precision(trade_log.net_pnl, precision: 0) : '' %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.currency %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <%= trade_log.order_id %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -11,7 +11,7 @@
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">虧損交易</span>
-      <span class="text-red-600 font-medium"><%= @statistics[:lose_count] %></span>
+      <span class="text-red-600 font-medium"><%= @statistics[:loss_count] %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">勝率</span>
@@ -50,7 +50,7 @@
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">平均虧損</span>
-      <span class="text-red-600 font-medium"><%= number_with_precision(@statistics[:avg_lose], precision: 0) %></span>
+      <span class="text-red-600 font-medium"><%= number_with_precision(@statistics[:avg_loss], precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">最大獲利</span>
@@ -58,11 +58,15 @@
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">最大虧損</span>
-      <span class="text-red-600 font-medium"><%= number_with_precision(@statistics[:max_lose], precision: 0) %></span>
+      <span class="text-red-600 font-medium"><%= number_with_precision(@statistics[:max_loss], precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">盈虧比</span>
-      <span class="font-medium"><%= @statistics[:profit_lose_ratio] %></span>
+      <span class="font-medium"><%= @statistics[:profit_loss_ratio] %></span>
+    </div>
+    <div class="flex justify-between">
+      <span class="text-gray-600">最大連續虧損次數</span>
+      <span class="text-red-600 font-medium"><%= @statistics[:max_consecutive_losses] %></span>
     </div>
   </div>
 </div>

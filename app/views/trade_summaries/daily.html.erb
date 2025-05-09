@@ -25,13 +25,33 @@
     <!-- Daily Risk Highlights -->
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-lg font-semibold mb-4">風險指標</h2>
+
       <div class="space-y-4">
-        <!-- Add spacing with CSS margin instead of empty divs -->
-        <div class="mt-24"></div>
         <div class="flex justify-between items-center">
-          <span class="text-gray-700">當日最大虧損:</span>
-          <% max_loss = @trade_logs.map { |log| log.net_pnl || 0 }.min || 0 %>
-          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100) * 100).round %>
+          <% max_daily_trades = 8 %>
+          <span class="text-gray-700">交易次數: (< <%= max_daily_trades %>)</span>
+          <span class="font-medium <%= @statistics[:trade_count] >= max_daily_trades ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+            <%= @statistics[:trade_count] %>
+            <% if @statistics[:trade_count] >= max_daily_trades %>
+              (>= <%= max_daily_trades %>)
+            <% end %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <% max_consecutive_losses = 3 %>
+          <span class="text-gray-700">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
+          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+            <%= @statistics[:max_consecutive_losses] %>
+            <% if @statistics[:max_consecutive_losses] >= max_consecutive_losses %>
+              (>= <%= max_consecutive_losses %>)
+            <% end %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <% max_loss = @statistics[:max_loss] %>
+          <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
+          <span class="text-gray-700">當日單筆最大虧損: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
+          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / risk_amount * 100).round %>
           <span class="font-medium <%=
             if risk_percentage >= 100
               'text-red-600 font-bold'
@@ -42,16 +62,17 @@
             end
           %>">
             <%= number_with_precision(max_loss, precision: 0) %>
-            <% if @month_report.ending_capital > 0 %>
+            <% if risk_amount > 0 %>
               (<%= risk_percentage %>% of risk)
             <% end %>
           </span>
         </div>
 
         <div class="flex justify-between items-center">
-          <span class="text-gray-700">當日淨損益:</span>
-          <% total_net_pnl = @trade_logs.sum { |log| log.net_pnl || 0 } %>
-          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (total_net_pnl.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100) * 100).round %>
+          <% total_net_pnl = @statistics[:total_net_profit] %>
+          <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100 %>
+          <span class="text-gray-700">當日淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
+          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (total_net_pnl.abs.to_f / risk_amount * 100).round %>
           <span class="font-medium <%=
             if total_net_pnl < 0 && risk_percentage >= 100
               'text-red-600 font-bold'
@@ -64,14 +85,13 @@
             end
           %>">
             <%= number_with_precision(total_net_pnl, precision: 0) %>
-            <% if total_net_pnl < 0 && @month_report.ending_capital > 0 %>
+            <% if total_net_pnl < 0 && risk_amount > 0 %>
               (<%= risk_percentage %>% of risk)
             <% end %>
           </span>
         </div>
       </div>
     </div>
-
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -98,65 +118,6 @@
         </div>
       </div>
     </div>
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">券商帳戶</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">商品名稱</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">合約月份</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">買口數</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">賣口數</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">成交價格</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">損益</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">手續費</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">交易稅</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">淨損益</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">幣別</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">委託書號</th>
-        </tr>
-      </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-        <% @trade_logs.each do |trade_log| %>
-          <tr>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.broker_account.name %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.product_name %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.contract_month %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.buy_quantity %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.sell_quantity %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= number_with_precision(trade_log.price) %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.gross_pnl ? number_with_precision(trade_log.gross_pnl, precision: 0) : '' %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.commission ? number_with_precision(trade_log.commission, precision: 0) : '' %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.tax ? number_with_precision(trade_log.tax, precision: 0) : '' %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm <%= trade_log.net_pnl.to_f >= 0 ? 'text-green-600' : 'text-red-600' %>">
-              <%= trade_log.net_pnl ? number_with_precision(trade_log.net_pnl, precision: 0) : '' %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.currency %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= trade_log.order_id %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <%= render 'trade_logs_table', active_logs: @trade_logs %>
   </div>
 </div>
