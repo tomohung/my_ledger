@@ -23,7 +23,7 @@
           <%= trade_log.broker_account.name %>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-          <%= trade_log.trade_date&.strftime('%Y/%m/%d') %>
+          <%= link_to trade_log.trade_date&.strftime('%Y/%m/%d'), daily_trade_summaries_path(date: trade_log.trade_date), class: "text-indigo-500 hover:underline" %>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
           <%= trade_log.product_name %>
