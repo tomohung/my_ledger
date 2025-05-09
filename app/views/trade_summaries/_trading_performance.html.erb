@@ -64,5 +64,9 @@
       <span class="text-gray-600">盈虧比</span>
       <span class="font-medium"><%= @statistics[:profit_loss_ratio] %></span>
     </div>
+    <div class="flex justify-between">
+      <span class="text-gray-600">最大連續虧損次數</span>
+      <span class="text-red-600 font-medium"><%= @statistics[:max_consecutive_losses] %></span>
+    </div>
   </div>
 </div>

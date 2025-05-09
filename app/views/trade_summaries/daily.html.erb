@@ -27,9 +27,18 @@
       <h2 class="text-lg font-semibold mb-4">風險指標</h2>
       <div class="space-y-4">
         <!-- Add spacing with CSS margin instead of empty divs -->
-        <div class="mt-24"></div>
+        <div class="mt-14"></div>
         <div class="flex justify-between items-center">
-          <span class="text-gray-700">當日最大虧損:</span>
+          <span class="text-gray-700">最大連續虧損次數:</span>
+          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= 3 ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+            <%= @statistics[:max_consecutive_losses] %>
+            <% if @statistics[:max_consecutive_losses] >= 3 %>
+              (>= 3)
+            <% end %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-700">當日單筆最大虧損:</span>
           <% max_loss = @statistics[:max_loss] %>
           <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100) * 100).round %>
           <span class="font-medium <%=

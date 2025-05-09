@@ -17,7 +17,8 @@ class TradeLogStatisticsService
       total_net_profit: active_trades.sum(&:net_pnl),
       profit_loss_ratio: calculate_profit_loss_ratio,
       total_commission: calculate_total_commission,
-      total_tax: calculate_total_tax
+      total_tax: calculate_total_tax,
+      max_consecutive_losses: calculate_max_consecutive_losses
     }
   end
 
@@ -61,5 +62,23 @@ class TradeLogStatisticsService
 
   def calculate_total_tax
     @trade_logs.sum(&:tax).to_f
+  end
+
+  def calculate_max_consecutive_losses
+    return 0 if @active_trades.empty?
+
+    current_streak = 0
+    max_streak = 0
+
+    @active_trades.sort_by(&:created_at).each do |trade|
+      if trade.gross_pnl&.negative?
+        current_streak += 1
+        max_streak = [max_streak, current_streak].max
+      else
+        current_streak = 0
+      end
+    end
+
+    max_streak
   end
 end
