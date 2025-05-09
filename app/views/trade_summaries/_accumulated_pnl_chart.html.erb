@@ -1,0 +1,23 @@
+<%# Calculate accumulated PNL for each day in the month %>
+<% month_start = @selected_date.beginning_of_month %>
+<% month_end = @selected_date.end_of_month %>
+<% accumulated_pnl = 0 %>
+<% daily_pnl_data = {} %>
+
+<% (month_start..month_end).each do |date| %>
+  <% daily_pnl = @trade_logs.select { |log| log.trade_date == date }.sum { |log| log.net_pnl.to_f } %>
+  <% accumulated_pnl += daily_pnl %>
+  <% daily_pnl_data[date] = date.future? ? nil : accumulated_pnl %>
+<% end %>
+
+<div class="bg-white rounded-lg shadow p-6">
+  <h2 class="text-lg font-semibold mb-4">本月累積損益走勢</h2>
+    <%= area_chart daily_pnl_data,
+      colors: ["#3B82F6"],
+      xtitle: "日期",
+      ytitle: "累積損益",
+      ymin: daily_pnl_data.values.compact.min,
+      ymax: daily_pnl_data.values.compact.max,
+      points: true,
+      curve: true %>
+</div>
