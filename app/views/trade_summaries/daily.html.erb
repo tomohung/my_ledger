@@ -23,6 +23,8 @@
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-lg font-semibold mb-4">風險指標</h2>
       <div class="space-y-4">
+        <!-- Add spacing with CSS margin instead of empty divs -->
+        <div class="mt-24"></div>
         <div class="flex justify-between items-center">
           <span class="text-gray-700">當日最大虧損:</span>
           <% max_loss = @trade_logs.map { |log| log.net_pnl || 0 }.min || 0 %>
