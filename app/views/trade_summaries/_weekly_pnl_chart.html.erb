@@ -1,22 +1,31 @@
 <% active_logs = @trade_logs.select { |log| log.gross_pnl.present? } %>
 <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
-<% warning_logs, normal_logs = active_logs.partition { |log| log.gross_pnl.negative? && log.gross_pnl.abs > risk_amount } %>
-<% normal_logs, good_logs = normal_logs.partition { |log| log.gross_pnl <= risk_amount } %>
+
+<% profit_large_risk = active_logs.select { |log| log.gross_pnl > 0 && log.gross_pnl > risk_amount } %>
+<% profit_small_risk = active_logs.select { |log| log.gross_pnl > 0 && log.gross_pnl <= risk_amount } %>
+<% loss_small_risk = active_logs.select { |log| log.gross_pnl < 0 && log.gross_pnl.abs <= risk_amount } %>
+<% loss_large_risk = active_logs.select { |log| log.gross_pnl < 0 && log.gross_pnl.abs > risk_amount } %>
+
 <%= scatter_chart [
   {
-    name: "警告",
-    data: warning_logs.map { |log| [log.trade_date.wday, log.gross_pnl] },
-    color: "#EF4444"
+    name: "獲利 > 風險",
+    data: profit_large_risk.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    color: "#3B82F6"
   },
   {
-    name: "正常",
-    data: normal_logs.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    name: "獲利 ≤ 風險",
+    data: profit_small_risk.map { |log| [log.trade_date.wday, log.gross_pnl] },
     color: "#FBBF24"
   },
   {
-    name: "優良",
-    data: good_logs.map { |log| [log.trade_date.wday, log.gross_pnl] },
-    color: "#3B82F6"
+    name: "虧損 ≤ 風險",
+    data: loss_small_risk.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    color: "#9CA3AF"
+  },
+  {
+    name: "虧損 > 風險",
+    data: loss_large_risk.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    color: "#EF4444"
   }
 ],
     xtitle: "星期",
