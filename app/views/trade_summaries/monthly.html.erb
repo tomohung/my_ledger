@@ -17,12 +17,13 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Capital & Risk Management -->
     <%= render 'capital_risk_management' %>
+
     <!-- Monthly Risk Information -->
-    <div class="bg-white rounded-lg shadow p-6 mt-6">
+    <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-lg font-semibold mb-4">本月風險管理</h2>
       <div class="space-y-4">
         <!-- Add spacing with CSS margin instead of empty divs -->
-        <div class="mt-48"></div>
+        <div class="mt-54"></div>
         <div class="flex justify-between">
           <% total_net_pnl = @trade_logs.sum { |log| log.net_pnl.to_f } %>
           <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (total_net_pnl.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_month / 100) * 100).round %>
@@ -48,7 +49,7 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Trading Performance -->
     <%= render 'trading_performance' %>
   </div>
