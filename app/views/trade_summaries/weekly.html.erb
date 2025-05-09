@@ -16,6 +16,29 @@
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <%= render 'calendar' %>
+
+    <!-- Gross PnL Chart -->
+    <div class="md:col-span-2 bg-white rounded-lg shadow p-6">
+      <h2 class="text-lg font-semibold mb-4">本週交易損益走勢</h2>
+      <%= scatter_chart @trade_logs.map { |log| [log.trade_date, log.gross_pnl] },
+          colors: ["#3B82F6"],
+          library: {
+            scales: {
+              y: {
+                title: {
+                  display: true,
+                  text: 'Gross Profit & Loss'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Date'
+                }
+              }
+            }
+          } %>
+    </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
