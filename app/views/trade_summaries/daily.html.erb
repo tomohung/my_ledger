@@ -29,7 +29,7 @@
       <div class="space-y-4">
         <div class="flex justify-between items-center">
           <% max_daily_trades = 8 %>
-          <span class="text-gray-700">交易次數: (<= <%= max_daily_trades %>)</span>
+          <span class="text-gray-700">交易次數: (< <%= max_daily_trades %>)</span>
           <span class="font-medium <%= @statistics[:trade_count] >= max_daily_trades ? 'text-red-600 font-bold' : 'text-gray-900' %>">
             <%= @statistics[:trade_count] %>
             <% if @statistics[:trade_count] >= max_daily_trades %>
