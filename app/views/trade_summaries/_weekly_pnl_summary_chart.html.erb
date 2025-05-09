@@ -1,0 +1,9 @@
+<% weekday_pnl = @trade_logs.group_by { |log| log.trade_date.wday }.transform_values { |logs| logs.sum { |log| log.net_pnl.to_f } } %>
+<% weekday_names = ['日', '一', '二', '三', '四', '五', '六'] %>
+<%= column_chart weekday_names.map.with_index { |name, i| [name, weekday_pnl[i] || 0] },
+    colors: ["#3B82F6"],
+    xtitle: "星期",
+    ytitle: "淨損益",
+    ymin: weekday_pnl.values.min,
+    ymax: weekday_pnl.values.max
+    %>
