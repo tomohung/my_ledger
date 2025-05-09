@@ -1,0 +1,28 @@
+<% active_logs = @trade_logs.select { |log| log.gross_pnl.present? } %>
+<% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
+<% warning_logs, normal_logs = active_logs.partition { |log| log.gross_pnl.negative? && log.gross_pnl.abs > risk_amount } %>
+<% normal_logs, good_logs = normal_logs.partition { |log| log.gross_pnl <= risk_amount } %>
+<%= scatter_chart [
+  {
+    name: "警告",
+    data: warning_logs.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    color: "#EF4444"
+  },
+  {
+    name: "正常",
+    data: normal_logs.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    color: "#FBBF24"
+  },
+  {
+    name: "優良",
+    data: good_logs.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    color: "#3B82F6"
+  }
+],
+    xtitle: "星期",
+    ytitle: "損益",
+    ymin: @trade_logs.map { |log| log.gross_pnl.to_f }.min,
+    ymax: @trade_logs.map { |log| log.gross_pnl.to_f }.max,
+    xmin: 0,
+    xmax: 6
+    %>

@@ -20,34 +20,7 @@
     <!-- Gross PnL Chart -->
     <div class="md:col-span-2 bg-white rounded-lg shadow p-6">
       <h2 class="text-lg font-semibold mb-4">本週交易損益走勢</h2>
-      <% active_logs = @trade_logs.select { |log| log.gross_pnl.present? } %>
-      <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
-      <% warning_logs, normal_logs = active_logs.partition { |log| log.gross_pnl.negative? && log.gross_pnl.abs > risk_amount } %>
-      <% normal_logs, good_logs = normal_logs.partition { |log| log.gross_pnl <= risk_amount } %>
-      <%= scatter_chart [
-        {
-          name: "警告",
-          data: warning_logs.map { |log| [log.trade_date.wday, log.gross_pnl] },
-          color: "#EF4444"
-        },
-        {
-          name: "正常",
-          data: normal_logs.map { |log| [log.trade_date.wday, log.gross_pnl] },
-          color: "#FBBF24"
-        },
-        {
-          name: "優良",
-          data: good_logs.map { |log| [log.trade_date.wday, log.gross_pnl] },
-          color: "#3B82F6"
-        }
-      ],
-          xtitle: "星期",
-          ytitle: "損益",
-          ymin: @trade_logs.map { |log| log.gross_pnl.to_f }.min,
-          ymax: @trade_logs.map { |log| log.gross_pnl.to_f }.max,
-          xmin: 0,
-          xmax: 6
-          %>
+      <%= render 'weekly_pnl_chart' %>
     </div>
   </div>
 
@@ -56,73 +29,7 @@
     <%= render 'capital_risk_management' %>
 
     <!-- Weekly Risk Information -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">本週風險管理</h2>
-      <div class="space-y-4">
-        <div class="flex justify-between items-center">
-          <% max_consecutive_losses = 6 %>
-          <span class="text-gray-700">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
-          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'text-red-600 font-bold' : 'text-gray-900' %>">
-            <%= @statistics[:max_consecutive_losses] %>
-            <% if @statistics[:max_consecutive_losses] >= max_consecutive_losses %>
-              (>= <%= max_consecutive_losses %>)
-            <% end %>
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <% max_win_rate = 40 %>
-          <span class="text-gray-700">勝率: (< <%= max_win_rate %> %)</span>
-          <span class="font-medium <%= @statistics[:win_rate] <= max_win_rate ? 'text-red-600 font-bold' : 'text-gray-900' %>">
-            <%= number_to_percentage(@statistics[:win_rate], precision: 1) %>
-            <% if @statistics[:win_rate] <= max_win_rate %>
-              (<= <%= max_win_rate %>%)
-            <% end %>
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <% max_loss = @statistics[:max_loss] %>
-          <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
-          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / risk_amount * 100).round %>
-          <span class="text-gray-700">當週單筆最大虧損: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
-          <span class="font-medium <%=
-            if risk_percentage >= 100
-              'text-red-600 font-bold'
-            elsif risk_percentage >= 75
-              'text-yellow-600 font-bold'
-            else
-              'text-gray-900'
-            end
-          %>">
-            <%= number_with_precision(max_loss, precision: 0) %>
-            <% if @month_report.ending_capital > 0 %>
-              (<%= risk_percentage %>% of risk)
-            <% end %>
-          </span>
-        </div>
-        <div class="flex justify-between">
-          <% total_net_pnl = @trade_logs.sum { |log| log.net_pnl.to_f } %>
-          <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_week / 100 %>
-          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (total_net_pnl.abs.to_f / risk_amount * 100).round %>
-          <span class="text-gray-700">本週淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
-          <span class="font-medium <%=
-            if total_net_pnl > 0
-              'text-green-600'
-            elsif risk_percentage >= 100
-              'text-red-600 font-bold'
-            elsif risk_percentage >= 75
-              'text-yellow-600 font-bold'
-            else
-              'text-gray-900'
-            end
-          %>">
-            <%= number_with_precision(total_net_pnl, precision: 0) %>
-            <% if total_net_pnl < 0 && @month_report.ending_capital > 0 %>
-              (<%= risk_percentage %>% of risk)
-            <% end %>
-          </span>
-        </div>
-      </div>
-    </div>
+    <%= render 'weekly_risk_info' %>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
