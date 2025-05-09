@@ -14,11 +14,38 @@
     <% end %>
   </div>
 
-    <!-- Calendar Section -->
-
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Capital & Risk Management -->
     <%= render 'capital_risk_management' %>
+    <!-- Monthly Risk Information -->
+    <div class="bg-white rounded-lg shadow p-6 mt-6">
+      <h2 class="text-lg font-semibold mb-4">本月風險管理</h2>
+      <div class="space-y-4">
+        <!-- Add spacing with CSS margin instead of empty divs -->
+        <div class="mt-48"></div>
+        <div class="flex justify-between">
+          <% total_net_pnl = @trade_logs.sum { |log| log.net_pnl.to_f } %>
+          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (total_net_pnl.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_month / 100) * 100).round %>
+          <span class="text-gray-600">本月風險金額</span>
+          <span class="font-medium <%=
+            if total_net_pnl > 0
+              'text-green-600'
+            elsif risk_percentage >= 100
+              'text-red-600 font-bold'
+            elsif risk_percentage >= 75
+              'text-yellow-600 font-bold'
+            else
+              'text-gray-900'
+            end
+          %>">
+            <%= number_with_precision(total_net_pnl, precision: 0) %>
+            <% if total_net_pnl < 0 && @month_report.ending_capital > 0 %>
+              (<%= risk_percentage %>% of risk)
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
