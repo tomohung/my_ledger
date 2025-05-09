@@ -42,7 +42,7 @@ class MonthReport < ApplicationRecord
   validates :report_date, uniqueness: {scope: :user_id}
 
   before_validation :set_initial_capital, on: :create
-  before_save :calculate_ending_capital
+  before_validation :calculate_ending_capital
 
   def self.generate_for_month(user, date)
     month_start = date.beginning_of_month

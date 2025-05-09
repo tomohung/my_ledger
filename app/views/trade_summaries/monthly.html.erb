@@ -1,36 +1,55 @@
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">每月交易摘要</h1>
-  </div>
-
-  <!-- Top Section -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    <!-- Calendar Section -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="flex items-center justify-between mb-4">
-        <%= link_to monthly_trade_summaries_path(date: @selected_date - 1.month), class: "text-gray-600 hover:text-gray-900" do %>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-          </svg>
-        <% end %>
-        <h2 class="text-lg font-medium text-gray-900">
-          <%= @selected_date.strftime("%Y年%m月") %>
-        </h2>
-        <%= link_to monthly_trade_summaries_path(date: @selected_date + 1.month), class: "text-gray-600 hover:text-gray-900" do %>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-          </svg>
-        <% end %>
-      </div>
+    <div class="flex items-center gap-4">
+      <h1 class="text-2xl font-bold">每月交易摘要</h1>
     </div>
+    <%= form_tag monthly_trade_summaries_path, method: :get, class: "flex items-center gap-4" do %>
+      <div class="flex items-center gap-2">
+        <%= link_to "前一個月", monthly_trade_summaries_path(date: @selected_date - 1.month), class: "px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" %>
+        <%= label_tag :date, "選擇日期" %>
+        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300" %>
+        <%= link_to "後一個月", monthly_trade_summaries_path(date: @selected_date + 1.month), class: "px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" %>
+      </div>
+      <%= submit_tag "查詢", class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
+    <% end %>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Capital & Risk Management -->
     <%= render 'capital_risk_management' %>
+
+    <!-- Monthly Risk Information -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-lg font-semibold mb-4">本月風險管理</h2>
+      <div class="space-y-4">
+        <!-- Add spacing with CSS margin instead of empty divs -->
+        <div class="mt-54"></div>
+        <div class="flex justify-between">
+          <% total_net_pnl = @trade_logs.sum { |log| log.net_pnl.to_f } %>
+          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (total_net_pnl.abs.to_f / (@month_report.ending_capital * current_user.risk_amount_percentage_per_month / 100) * 100).round %>
+          <span class="text-gray-600">本月風險金額</span>
+          <span class="font-medium <%=
+            if total_net_pnl > 0
+              'text-green-600'
+            elsif risk_percentage >= 100
+              'text-red-600 font-bold'
+            elsif risk_percentage >= 75
+              'text-yellow-600 font-bold'
+            else
+              'text-gray-900'
+            end
+          %>">
+            <%= number_with_precision(total_net_pnl, precision: 0) %>
+            <% if total_net_pnl < 0 && @month_report.ending_capital > 0 %>
+              (<%= risk_percentage %>% of risk)
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Trading Performance -->
     <%= render 'trading_performance' %>
   </div>
