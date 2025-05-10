@@ -21,7 +21,9 @@
 
     <div class="flex justify-between">
       <span class="text-gray-600">總獲利</span>
-      <span class="text-green-600 font-medium"><%= number_with_precision(@statistics[:total_gross_profit], precision: 0) %></span>
+      <span class="<%= @statistics[:total_gross_profit] >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
+        <%= number_with_precision(@statistics[:total_gross_profit], precision: 0) %>
+      </span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">總手續費</span>
