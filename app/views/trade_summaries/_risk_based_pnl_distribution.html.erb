@@ -1,0 +1,64 @@
+<%# Calculate risk amount per trade %>
+<% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
+<% interval = 0.5 %>
+<% interval_amount = risk_amount * interval %>
+
+<%# Group trades by date and calculate daily net PNL %>
+<% daily_pnl = @trade_logs.group_by(&:trade_date).transform_values { |logs| logs.sum { |log| log.net_pnl.to_f } } %>
+
+<%# Categorize daily PNL into risk-based intervals %>
+<% distribution = Hash.new(0) %>
+<% daily_pnl.each do |date, pnl| %>
+  <% risk_ratio = (pnl / interval_amount).round(0) %>
+  <% distribution[risk_ratio] += 1 %>
+<% end %>
+
+<%# Sort the distribution by risk ratio %>
+<% keys = distribution.keys %>
+<% min_key = keys.min || 0 %>
+<% max_key = keys.max || 0 %>
+<% sorted_distribution = {} %>
+<% (min_key..max_key).each do |key| %>
+  <% sorted_distribution[key * interval] = distribution[key] %>
+<% end %>
+
+<%# Split data into positive and negative %>
+<% positive_data, negative_data = sorted_distribution.partition { |k, v| k > 0 }.map(&:to_h) %>
+
+<div class="bg-white rounded-lg shadow p-6">
+  <h2 class="text-lg font-semibold mb-4">每日損益風險分布</h2>
+  <%= column_chart [
+    {
+      name: "獲利",
+      data: positive_data,
+      color: "#3B82F6"
+    },
+    {
+      name: "虧損",
+      data: negative_data,
+      color: "#EF4444"
+    }
+  ],
+      xtitle: "風險倍數 (R)",
+      ytitle: "交易天數",
+      library: {
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "風險倍數 (R)"
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: "交易天數"
+            },
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      } %>
+</div>
