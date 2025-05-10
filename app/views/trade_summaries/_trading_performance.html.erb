@@ -63,8 +63,12 @@
       <span class="text-red-600 font-medium"><%= number_with_precision(@statistics[:max_loss], precision: 0) %></span>
     </div>
     <div class="flex justify-between">
-      <span class="text-gray-600">盈虧比</span>
-      <span class="font-medium"><%= @statistics[:profit_loss_ratio] %></span>
+      <span class="text-gray-600">平均盈虧比</span>
+      <span class="font-medium"><%= @statistics[:avg_profit_loss_ratio] %></span>
+    </div>
+    <div class="flex justify-between">
+      <span class="text-gray-600">最大盈虧比</span>
+      <span class="font-medium"><%= @statistics[:max_profit_loss_ratio] %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">最大連續虧損次數</span>
