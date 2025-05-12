@@ -19,32 +19,7 @@
         class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
   <% end %>
 
-  <% if @plot_script.present? %>
-    <div class="mt-8 w-full">
-      <h2 class="text-xl font-semibold mb-4">Generated Plot Script</h2>
-      <div class="bg-gray-50 p-4 rounded-lg border border-gray-300">
-        <textarea
-          id="plot-script-output"
-          class="w-full h-[500px] bg-gray-50 text-sm text-gray-800 border-none focus:ring-0 focus:outline-none"
-          readonly><%= @plot_script %></textarea>
-      </div>
-      <div class="mt-4">
-        <button onclick="copyToClipboard()" class="py-2 px-4 bg-gray-600 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-          Copy to Clipboard
-        </button>
-      </div>
-    </div>
-
-    <script>
-      function copyToClipboard() {
-        const scriptTextarea = document.getElementById('plot-script-output');
-        scriptTextarea.select();
-        navigator.clipboard.writeText(scriptTextarea.value).then(() => {
-          alert('Script copied to clipboard!');
-        }).catch(err => {
-          console.error('Could not copy text: ', err);
-        });
-      }
-    </script>
+  <%= turbo_frame_tag "plot-script-output" do %>
+    <%= render "plot_script", plot_script: @plot_script %>
   <% end %>
 </div>

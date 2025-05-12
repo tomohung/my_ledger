@@ -1,0 +1,9 @@
+<div class="mt-8 w-full">
+  <h2 class="text-xl font-semibold mb-4">Generated Plot Script</h2>
+  <div class="bg-gray-50 p-4 rounded-lg border border-gray-300">
+    <%= text_area_tag nil, plot_script,
+        id: "plot-script-output",
+        class: "w-full h-[500px] bg-gray-50 text-sm text-gray-800 border-none focus:ring-0 focus:outline-none",
+        readonly: true %>
+  </div>
+</div>
