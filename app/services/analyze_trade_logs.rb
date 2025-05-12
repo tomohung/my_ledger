@@ -1,9 +1,9 @@
-class TradeLogStatisticsService
+class AnalyzeTradeLogs
   def initialize(trade_logs)
     @trade_logs = trade_logs
   end
 
-  def calculate
+  def call
     {
       avg_profit: calculate_avg_profit,
       avg_loss: calculate_avg_loss,
