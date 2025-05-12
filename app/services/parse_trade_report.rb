@@ -1,6 +1,6 @@
 require "csv"
 
-class TradeReportParserService
+class ParseTradeReport
   # Define a struct to hold trade data
   Trade = Struct.new(:type, :direction, :price, :quantity, :date, :time)
 
@@ -8,7 +8,7 @@ class TradeReportParserService
     @csv_content = csv_content
   end
 
-  def parse
+  def call
     # Remove any BOM or special characters
     cleaned_content = @csv_content.gsub(/^\uFEFF/, "")
     # Clean up Excel-style formatting after successful parse

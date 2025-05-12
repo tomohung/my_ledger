@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe TradeReportParserService do
-  describe "#parse" do
+RSpec.describe ParseTradeReport do
+  describe "#call" do
     context "with 歷史成交 format" do
       let(:futures_csv) do
         <<~CSV
@@ -13,7 +13,7 @@ RSpec.describe TradeReportParserService do
       end
 
       let(:service) { described_class.new(futures_csv) }
-      let(:trades) { service.parse }
+      let(:trades) { service.call }
 
       it "parses the correct number of trades" do
         expect(trades.size).to eq(3)
@@ -51,7 +51,7 @@ RSpec.describe TradeReportParserService do
       end
 
       let(:service) { described_class.new(options_csv) }
-      let(:trades) { service.parse }
+      let(:trades) { service.call }
 
       it "parses the correct number of trades" do
         expect(trades.size).to eq(3)
@@ -80,7 +80,7 @@ RSpec.describe TradeReportParserService do
 
     context "with empty CSV content" do
       let(:service) { described_class.new("") }
-      let(:trades) { service.parse }
+      let(:trades) { service.call }
 
       it "returns an empty array" do
         expect(trades).to be_empty
@@ -94,7 +94,7 @@ RSpec.describe TradeReportParserService do
       end
 
       let(:service) { described_class.new(csv_with_bom) }
-      let(:trades) { service.parse }
+      let(:trades) { service.call }
 
       it "successfully removes BOM and parses the content" do
         expect(trades.size).to eq(1)
