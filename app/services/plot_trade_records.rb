@@ -23,13 +23,17 @@ class PlotTradeRecords
       // Settings
       showBuys = input.bool(true, "Show Buy Signals")
       showSells = input.bool(true, "Show Sell Signals")
-      buyColor = input.color(color.blue, "Buy Signal Color")
-      sellColor = input.color(color.orange, "Sell Signal Color")
+      buyColor = input.color(color.red, "Buy Signal Color")
+      sellColor = input.color(color.green, "Sell Signal Color")
+      closeColor = input.color(color.gray, "Close Signal Color")
     PINE
   end
 
   def plotshape_calls
     trades_to_plot = @merge_to_5min ? merge_trades(@trades) : @trades.map { |t| [t] } # standard:disable Performance/ZipWithoutBlock
+    buy_style = "shape.triangleup"
+    sell_style = "shape.triangledown"
+    close_style = "shape.xcross"
 
     trades_to_plot.map.with_index do |trade_group, index|
       trade = trade_group.first
@@ -39,6 +43,16 @@ class PlotTradeRecords
       show_type = (trade.direction == "買") ? "Buys" : "Sells"
       trade_type = (trade.type == "新倉") ? "open" : "close"
       direction = (trade.direction == "買") ? "buy" : "sell"
+      style, color =
+        if trade.type.include?("新倉")
+          if trade.direction.include?("買")
+            [buy_style, "buyColor"]
+          else
+            [sell_style, "sellColor"]
+          end
+        else
+          [close_style, "closeColor"]
+        end
 
       <<~PINE
         // Trade #{index + 1} (#{trade_group.size} trades)
@@ -46,7 +60,7 @@ class PlotTradeRecords
         #{trade_type}_barTime#{index} = time_close[1]
         #{trade_type}_next_barTime#{index} = time_close
         #{trade_type}#{index}_condition = #{trade_type}_barTime#{index} < #{trade_type}_#{index}_time and #{trade_type}_next_barTime#{index} >= #{trade_type}_#{index}_time and show#{show_type}
-        plotshape(#{trade_type}#{index}_condition ? #{trade.price} : na, title="#{trade_type} #{index + 1}", style=shape.xcross, location=location.absolute, color=#{direction}Color, size=size.small, text="#{direction} #{trade.price} x#{total_quantity}")
+        plotshape(#{trade_type}#{index}_condition ? #{trade.price} : na, title="#{trade_type} #{index + 1}", style=#{style}, location=location.absolute, color=#{color}, textcolor=#{color}, size=size.small, text="#{direction} #{trade.price} x#{total_quantity}")
       PINE
     end.join("\n\n")
   end
