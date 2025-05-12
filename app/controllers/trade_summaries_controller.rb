@@ -11,7 +11,7 @@ class TradeSummariesController < ApplicationController
       .includes(:broker_account)
       .order(created_at: :desc)
 
-    @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
+    @statistics = AnalyzeTradeLogs.new(@trade_logs).call
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
@@ -24,7 +24,7 @@ class TradeSummariesController < ApplicationController
       .includes(:broker_account)
       .order(created_at: :desc)
 
-    @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
+    @statistics = AnalyzeTradeLogs.new(@trade_logs).call
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
@@ -37,7 +37,7 @@ class TradeSummariesController < ApplicationController
       .includes(:broker_account)
       .order(created_at: :desc)
 
-    @statistics = TradeLogStatisticsService.new(@trade_logs).calculate
+    @statistics = AnalyzeTradeLogs.new(@trade_logs).call
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
