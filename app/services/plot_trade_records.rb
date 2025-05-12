@@ -37,14 +37,16 @@ class PlotTradeRecords
       time = trade.time.split(":")
       total_quantity = trade_group.sum(&:quantity)
       show_type = (trade.direction == "買") ? "Buys" : "Sells"
+      trade_type = (trade.type == "新倉") ? "open" : "close"
+      direction = (trade.direction == "買") ? "buy" : "sell"
 
       <<~PINE
         // Trade #{index + 1} (#{trade_group.size} trades)
-        #{trade.type}_#{index}_time = timestamp(#{date[0]}, #{date[1]}, #{date[2]}, #{time[0]}, #{time[1]}, #{time[2]})
-        #{trade.type}_barTime#{index} = time_close[1]
-        #{trade.type}_next_barTime#{index} = time_close
-        #{trade.type}#{index}_condition = #{trade.type}_barTime#{index} < #{trade.type}_#{index}_time and #{trade.type}_next_barTime#{index} >= #{trade.type}_#{index}_time and show#{show_type}
-        plotshape(#{trade.type}#{index}_condition ? #{trade.price} : na, title="#{trade.type} #{index + 1}", style=shape.xcross, location=location.absolute, color=#{(trade.direction == "買") ? "buyColor" : "sellColor"}, size=size.small, text="#{trade.direction} #{trade.price} x#{total_quantity}")
+        #{trade_type}_#{index}_time = timestamp(#{date[0]}, #{date[1]}, #{date[2]}, #{time[0]}, #{time[1]}, #{time[2]})
+        #{trade_type}_barTime#{index} = time_close[1]
+        #{trade_type}_next_barTime#{index} = time_close
+        #{trade_type}#{index}_condition = #{trade_type}_barTime#{index} < #{trade_type}_#{index}_time and #{trade_type}_next_barTime#{index} >= #{trade_type}_#{index}_time and show#{show_type}
+        plotshape(#{trade_type}#{index}_condition ? #{trade.price} : na, title="#{trade_type} #{index + 1}", style=shape.xcross, location=location.absolute, color=#{direction}Color, size=size.small, text="#{direction} #{trade.price} x#{total_quantity}")
       PINE
     end.join("\n\n")
   end
