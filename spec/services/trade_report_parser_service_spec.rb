@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe TradeReportParserService do
   describe "#parse" do
-    context "with futures trading system format" do
+    context "with 歷史成交 format" do
       let(:futures_csv) do
         <<~CSV
           帳號,商品名稱,委託種類,買賣別,委託價,成交均價,原委託量,成交數量,交易日期,成交時間,委託序號,來源別,網路單號,
@@ -40,13 +40,13 @@ RSpec.describe TradeReportParserService do
       end
     end
 
-    context "with options trading system format" do
+    context "with 當日成交 format" do
       let(:options_csv) do
         <<~CSV
           帳號,商品,種類,買賣別,委託價,成交均價,委託量,成交量,交易日期,成交時間,委託序號,來源別,
           ="022-0055408 期權",="小台指05",="平倉IOC",="市賣","20,996","21,100","1","1",="2025/05/12",="10:47:32",="yabdx",="I",
           ="022-0055408 期權",="小台指05",="新倉ROD",="限買","21,116","21,116","1","1",="2025/05/12",="10:36:11",="yabbG",="I",
-          ="022-0055408 期權",="新倉IOC",="市賣","21,200","21,150","1","1",="2025/05/12",="10:30:05",="yab9X",="I"
+          ="022-0055408 期權",="小台指05",="新倉IOC",="市賣","21,200","21,150","1","1",="2025/05/12",="10:30:05",="yab9X",="I"
         CSV
       end
 
