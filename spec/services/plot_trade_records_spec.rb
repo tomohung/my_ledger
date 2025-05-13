@@ -17,18 +17,19 @@ RSpec.describe PlotTradeRecords do
       it "generates correct PineScript code" do
         expect(result).to include("showBuys = input.bool(true, \"Show Buy Signals\")")
         expect(result).to include("showSells = input.bool(true, \"Show Sell Signals\")")
-        expect(result).to include("buyColor = input.color(color.blue, \"Buy Signal Color\")")
-        expect(result).to include("sellColor = input.color(color.orange, \"Sell Signal Color\")")
+        expect(result).to include("buyColor = input.color(color.red, \"Buy Signal Color\")")
+        expect(result).to include("sellColor = input.color(color.green, \"Sell Signal Color\")")
+        expect(result).to include("closeColor = input.color(color.gray, \"Close Signal Color\")")
 
         # Check first trade
         expect(result).to include("timestamp(2025, 05, 09, 08, 48, 14)")
-        expect(result).to include("plotshape(新倉0_condition ? 20700 : na")
-        expect(result).to include('text="買 20700 x2"')
+        expect(result).to include("plotshape(open0_condition ? 20700 : na")
+        expect(result).to include('text="buy 20700 x2"')
 
         # Check second trade
         expect(result).to include("timestamp(2025, 05, 09, 09, 15, 30)")
-        expect(result).to include("plotshape(平倉1_condition ? 20800 : na")
-        expect(result).to include('text="賣 20800 x1"')
+        expect(result).to include("plotshape(close1_condition ? 20800 : na")
+        expect(result).to include('text="sell 20800 x1"')
       end
     end
 
@@ -56,9 +57,9 @@ RSpec.describe PlotTradeRecords do
 
       it "shows total quantity for merged trades" do
         # First group (2 trades within 5 minutes)
-        expect(result).to include('text="買 20700 x3"') # 2 + 1
+        expect(result).to include('text="buy 20700 x3"') # 2 + 1
         # Second group (1 trade)
-        expect(result).to include('text="買 20800 x3"')
+        expect(result).to include('text="buy 20800 x3"')
       end
     end
 
