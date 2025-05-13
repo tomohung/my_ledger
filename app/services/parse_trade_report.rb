@@ -45,7 +45,7 @@ class ParseTradeReport
   end
 
   def extract_price(row)
-    row["成交均價"]&.gsub(/[=",]/, "")&.to_f
+    row["成交均價"]&.gsub(/[=",]/, "")&.to_i
   end
 
   def extract_quantity(row)

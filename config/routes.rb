@@ -25,4 +25,5 @@ Rails.application.routes.draw do
     end
   end
   resource :user, only: [:edit, :update]
+  resources :trade_plots, only: [:new, :create]
 end

@@ -1,0 +1,25 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-6">Generate Trade Plot Script</h1>
+
+  <%= form_with url: trade_plots_path, method: :post, class: "space-y-6" do |f| %>
+    <div>
+      <%= f.label :csv_content, "Paste CSV Content", class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= f.text_area :csv_content,
+          rows: 10,
+          class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500",
+          placeholder: "Paste your CSV content here..." %>
+    </div>
+
+    <div class="flex items-center">
+      <%= f.check_box :merge_to_5min, class: "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" %>
+      <%= f.label :merge_to_5min, "Merge trades to 5-minute intervals", class: "ml-2 block text-sm text-gray-900" %>
+    </div>
+
+    <%= f.submit "Generate Plot Script",
+        class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+  <% end %>
+
+  <%= turbo_frame_tag "plot-script-output" do %>
+    <%= render "plot_script", plot_script: @plot_script %>
+  <% end %>
+</div>
