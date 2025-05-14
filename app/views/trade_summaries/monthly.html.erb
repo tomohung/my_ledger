@@ -34,6 +34,16 @@
           </span>
         </div>
         <div class="flex justify-between items-center">
+          <% max_consecutive_loss_days = 3 %>
+          <span class="text-gray-700">本月最多連續虧損天數: (< <%= max_consecutive_loss_days %>)</span>
+          <span class="font-medium <%= @statistics[:max_consecutive_loss_days] >= max_consecutive_loss_days ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+            <%= @statistics[:max_consecutive_loss_days] %>
+            <% if @statistics[:max_consecutive_loss_days] >= max_consecutive_loss_days %>
+              (>= <%= max_consecutive_loss_days %>)
+            <% end %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
           <% max_win_rate = 40 %>
           <span class="text-gray-700">勝率: (< <%= max_win_rate %> %)</span>
           <span class="font-medium <%= @statistics[:win_rate] <= max_win_rate ? 'text-red-600 font-bold' : 'text-gray-900' %>">
@@ -67,6 +77,11 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 mt-6">
+    <!-- Daily PNL Chart -->
+    <%= render 'daily_pnl_chart' %>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">

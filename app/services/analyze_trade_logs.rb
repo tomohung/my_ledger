@@ -19,7 +19,8 @@ class AnalyzeTradeLogs
       max_profit_loss_ratio: calculate_max_profit_loss_ratio,
       total_commission: calculate_total_commission,
       total_tax: calculate_total_tax,
-      max_consecutive_losses: calculate_max_consecutive_losses
+      max_consecutive_losses: calculate_max_consecutive_losses,
+      max_consecutive_loss_days: calculate_max_consecutive_loss_days
     }
   end
 
@@ -80,6 +81,29 @@ class AnalyzeTradeLogs
 
     @active_trades.sort_by(&:trade_date).each do |trade|
       if trade.gross_pnl&.negative?
+        current_consecutive += 1
+        max_consecutive = [max_consecutive, current_consecutive].max
+      else
+        current_consecutive = 0
+      end
+    end
+
+    max_consecutive
+  end
+
+  def calculate_max_consecutive_loss_days
+    return 0 if @active_trades.empty?
+
+    # Group trades by date and sum their gross_pnl
+    daily_pnl = @active_trades.group_by(&:trade_date).transform_values do |trades|
+      trades.sum(&:net_pnl)
+    end
+
+    max_consecutive = 0
+    current_consecutive = 0
+
+    daily_pnl.sort_by { |date, _| date }.each do |date, pnl|
+      if pnl.negative?
         current_consecutive += 1
         max_consecutive = [max_consecutive, current_consecutive].max
       else

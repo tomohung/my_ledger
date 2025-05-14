@@ -9,7 +9,6 @@ class TradeSummariesController < ApplicationController
     @trade_logs = current_user.trade_logs
       .where(trade_date: @selected_date)
       .includes(:broker_account)
-      .order(created_at: :desc)
 
     @statistics = AnalyzeTradeLogs.new(@trade_logs).call
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
@@ -22,7 +21,6 @@ class TradeSummariesController < ApplicationController
     @trade_logs = current_user.trade_logs
       .where(trade_date: week_start..week_end)
       .includes(:broker_account)
-      .order(created_at: :desc)
 
     @statistics = AnalyzeTradeLogs.new(@trade_logs).call
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
@@ -35,7 +33,6 @@ class TradeSummariesController < ApplicationController
     @trade_logs = current_user.trade_logs
       .where(trade_date: month_start..month_end)
       .includes(:broker_account)
-      .order(created_at: :desc)
 
     @statistics = AnalyzeTradeLogs.new(@trade_logs).call
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
