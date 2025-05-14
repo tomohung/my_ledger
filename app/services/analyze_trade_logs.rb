@@ -101,20 +101,14 @@ class AnalyzeTradeLogs
 
     max_consecutive = 0
     current_consecutive = 0
-    last_trade_date = nil
 
     daily_pnl.sort_by { |date, _| date }.each do |date, pnl|
       if pnl.negative?
-        if last_trade_date.nil? || date == last_trade_date + 1.day
-          current_consecutive += 1
-          max_consecutive = [max_consecutive, current_consecutive].max
-        else
-          current_consecutive = 1
-        end
+        current_consecutive += 1
+        max_consecutive = [max_consecutive, current_consecutive].max
       else
         current_consecutive = 0
       end
-      last_trade_date = date
     end
 
     max_consecutive
