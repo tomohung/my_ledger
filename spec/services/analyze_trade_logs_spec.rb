@@ -48,6 +48,21 @@ RSpec.describe AnalyzeTradeLogs do
       end
     end
 
+    context "with consecutive loss days" do
+      let(:trade_logs) do
+        [
+          double("TradeLog", gross_pnl: -50.0, net_pnl: -55.0, commission: 5.0, tax: 0.0, trade_date: Date.today),
+          double("TradeLog", gross_pnl: 200.0, net_pnl: 190.0, commission: 5.0, tax: 5.0, trade_date: Date.today - 1.day),
+          double("TradeLog", gross_pnl: -30.0, net_pnl: -35.0, commission: 5.0, tax: 0.0, trade_date: Date.today - 2.days),
+          double("TradeLog", gross_pnl: -20.0, net_pnl: -25.0, commission: 5.0, tax: 0.0, trade_date: Date.today - 3.days)
+        ]
+      end
+
+      it "calculates max consecutive loss days" do
+        expect(result[:max_consecutive_loss_days]).to eq(2)
+      end
+    end
+
     context "with empty trade logs" do
       let(:trade_logs) { [] }
 
@@ -67,6 +82,7 @@ RSpec.describe AnalyzeTradeLogs do
         expect(result[:total_commission]).to eq(0.0)
         expect(result[:total_tax]).to eq(0.0)
         expect(result[:max_consecutive_losses]).to eq(0)
+        expect(result[:max_consecutive_loss_days]).to eq(0)
       end
     end
   end
