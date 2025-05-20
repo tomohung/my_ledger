@@ -17,6 +17,7 @@ class AnalyzeTradeLogs
       total_net_profit: active_trades.sum(&:net_pnl),
       avg_profit_loss_ratio: calculate_avg_profit_loss_ratio,
       max_profit_loss_ratio: calculate_max_profit_loss_ratio,
+      average_pnl: calculate_average_pnl,
       total_commission: calculate_total_commission,
       total_tax: calculate_total_tax,
       max_consecutive_losses: calculate_max_consecutive_losses,
@@ -63,6 +64,11 @@ class AnalyzeTradeLogs
     max_profit = profit_trades.map(&:gross_pnl).max
     min_loss = loss_trades.map(&:gross_pnl).min
     (max_profit.abs / min_loss.abs).round(2)
+  end
+
+  def calculate_average_pnl
+    return 0 if active_trades.empty?
+    active_trades.sum(&:gross_pnl) / active_trades.count
   end
 
   def calculate_total_commission
