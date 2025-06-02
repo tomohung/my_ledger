@@ -35,7 +35,7 @@
         is_today = date == today
       %>
       <div class="relative">
-        <%= link_to weekly_trade_summaries_path(date: date),
+        <%= link_to daily_trade_summaries_path(date: date),
             class: "block text-center py-2 rounded #{is_selected_week ? 'bg-indigo-100' : ''} #{!is_current_month ? 'text-gray-400' : ''} #{is_today ? 'font-bold' : ''}" do %>
           <span class="relative z-10"><%= date.day %></span>
           <% if is_selected_week %>
