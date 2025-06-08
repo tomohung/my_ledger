@@ -45,6 +45,6 @@
   </div>
 
   <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
-    <%= render 'trade_logs_table', active_logs: @trade_logs.select { |log| log.net_pnl.to_f.abs > 0.5 * @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 }.sort_by(&:net_pnl) %>
+    <%= render 'trade_logs_table', active_logs: @trade_logs.select { |log| log.net_pnl.present? }.sort_by(&:net_pnl) %>
   </div>
 </div>
