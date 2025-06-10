@@ -1,9 +1,40 @@
 <% weekday_pnl = @trade_logs.group_by { |log| log.trade_date.wday }.transform_values { |logs| logs.sum { |log| log.net_pnl.to_f } } %>
 <% weekday_names = ['日', '一', '二', '三', '四', '五', '六'] %>
-<%= column_chart weekday_names.map.with_index { |name, i| [name, weekday_pnl[i] || 0] },
-    colors: ["#3B82F6"],
+
+<%# Split data into positive and negative %>
+<% positive_data = weekday_names.map.with_index { |name, i| [name, weekday_pnl[i]&.positive? ? weekday_pnl[i] : 0] } %>
+<% negative_data = weekday_names.map.with_index { |name, i| [name, weekday_pnl[i]&.negative? ? weekday_pnl[i] : 0] } %>
+
+  <%= column_chart [
+    {
+      name: "獲利",
+      data: positive_data,
+      color: "#3B82F6"
+    },
+    {
+      name: "虧損",
+      data: negative_data,
+      color: "#EF4444"
+    }
+  ],
     xtitle: "星期",
     ytitle: "淨損益",
-    ymin: weekday_pnl.values.min,
-    ymax: weekday_pnl.values.max
-    %>
+    library: {
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "星期"
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: "淨損益"
+          },
+          beginAtZero: true
+        }
+      }
+    },
+    stacked: true
+  %>
