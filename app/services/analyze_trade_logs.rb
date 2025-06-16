@@ -11,10 +11,10 @@ class AnalyzeTradeLogs
       profit_count: profit_trades.count,
       loss_count: loss_trades.count,
       trade_count: @active_trades.count,
-      max_profit: profit_trades.map(&:gross_pnl).max || 0,
-      max_loss: loss_trades.map(&:gross_pnl).min || 0,
-      total_gross_profit: active_trades.sum(&:gross_pnl),
-      total_net_profit: active_trades.sum(&:net_pnl),
+      max_profit: profit_trades.map(&:net_pnl).max || 0,
+      max_loss: loss_trades.map(&:net_pnl).min || 0,
+      total_gross_profit: active_trades.pluck(:gross_pnl).compact_blank.sum,
+      total_net_profit: active_trades.pluck(:net_pnl).compact_blank.sum,
       avg_profit_loss_ratio: calculate_avg_profit_loss_ratio,
       max_profit_loss_ratio: calculate_max_profit_loss_ratio,
       average_pnl: calculate_average_pnl,
@@ -28,25 +28,25 @@ class AnalyzeTradeLogs
   private
 
   def active_trades
-    @active_trades ||= @trade_logs.select { |trade| trade.gross_pnl.present? }
+    @active_trades ||= @trade_logs.select { |trade| trade.net_pnl.present? }
   end
 
   def profit_trades
-    @profit_trades ||= @trade_logs.select { |trade| trade.gross_pnl&.positive? }
+    @profit_trades ||= @trade_logs.select { |trade| trade.net_pnl&.positive? }
   end
 
   def loss_trades
-    @loss_trades ||= @trade_logs.select { |trade| trade.gross_pnl&.negative? }
+    @loss_trades ||= @trade_logs.select { |trade| trade.net_pnl&.negative? }
   end
 
   def calculate_avg_profit
     return 0 if profit_trades.empty?
-    profit_trades.sum(&:gross_pnl) / profit_trades.count
+    profit_trades.sum(&:net_pnl) / profit_trades.count
   end
 
   def calculate_avg_loss
     return 0 if loss_trades.empty?
-    loss_trades.sum(&:gross_pnl) / loss_trades.count
+    loss_trades.sum(&:net_pnl) / loss_trades.count
   end
 
   def calculate_win_rate
@@ -61,14 +61,14 @@ class AnalyzeTradeLogs
 
   def calculate_max_profit_loss_ratio
     return 0 if loss_trades.empty? || profit_trades.empty?
-    max_profit = profit_trades.map(&:gross_pnl).max
-    min_loss = loss_trades.map(&:gross_pnl).min
+    max_profit = profit_trades.map(&:net_pnl).max
+    min_loss = loss_trades.map(&:net_pnl).min
     (max_profit.abs / min_loss.abs).round(2)
   end
 
   def calculate_average_pnl
     return 0 if active_trades.empty?
-    active_trades.sum(&:gross_pnl) / active_trades.count
+    active_trades.sum(&:net_pnl) / active_trades.count
   end
 
   def calculate_total_commission
@@ -86,7 +86,7 @@ class AnalyzeTradeLogs
     current_consecutive = 0
 
     @active_trades.sort_by(&:trade_date).each do |trade|
-      if trade.gross_pnl&.negative?
+      if trade.net_pnl&.negative?
         current_consecutive += 1
         max_consecutive = [max_consecutive, current_consecutive].max
       else
