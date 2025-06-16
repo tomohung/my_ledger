@@ -9,6 +9,7 @@
 #  updated_at      :datetime         not null
 #  risk_settings   :text             default({}), not null
 #  initial_capital :decimal(10, 2)   default(0.0), not null
+#  name            :string
 #
 # Indexes
 #
@@ -55,7 +56,7 @@ class User < ApplicationRecord
   after_initialize :set_default_initial_capital, if: :new_record?
 
   def name
-    email_address.split("@").first
+    super.presence || email_address.split("@").first
   end
 
   private
