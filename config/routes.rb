@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       get :daily
       get :weekly
       get :monthly
+      patch :update_initial_capital
     end
   end
   resource :user, only: [:edit, :update]

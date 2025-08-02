@@ -2,10 +2,32 @@
 <div class="bg-white rounded-lg shadow p-6">
   <h2 class="text-lg font-semibold mb-4">資金與風險管理</h2>
   <div class="space-y-4">
-    <div class="flex justify-between">
+    <div class="flex justify-between items-center">
       <span class="text-gray-600">期初資金</span>
-      <span class="font-medium"><%= number_with_precision(@month_report.initial_capital, precision: 0) %></span>
+      <span class="font-medium" id="initial-capital-value">
+        <%= number_with_precision(@month_report.initial_capital, precision: 0) %>
+        <button type="button" class="ml-2 text-blue-600 underline" data-action="click->dropdown#toggle" data-dropdown-target="button" id="edit-initial-capital-btn">Edit</button>
+      </span>
     </div>
+    <div id="edit-initial-capital-form" style="display:none;" class="flex justify-end mt-2">
+      <%= form_with url: update_initial_capital_trade_summaries_path, method: :patch, local: false, data: { turbo_frame: "initial-capital-value" } do |f| %>
+        <%= f.hidden_field :month_report_id, value: @month_report.id %>
+        <%= f.number_field :initial_capital, value: @month_report.initial_capital, min: 0, class: "border rounded px-2 py-1 w-32 mr-2" %>
+        <%= f.submit "儲存", class: "bg-blue-500 text-white px-3 py-1 rounded mr-2" %>
+        <button type="button" class="bg-gray-300 px-3 py-1 rounded" onclick="document.getElementById('edit-initial-capital-form').style.display='none';document.getElementById('initial-capital-value').style.display='flex';">取消</button>
+      <% end %>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var editBtn = document.getElementById('edit-initial-capital-btn');
+        if (editBtn) {
+          editBtn.addEventListener('click', function() {
+            document.getElementById('initial-capital-value').style.display = 'none';
+            document.getElementById('edit-initial-capital-form').style.display = 'flex';
+          });
+        }
+      });
+    </script>
     <div class="flex justify-between">
       <span class="text-gray-600">期末資金</span>
       <span class="font-medium"><%= number_with_precision(@month_report.ending_capital, precision: 0) %></span>
