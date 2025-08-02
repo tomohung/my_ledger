@@ -44,9 +44,29 @@ class TradeSummariesController < ApplicationController
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
   end
 
+  def update_initial_capital
+    @month_report = current_user.month_reports.find(params[:month_report_id])
+
+    if @month_report.update(initial_capital_params)
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("initial-capital-value", partial: "trade_summaries/capital_risk_management", locals: {month_report: @month_report}) }
+        format.html { redirect_back fallback_location: daily_trade_summaries_path, notice: "期初資金已更新" }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("edit-initial-capital-form", partial: "shared/form_errors", locals: {object: @month_report}) }
+        format.html { redirect_back fallback_location: daily_trade_summaries_path, alert: "更新失敗" }
+      end
+    end
+  end
+
   private
 
   def set_selected_date
     @selected_date = params[:date]&.to_date || Date.today
+  end
+
+  def initial_capital_params
+    params.permit(:initial_capital)
   end
 end
