@@ -41,26 +41,31 @@ class AnalyzeTradeLogs
 
   def calculate_avg_profit
     return 0 if profit_trades.empty?
+
     profit_trades.sum(&:net_pnl) / profit_trades.count
   end
 
   def calculate_avg_loss
     return 0 if loss_trades.empty?
+
     loss_trades.sum(&:net_pnl) / loss_trades.count
   end
 
   def calculate_win_rate
     return 0 if active_trades.empty?
+
     (profit_trades.count.to_f / active_trades.count * 100).round(2)
   end
 
   def calculate_avg_profit_loss_ratio
     return 0 if loss_trades.empty? || profit_trades.empty?
+
     (calculate_avg_profit.abs / calculate_avg_loss.abs).round(2)
   end
 
   def calculate_max_profit_loss_ratio
     return 0 if loss_trades.empty? || profit_trades.empty?
+
     max_profit = profit_trades.map(&:net_pnl).max
     min_loss = loss_trades.map(&:net_pnl).min
     (max_profit.abs / min_loss.abs).round(2)
@@ -68,6 +73,7 @@ class AnalyzeTradeLogs
 
   def calculate_average_pnl
     return 0 if active_trades.empty?
+
     active_trades.sum(&:net_pnl) / active_trades.count
   end
 

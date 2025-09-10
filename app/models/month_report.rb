@@ -69,6 +69,7 @@ class MonthReport < ApplicationRecord
 
   def win_rate
     return 0 if total_trades.zero?
+
     (winning_trades.to_f / total_trades * 100).round(1)
   end
 

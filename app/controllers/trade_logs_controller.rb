@@ -1,5 +1,6 @@
 class TradeLogsController < ApplicationController
   include Pagy::Backend
+
   before_action :set_broker_account, only: [:create]
   before_action :set_trade_log, only: [:destroy]
 
