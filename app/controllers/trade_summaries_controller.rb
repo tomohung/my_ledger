@@ -3,6 +3,7 @@ require "ostruct"
 class TradeSummariesController < ApplicationController
   include Pagy::Backend
   include TimezoneHandling
+
   before_action :set_selected_date, only: [:daily, :weekly, :monthly]
 
   def daily
