@@ -1,37 +1,37 @@
-<% active_logs = @trade_logs.select { |log| log.gross_pnl.present? } %>
+<% active_logs = @trade_logs.select { |log| log.net_pnl.present? } %>
 <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
 
-<% profit_large_risk = active_logs.select { |log| log.gross_pnl > 0 && log.gross_pnl > risk_amount } %>
-<% profit_small_risk = active_logs.select { |log| log.gross_pnl > 0 && log.gross_pnl <= risk_amount } %>
-<% loss_small_risk = active_logs.select { |log| log.gross_pnl < 0 && log.gross_pnl.abs <= risk_amount } %>
-<% loss_large_risk = active_logs.select { |log| log.gross_pnl < 0 && log.gross_pnl.abs > risk_amount } %>
+<% profit_large_risk = active_logs.select { |log| log.net_pnl >= 0 && log.net_pnl > risk_amount } %>
+<% profit_small_risk = active_logs.select { |log| log.net_pnl >= 0 && log.net_pnl <= risk_amount } %>
+<% loss_small_risk = active_logs.select { |log| log.net_pnl < 0 && log.net_pnl.abs <= risk_amount } %>
+<% loss_large_risk = active_logs.select { |log| log.net_pnl < 0 && log.net_pnl.abs > risk_amount } %>
 
 <%= scatter_chart [
   {
     name: "獲利 > 風險",
-    data: profit_large_risk.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    data: profit_large_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
     color: "#3B82F6"
   },
   {
     name: "獲利 ≤ 風險",
-    data: profit_small_risk.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    data: profit_small_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
     color: "#FBBF24"
   },
   {
     name: "虧損 ≤ 風險",
-    data: loss_small_risk.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    data: loss_small_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
     color: "#9CA3AF"
   },
   {
     name: "虧損 > 風險",
-    data: loss_large_risk.map { |log| [log.trade_date.wday, log.gross_pnl] },
+    data: loss_large_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
     color: "#EF4444"
   }
 ],
     xtitle: "星期",
     ytitle: "損益",
-    ymin: @trade_logs.map { |log| log.gross_pnl.to_f }.min,
-    ymax: @trade_logs.map { |log| log.gross_pnl.to_f }.max,
+    ymin: @trade_logs.map { |log| log.net_pnl.to_f }.min,
+    ymax: @trade_logs.map { |log| log.net_pnl.to_f }.max,
     xmin: 0,
     xmax: 6
     %>
