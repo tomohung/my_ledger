@@ -1,5 +1,5 @@
 <%# Calculate risk amount per trade %>
-<% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
+<% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100 %>
 <% interval = 0.5 %>
 <% interval_amount = risk_amount * interval %>
 
