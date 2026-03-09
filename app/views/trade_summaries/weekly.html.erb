@@ -18,13 +18,13 @@
     <%= render 'calendar' %>
 
     <!-- Weekly PnL Summary -->
-    <div class="bg-white rounded-lg shadow p-6">
+    <div class="card p-6">
       <h2 class="text-lg font-semibold mb-4">本週每日淨損益</h2>
       <%= render 'weekly_pnl_summary_chart' %>
     </div>
 
     <!-- Gross PnL Chart -->
-    <div class="bg-white rounded-lg shadow p-6">
+    <div class="card p-6">
       <h2 class="text-lg font-semibold mb-4">本週交易損益走勢</h2>
       <%= render 'weekly_pnl_chart' %>
     </div>
@@ -44,7 +44,7 @@
     <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
   </div>
 
-  <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
+  <div class="card overflow-hidden mt-6">
     <%= render 'trade_logs_table', active_logs: @trade_logs.select { |log| log.net_pnl.present? }.sort_by(&:net_pnl) %>
   </div>
 </div>

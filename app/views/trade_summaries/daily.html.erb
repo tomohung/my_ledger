@@ -23,7 +23,7 @@
     <!-- Capital & Risk Management -->
     <%= render 'capital_risk_management' %>
     <!-- Daily Risk Highlights -->
-    <div class="bg-white rounded-lg shadow p-6">
+    <div class="card p-6">
       <h2 class="text-lg font-semibold mb-4">風險指標</h2>
 
       <div class="space-y-4">
@@ -99,7 +99,7 @@
     <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
   </div>
 
-  <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
+  <div class="card overflow-hidden mt-6">
     <div class="bg-gray-50 border-b border-gray-200">
       <div class="px-6 py-4 flex justify-end">
         <div class="flex items-center gap-8">

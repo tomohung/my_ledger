@@ -19,7 +19,7 @@
     <%= render 'capital_risk_management' %>
 
     <!-- Monthly Risk Information -->
-    <div class="bg-white rounded-lg shadow p-6">
+    <div class="card p-6">
       <h2 class="text-lg font-semibold mb-4">本月風險管理</h2>
       <div class="space-y-4">
         <!-- Add spacing with CSS margin instead of empty divs -->
@@ -109,7 +109,7 @@
     <%= render 'trading_performance', statistics: @sell_statistics, title: '(賣出)' %>
   </div>
 
-  <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
+  <div class="card overflow-hidden mt-6">
     <%= render 'trade_logs_table', active_logs: @trade_logs.select { |log| log.net_pnl.present? }.sort_by(&:net_pnl) %>
   </div>
 </div>

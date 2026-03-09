@@ -25,7 +25,7 @@
 <%# Split data into positive and negative %>
 <% positive_data, negative_data = sorted_distribution.partition { |k, v| k >= 0 }.map(&:to_h) %>
 
-<div class="bg-white rounded-lg shadow p-6">
+<div class="card p-6">
   <h2 class="text-lg font-semibold mb-4">每日損益風險分布</h2>
   <%= column_chart [
     {
