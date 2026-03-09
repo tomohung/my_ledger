@@ -12,13 +12,13 @@
     <div class="flex items-center gap-4">
       <!-- Month navigation -->
       <div class="flex gap-2">
-        <%= link_to "◀ 上個月", weekly_trade_summaries_path(date: @selected_date - 1.month), class: "px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded-md text-xs font-medium" %>
-        <%= link_to "下個月 ▶", weekly_trade_summaries_path(date: @selected_date + 1.month), class: "px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded-md text-xs font-medium" %>
+        <%= link_to "◀ 上個月", weekly_trade_summaries_path(date: @selected_date - 1.month), class: "btn btn-ghost btn-sm" %>
+        <%= link_to "下個月 ▶", weekly_trade_summaries_path(date: @selected_date + 1.month), class: "btn btn-ghost btn-sm" %>
       </div>
       <!-- Week navigation -->
       <div class="flex gap-2">
-        <%= link_to "← 上週", weekly_trade_summaries_path(date: @selected_date - 1.week), class: "px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs border border-gray-300" %>
-        <%= link_to "下週 →", weekly_trade_summaries_path(date: @selected_date + 1.week), class: "px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs border border-gray-300" %>
+        <%= link_to "← 上週", weekly_trade_summaries_path(date: @selected_date - 1.week), class: "btn btn-ghost btn-sm" %>
+        <%= link_to "下週 →", weekly_trade_summaries_path(date: @selected_date + 1.week), class: "btn btn-ghost btn-sm" %>
       </div>
     </div>
   </div>
