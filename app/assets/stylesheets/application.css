@@ -52,6 +52,26 @@ body { background-color: #F8F9FA; }
 }
 .data-table tbody tr:hover { background-color: #FAFAFA; }
 
+/* ── Typography ─────────────────────────────────────────── */
+/* Page titles (h1 inside views) */
+h1 {
+  font-size: 1.5rem;   /* text-2xl */
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.01em;
+}
+
+/* Card section headers (h2) */
+h2.card-title,
+.card h2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6B7280;
+  margin-bottom: 1rem;
+}
+
 /* ── Button system ──────────────────────────────────────── */
 /* Base */
 .btn {

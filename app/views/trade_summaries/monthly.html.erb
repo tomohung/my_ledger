@@ -3,14 +3,13 @@
     <div class="flex items-center gap-4">
       <h1 class="text-2xl font-bold">每月交易摘要</h1>
     </div>
-    <%= form_tag monthly_trade_summaries_path, method: :get, class: "flex items-center gap-4" do %>
+    <%= form_tag monthly_trade_summaries_path, method: :get, class: "flex items-center gap-4", data: { controller: "date-nav" } do %>
       <div class="flex items-center gap-2">
         <%= link_to "前一個月", monthly_trade_summaries_path(date: @selected_date - 1.month), class: "btn btn-ghost" %>
         <%= label_tag :date, "選擇日期" %>
-        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300" %>
+        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300", data: { action: "change->date-nav#change" } %>
         <%= link_to "後一個月", monthly_trade_summaries_path(date: @selected_date + 1.month), class: "btn btn-ghost" %>
       </div>
-      <%= submit_tag "查詢", class: "btn btn-ghost" %>
     <% end %>
   </div>
 

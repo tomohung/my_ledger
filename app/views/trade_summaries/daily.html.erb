@@ -7,15 +7,14 @@
           class: "ml-4 btn #{@trade_logs.present? || @selected_date > Date.today ? 'btn-ghost' : 'btn-success'}",
           disabled: @trade_logs.present? || @selected_date > Date.today %>
     </div>
-    <%= form_tag daily_trade_summaries_path, method: :get, class: "flex items-center gap-4" do %>
+    <%= form_tag daily_trade_summaries_path, method: :get, class: "flex items-center gap-4", data: { controller: "date-nav" } do %>
       <div class="flex items-center gap-2">
         <%= link_to "前一天", daily_trade_summaries_path(date: @selected_date - 1.day), class: "btn btn-ghost" %>
         <%= label_tag :date, "選擇日期" %>
-        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300" %>
+        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300", data: { action: "change->date-nav#change" } %>
         <span class="text-gray-700 font-bold"><%= t('date.day_names')[@selected_date.wday] %></span>
         <%= link_to "後一天", daily_trade_summaries_path(date: @selected_date + 1.day), class: "btn btn-ghost" %>
       </div>
-      <%= submit_tag "查詢", class: "btn btn-ghost" %>
     <% end %>
   </div>
 
