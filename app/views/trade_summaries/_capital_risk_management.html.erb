@@ -4,7 +4,7 @@
   <div class="space-y-4">
     <div class="flex justify-between items-center">
       <span class="text-gray-600">期初資金</span>
-      <span class="font-medium" id="initial-capital-value">
+      <span class="metric-value-sm" id="initial-capital-value">
         <%= number_with_precision(@month_report.initial_capital, precision: 0) %>
         <button type="button" class="ml-2 text-blue-600 underline" data-action="click->dropdown#toggle" data-dropdown-target="button" id="edit-initial-capital-btn">Edit</button>
       </span>
@@ -30,24 +30,24 @@
     </script>
     <div class="flex justify-between">
       <span class="text-gray-600">期末資金</span>
-      <span class="font-medium"><%= number_with_precision(@month_report.ending_capital, precision: 0) %></span>
+      <span class="metric-value"><%= number_with_precision(@month_report.ending_capital, precision: 0) %></span>
     </div>
     <div class="border-t border-gray-200 my-4"></div>
     <div class="flex justify-between">
       <span class="text-gray-600">每筆交易風險金額 (<%= current_user.risk_amount_percentage_per_trade %>%)</span>
-      <span class="font-medium"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100, precision: 0) %></span>
+      <span class="metric-value-sm"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100, precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">每日風險金額 (<%= current_user.risk_amount_percentage_per_day %>%)</span>
-      <span class="font-medium"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100, precision: 0) %></span>
+      <span class="metric-value-sm"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100, precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">每週風險金額 (<%= current_user.risk_amount_percentage_per_week %>%)</span>
-      <span class="font-medium"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_week / 100, precision: 0) %></span>
+      <span class="metric-value-sm"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_week / 100, precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">每月風險金額 (<%= current_user.risk_amount_percentage_per_month %>%)</span>
-      <span class="font-medium"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_month / 100, precision: 0) %></span>
+      <span class="metric-value-sm"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_month / 100, precision: 0) %></span>
     </div>
   </div>
 </div>

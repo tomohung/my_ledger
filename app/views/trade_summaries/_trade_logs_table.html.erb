@@ -1,4 +1,4 @@
-<table class="min-w-full divide-y divide-gray-200">
+<table class="data-table min-w-full divide-y divide-gray-200">
   <thead class="bg-gray-50">
     <tr>
       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">券商帳戶</th>
@@ -31,25 +31,25 @@
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
           <%= trade_log.contract_month %>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
           <%= trade_log.buy_quantity %>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
           <%= trade_log.sell_quantity %>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
           <%= number_with_precision(trade_log.price) %>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
           <%= trade_log.gross_pnl ? number_with_precision(trade_log.gross_pnl, precision: 0) : '' %>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
           <%= trade_log.commission ? number_with_precision(trade_log.commission, precision: 0) : '' %>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
           <%= trade_log.tax ? number_with_precision(trade_log.tax, precision: 0) : '' %>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm <%= trade_log.net_pnl.to_f >= 0 ? 'text-green-600' : 'text-red-600' %>">
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono <%= trade_log.net_pnl.to_f >= 0 ? 'text-green-600' : 'text-red-600' %>">
           <%= trade_log.net_pnl ? number_with_precision(trade_log.net_pnl, precision: 0) : '' %>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

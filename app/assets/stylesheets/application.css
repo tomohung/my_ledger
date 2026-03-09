@@ -8,3 +8,54 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Page background */
+body { background-color: #F8F9FA; }
+
+/* Cards: fine border instead of shadow */
+.card {
+  background: #FFFFFF;
+  border: 1px solid #E9ECEF;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+/* Metric numbers (large, mono) */
+.metric-value {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.metric-value-sm {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Table refinement */
+.data-table th {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6B7280;
+  border-bottom: 2px solid #E9ECEF;
+  padding: 0.75rem 1rem;
+}
+.data-table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.8125rem;
+  border-bottom: 1px solid #F3F4F6;
+}
+.data-table tbody tr:hover { background-color: #FAFAFA; }
+
+/* Nav active state: amber bottom-border */
+.nav-link-active {
+  color: #F59E0B;
+  border-bottom: 2px solid #F59E0B;
+  padding-bottom: 2px;
+  font-weight: 600;
+}

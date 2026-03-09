@@ -15,13 +15,13 @@
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">勝率</span>
-      <span class="font-medium"><%= number_to_percentage(statistics[:win_rate], precision: 1) %></span>
+      <span class="metric-value-sm font-medium"><%= number_to_percentage(statistics[:win_rate], precision: 1) %></span>
     </div>
     <div class="border-t border-gray-200 my-4"></div>
 
     <div class="flex justify-between">
       <span class="text-gray-600">總獲利</span>
-      <span class="<%= statistics[:total_gross_profit] >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
+      <span class="metric-value <%= statistics[:total_gross_profit] >= 0 ? 'text-green-600' : 'text-red-600' %>">
         <%= number_with_precision(statistics[:total_gross_profit], precision: 0) %>
       </span>
     </div>
@@ -36,7 +36,7 @@
     <div class="border-t border-gray-200 my-4"></div>
     <div class="flex justify-between">
       <span class="text-gray-600">總淨利</span>
-      <span class="<%= statistics[:total_net_profit] >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium">
+      <span class="metric-value <%= statistics[:total_net_profit] >= 0 ? 'text-green-600' : 'text-red-600' %>">
         <%= number_with_precision(statistics[:total_net_profit], precision: 0) %>
       </span>
     </div>
@@ -48,15 +48,15 @@
   <div class="space-y-4">
     <div class="flex justify-between">
       <span class="text-gray-600">平均損益</span>
-      <span class="<%= statistics[:average_pnl] >= 0 ? 'text-green-600' : 'text-red-600' %> font-medium"><%= number_with_precision(statistics[:average_pnl], precision: 0) %></span>
+      <span class="metric-value-sm <%= statistics[:average_pnl] >= 0 ? 'text-green-600' : 'text-red-600' %>"><%= number_with_precision(statistics[:average_pnl], precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">平均獲利</span>
-      <span class="text-green-600 font-medium"><%= number_with_precision(statistics[:avg_profit], precision: 0) %></span>
+      <span class="metric-value-sm text-green-600"><%= number_with_precision(statistics[:avg_profit], precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">平均虧損</span>
-      <span class="text-red-600 font-medium"><%= number_with_precision(statistics[:avg_loss], precision: 0) %></span>
+      <span class="metric-value-sm text-red-600"><%= number_with_precision(statistics[:avg_loss], precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">平均盈虧比</span>
@@ -65,11 +65,11 @@
     <div class="border-t border-gray-200 my-4"></div>
     <div class="flex justify-between">
       <span class="text-gray-600">最大獲利</span>
-      <span class="text-green-600 font-medium"><%= number_with_precision(statistics[:max_profit], precision: 0) %></span>
+      <span class="metric-value-sm text-green-600"><%= number_with_precision(statistics[:max_profit], precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">最大虧損</span>
-      <span class="text-red-600 font-medium"><%= number_with_precision(statistics[:max_loss], precision: 0) %></span>
+      <span class="metric-value-sm text-red-600"><%= number_with_precision(statistics[:max_loss], precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">最大盈虧比</span>
