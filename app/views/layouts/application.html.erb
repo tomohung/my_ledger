@@ -38,6 +38,7 @@
               <%= link_to "Daily", daily_trade_summaries_path, class: "#{current_page?(daily_trade_summaries_path) ? 'nav-link-active' : 'text-gray-400 hover:text-gray-100 transition-colors'}" %>
               <%= link_to "Weekly", weekly_trade_summaries_path, class: "#{current_page?(weekly_trade_summaries_path) ? 'nav-link-active' : 'text-gray-400 hover:text-gray-100 transition-colors'}" %>
               <%= link_to "Monthly", monthly_trade_summaries_path, class: "#{current_page?(monthly_trade_summaries_path) ? 'nav-link-active' : 'text-gray-400 hover:text-gray-100 transition-colors'}" %>
+              <%= link_to "Overall", overall_trade_summaries_path, class: "#{current_page?(overall_trade_summaries_path) ? 'nav-link-active' : 'text-gray-400 hover:text-gray-100 transition-colors'}" %>
               <%= link_to "Trade Logs", trade_logs_path, class: "#{current_page?(trade_logs_path) ? 'nav-link-active' : 'text-gray-400 hover:text-gray-100 transition-colors'}" %>
               <%= link_to "Trade Plots", new_trade_plot_path, class: "#{current_page?(new_trade_plot_path) ? 'nav-link-active' : 'text-gray-400 hover:text-gray-100 transition-colors'}" %>
             </div>

@@ -25,13 +25,10 @@
         <%= number_with_precision(statistics[:total_gross_profit], precision: 0) %>
       </span>
     </div>
+    <% trading_cost = statistics[:total_gross_profit] - statistics[:total_net_profit] %>
     <div class="flex justify-between">
-      <span class="text-gray-600">總手續費</span>
-      <span class="font-medium"><%= number_with_precision(statistics[:total_commission], precision: 0) %></span>
-    </div>
-    <div class="flex justify-between">
-      <span class="text-gray-600">總交易稅</span>
-      <span class="font-medium"><%= number_with_precision(statistics[:total_tax], precision: 0) %></span>
+      <span class="text-gray-600">交易成本</span>
+      <span class="font-medium"><%= number_with_precision(trading_cost, precision: 0) %></span>
     </div>
     <div class="border-t border-gray-200 my-4"></div>
     <div class="flex justify-between">

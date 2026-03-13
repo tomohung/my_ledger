@@ -1,0 +1,86 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">整體績效總覽</h1>
+    <%= form_tag overall_trade_summaries_path, method: :get, class: "flex items-center gap-4" do %>
+      <div class="flex items-center gap-2">
+        <%= label_tag :start_date, "起始日期", class: "text-gray-600 text-sm" %>
+        <%= date_field_tag :start_date, @start_date, class: "rounded border-gray-300 text-sm" %>
+        <%= label_tag :end_date, "終點日期", class: "text-gray-600 text-sm" %>
+        <%= date_field_tag :end_date, @end_date, class: "rounded border-gray-300 text-sm" %>
+        <%= submit_tag "套用", class: "btn btn-primary btn-sm" %>
+        <%= link_to "全部", overall_trade_summaries_path, class: "btn btn-ghost btn-sm" %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Summary stats row %>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="card p-4 text-center">
+      <div class="text-sm text-gray-500 mb-1">總交易次數</div>
+      <div class="text-2xl font-bold"><%= @statistics[:trade_count] %></div>
+    </div>
+    <div class="card p-4 text-center">
+      <div class="text-sm text-gray-500 mb-1">勝率</div>
+      <div class="text-2xl font-bold"><%= number_to_percentage(@statistics[:win_rate], precision: 1) %></div>
+    </div>
+    <div class="card p-4 text-center">
+      <div class="text-sm text-gray-500 mb-1">總淨損益</div>
+      <% total_net = @statistics[:total_net_profit] %>
+      <div class="text-2xl font-bold <%= total_net >= 0 ? 'text-green-500' : 'text-red-500' %>">
+        <%= number_with_precision(total_net, precision: 0) %>
+      </div>
+    </div>
+    <div class="card p-4 text-center">
+      <div class="text-sm text-gray-500 mb-1">平均盈虧比</div>
+      <div class="text-2xl font-bold"><%= @statistics[:avg_profit_loss_ratio] %></div>
+    </div>
+  </div>
+
+  <%# Accumulated PnL Chart %>
+  <% accumulated_pnl = 0 %>
+  <% accumulated_pnl_data = {} %>
+  <% (@start_date..@end_date).each do |date| %>
+    <% daily_pnl = @trade_logs.select { |log| log.trade_date == date }.sum { |log| log.net_pnl.to_f } %>
+    <% accumulated_pnl += daily_pnl %>
+    <% accumulated_pnl_data[date] = date.future? ? nil : accumulated_pnl %>
+  <% end %>
+
+  <div class="card p-6 mt-6">
+    <h2 class="text-lg font-semibold mb-4">累積損益走勢</h2>
+    <% chart_values = accumulated_pnl_data.values.compact %>
+    <%= area_chart accumulated_pnl_data,
+      colors: ["#F59E0B"],
+      xtitle: "日期",
+      ytitle: "累積損益",
+      ymin: chart_values.any? ? chart_values.min : 0,
+      ymax: chart_values.any? ? chart_values.max : 0,
+      points: false,
+      curve: true %>
+  </div>
+
+  <%# Daily PnL bar chart %>
+  <% daily_pnl_by_date = @trade_logs.group_by(&:trade_date).transform_values { |logs| logs.sum { |log| log.net_pnl.to_f } } %>
+  <% all_trade_dates = (@start_date..@end_date).select { |d| daily_pnl_by_date.key?(d) } %>
+  <% positive_data = all_trade_dates.each_with_object({}) { |d, h| h[d] = [daily_pnl_by_date[d], 0].max } %>
+  <% negative_data = all_trade_dates.each_with_object({}) { |d, h| h[d] = [daily_pnl_by_date[d], 0].min } %>
+
+  <div class="card p-6 mt-6">
+    <h2 class="text-lg font-semibold mb-4">每日損益</h2>
+    <%= column_chart [
+      { name: "獲利", data: positive_data, color: "#F59E0B" },
+      { name: "虧損", data: negative_data, color: "#EF4444" }
+    ], xtitle: "日期", ytitle: "損益", stacked: true %>
+  </div>
+
+  <%# Performance stats %>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+    <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+    <%= render 'trading_performance', statistics: @buy_statistics, title: '(買入)' %>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+    <%= render 'trading_performance', statistics: @sell_statistics, title: '(賣出)' %>
+  </div>
+
+</div>
