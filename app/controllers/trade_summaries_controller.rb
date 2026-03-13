@@ -6,6 +6,24 @@ class TradeSummariesController < ApplicationController
 
   before_action :set_selected_date, only: [:daily, :weekly, :monthly]
 
+  def overall
+    first_trade_date = current_user.trade_logs.minimum(:trade_date) || Date.today
+    @start_date = params[:start_date]&.to_date || first_trade_date
+    @end_date = params[:end_date]&.to_date || Date.today
+
+    @trade_logs = current_user.trade_logs
+      .where(trade_date: @start_date..@end_date)
+      .includes(:broker_account)
+
+    active_trades = @trade_logs.select { |trade| trade.gross_pnl.present? }
+    @buy_trades = active_trades.select { |trade| trade.buy_quantity.to_i.positive? }
+    @sell_trades = active_trades.select { |trade| trade.sell_quantity.to_i.positive? }
+
+    @statistics = AnalyzeTradeLogs.new(@trade_logs).call
+    @buy_statistics = AnalyzeTradeLogs.new(@buy_trades).call
+    @sell_statistics = AnalyzeTradeLogs.new(@sell_trades).call
+  end
+
   def daily
     @trade_logs = current_user.trade_logs
       .where(trade_date: @selected_date)
@@ -36,8 +54,8 @@ class TradeSummariesController < ApplicationController
       .includes(:broker_account)
 
     active_trades = @trade_logs.select { |trade| trade.gross_pnl.present? }
-    @buy_trades = active_trades.select { |trade| trade.buy_quantity.positive? }
-    @sell_trades = active_trades.select { |trade| trade.sell_quantity.positive? }
+    @buy_trades = active_trades.select { |trade| trade.buy_quantity.to_i.positive? }
+    @sell_trades = active_trades.select { |trade| trade.sell_quantity.to_i.positive? }
 
     @statistics = AnalyzeTradeLogs.new(@trade_logs).call
     @buy_statistics = AnalyzeTradeLogs.new(@buy_trades).call
