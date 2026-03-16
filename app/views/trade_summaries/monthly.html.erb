@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6">
+  <div class="flex justify-between items-center mb-6 animate-in">
     <div class="flex items-center gap-4">
-      <h1 class="text-2xl font-bold">每月交易摘要</h1>
+      <h1>每月交易摘要</h1>
     </div>
     <%= form_tag monthly_trade_summaries_path, method: :get, class: "flex items-center gap-4", data: { controller: "date-nav" } do %>
       <div class="flex items-center gap-2">
@@ -15,17 +15,18 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Capital & Risk Management -->
-    <%= render 'capital_risk_management' %>
+    <div class="animate-in animate-in-1">
+      <%= render 'capital_risk_management' %>
+    </div>
 
     <!-- Monthly Risk Information -->
-    <div class="card p-6">
+    <div class="card card-risk p-6 animate-in animate-in-2">
       <h2 class="text-lg font-semibold mb-4">本月風險管理</h2>
       <div class="space-y-4">
-        <!-- Add spacing with CSS margin instead of empty divs -->
         <div class="flex justify-between items-center">
           <% max_consecutive_losses = 6 %>
           <span class="text-gray-700">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
-          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'risk-danger' : '' %>">
             <%= @statistics[:max_consecutive_losses] %>
             <% if @statistics[:max_consecutive_losses] >= max_consecutive_losses %>
               (>= <%= max_consecutive_losses %>)
@@ -35,7 +36,7 @@
         <div class="flex justify-between items-center">
           <% max_consecutive_loss_days = 3 %>
           <span class="text-gray-700">本月最多連續虧損天數: (< <%= max_consecutive_loss_days %>)</span>
-          <span class="font-medium <%= @statistics[:max_consecutive_loss_days] >= max_consecutive_loss_days ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+          <span class="font-medium <%= @statistics[:max_consecutive_loss_days] >= max_consecutive_loss_days ? 'risk-danger' : '' %>">
             <%= @statistics[:max_consecutive_loss_days] %>
             <% if @statistics[:max_consecutive_loss_days] >= max_consecutive_loss_days %>
               (>= <%= max_consecutive_loss_days %>)
@@ -45,7 +46,7 @@
         <div class="flex justify-between items-center">
           <% max_win_rate = 40 %>
           <span class="text-gray-700">勝率: (< <%= max_win_rate %> %)</span>
-          <span class="font-medium <%= @statistics[:win_rate] <= max_win_rate ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+          <span class="font-medium <%= @statistics[:win_rate] <= max_win_rate ? 'risk-danger' : '' %>">
             <%= number_to_percentage(@statistics[:win_rate], precision: 1) %>
             <% if @statistics[:win_rate] <= max_win_rate %>
               (<= <%= max_win_rate %>%)
@@ -61,11 +62,11 @@
             if total_net_pnl > 0
               'text-green-600'
             elsif quota <= 0
-              'text-red-600 font-bold'
+              'risk-danger'
             elsif quota <= risk_amount * 0.382
-              'text-yellow-600 font-bold'
+              'risk-caution'
             else
-              'text-gray-900'
+              ''
             end
           %>">
             <%= number_with_precision(total_net_pnl, precision: 0) %>
@@ -80,16 +81,18 @@
 
   <div class="grid grid-cols-1 gap-6 mt-6">
     <!-- Daily PNL Chart -->
-    <%= render 'daily_pnl_chart' %>
+    <div class="animate-in animate-in-3">
+      <%= render 'daily_pnl_chart' %>
+    </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-    <div class="grid grid-cols-1 gap-6 mt-6">
+    <div class="animate-in animate-in-4">
       <!-- Accumulated PNL Chart -->
       <%= render 'accumulated_pnl_chart' %>
     </div>
 
-    <div class="grid grid-cols-1 gap-6 mt-6">
+    <div class="animate-in animate-in-5">
       <!-- Risk-based PNL Distribution Chart -->
       <%= render 'risk_based_pnl_distribution' %>
     </div>
@@ -108,7 +111,7 @@
     <%= render 'trading_performance', statistics: @sell_statistics, title: '(賣出)' %>
   </div>
 
-  <div class="card overflow-hidden mt-6">
+  <div class="card card-data overflow-hidden mt-6 animate-in animate-in-6">
     <%= render 'trade_logs_table', active_logs: @trade_logs.select { |log| log.net_pnl.present? }.sort_by(&:net_pnl) %>
   </div>
 </div>

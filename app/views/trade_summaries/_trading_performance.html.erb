@@ -1,4 +1,4 @@
-<div class="card p-6">
+<div class="card card-performance p-6">
   <h2 class="text-lg font-semibold mb-4">交易表現 <%= title || '' %></h2>
   <div class="space-y-4">
     <div class="flex justify-between">
@@ -17,7 +17,7 @@
       <span class="text-gray-600">勝率</span>
       <span class="metric-value-sm font-medium"><%= number_to_percentage(statistics[:win_rate], precision: 1) %></span>
     </div>
-    <div class="border-t border-gray-200 my-4"></div>
+    <div class="card-divider"></div>
 
     <div class="flex justify-between">
       <span class="text-gray-600">總獲利</span>
@@ -30,7 +30,7 @@
       <span class="text-gray-600">交易成本</span>
       <span class="font-medium"><%= number_with_precision(trading_cost, precision: 0) %></span>
     </div>
-    <div class="border-t border-gray-200 my-4"></div>
+    <div class="card-divider"></div>
     <div class="flex justify-between">
       <span class="text-gray-600">總淨利</span>
       <span class="metric-value <%= statistics[:total_net_profit] >= 0 ? 'text-green-600' : 'text-red-600' %>">
@@ -40,7 +40,7 @@
   </div>
 </div>
 <!-- P&L Statistics -->
-<div class="card p-6">
+<div class="card card-performance p-6">
   <h2 class="text-lg font-semibold mb-4">交易分析 <%= title || '' %></h2>
   <div class="space-y-4">
     <div class="flex justify-between">
@@ -59,7 +59,7 @@
       <span class="text-gray-600">平均盈虧比</span>
       <span class="font-medium"><%= statistics[:avg_profit_loss_ratio] %></span>
     </div>
-    <div class="border-t border-gray-200 my-4"></div>
+    <div class="card-divider"></div>
     <div class="flex justify-between">
       <span class="text-gray-600">最大獲利</span>
       <span class="metric-value-sm text-green-600"><%= number_with_precision(statistics[:max_profit], precision: 0) %></span>

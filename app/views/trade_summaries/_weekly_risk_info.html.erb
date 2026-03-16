@@ -1,10 +1,10 @@
-<div class="card p-6">
+<div class="card card-risk p-6">
   <h2 class="text-lg font-semibold mb-4">本週風險管理</h2>
   <div class="space-y-4">
     <div class="flex justify-between items-center">
       <% max_consecutive_losses = 6 %>
       <span class="text-gray-700">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
-      <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+      <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'risk-danger' : '' %>">
         <%= @statistics[:max_consecutive_losses] %>
         <% if @statistics[:max_consecutive_losses] >= max_consecutive_losses %>
           (>= <%= max_consecutive_losses %>)
@@ -14,7 +14,7 @@
     <div class="flex justify-between items-center">
       <% max_win_rate = 40 %>
       <span class="text-gray-700">勝率: (< <%= max_win_rate %> %)</span>
-      <span class="font-medium <%= @statistics[:win_rate] <= max_win_rate ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+      <span class="font-medium <%= @statistics[:win_rate] <= max_win_rate ? 'risk-danger' : '' %>">
         <%= number_to_percentage(@statistics[:win_rate], precision: 1) %>
         <% if @statistics[:win_rate] <= max_win_rate %>
           (<= <%= max_win_rate %>%)
@@ -28,11 +28,11 @@
       <span class="text-gray-700">當週單筆最大虧損: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
       <span class="font-medium <%=
         if risk_percentage >= 100
-          'text-red-600 font-bold'
+          'risk-danger'
         elsif risk_percentage >= 61.8
-          'text-yellow-600 font-bold'
+          'risk-caution'
         else
-          'text-gray-900'
+          ''
         end
       %>">
         <%= number_with_precision(max_loss, precision: 0) %>
@@ -50,11 +50,11 @@
         if total_net_pnl > 0
           'text-green-600'
         elsif quota <= 0
-          'text-red-600 font-bold'
+          'risk-danger'
         elsif quota <= risk_amount * 0.382
-          'text-yellow-600 font-bold'
+          'risk-caution'
         else
-          'text-gray-900'
+          ''
         end
       %>">
         <%= number_with_precision(total_net_pnl, precision: 0) %>

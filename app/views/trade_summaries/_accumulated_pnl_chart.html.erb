@@ -10,10 +10,10 @@
   <% daily_pnl_data[date] = date.future? ? nil : accumulated_pnl %>
 <% end %>
 
-<div class="card p-6">
+<div class="card card-chart p-6">
   <h2 class="text-lg font-semibold mb-4">本月累積損益走勢</h2>
     <%= area_chart daily_pnl_data,
-      colors: ["#F59E0B"],
+      colors: ["#C8850F"],
       xtitle: "日期",
       ytitle: "累積損益",
       ymin: daily_pnl_data.values.compact.min,

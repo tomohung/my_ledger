@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6">
+  <div class="flex justify-between items-center mb-6 animate-in">
     <div class="flex items-center gap-4">
-      <h1 class="text-2xl font-bold">每週交易摘要</h1>
+      <h1>每週交易摘要</h1>
     </div>
     <%= form_tag weekly_trade_summaries_path, method: :get, class: "flex items-center gap-4", data: { controller: "date-nav" } do %>
       <div class="flex items-center gap-2">
@@ -14,16 +14,18 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <%= render 'calendar' %>
+    <div class="animate-in animate-in-1">
+      <%= render 'calendar' %>
+    </div>
 
     <!-- Weekly PnL Summary -->
-    <div class="card p-6">
+    <div class="card card-chart p-6 animate-in animate-in-2">
       <h2 class="text-lg font-semibold mb-4">本週每日淨損益</h2>
       <%= render 'weekly_pnl_summary_chart' %>
     </div>
 
     <!-- Gross PnL Chart -->
-    <div class="card p-6">
+    <div class="card card-chart p-6 animate-in animate-in-3">
       <h2 class="text-lg font-semibold mb-4">本週交易損益走勢</h2>
       <%= render 'weekly_pnl_chart' %>
     </div>
@@ -32,10 +34,14 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Capital & Risk Management -->
-    <%= render 'capital_risk_management' %>
+    <div class="animate-in animate-in-4">
+      <%= render 'capital_risk_management' %>
+    </div>
 
     <!-- Weekly Risk Information -->
-    <%= render 'weekly_risk_info' %>
+    <div class="animate-in animate-in-5">
+      <%= render 'weekly_risk_info' %>
+    </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -43,7 +49,7 @@
     <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
   </div>
 
-  <div class="card overflow-hidden mt-6">
+  <div class="card card-data overflow-hidden mt-6 animate-in animate-in-6">
     <%= render 'trade_logs_table', active_logs: @trade_logs.select { |log| log.net_pnl.present? }.sort_by(&:net_pnl) %>
   </div>
 </div>

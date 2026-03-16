@@ -1,5 +1,5 @@
 <!-- Capital & Risk Management -->
-<div id="initial-capital-value" class="card p-6">
+<div id="initial-capital-value" class="card card-metric p-6">
   <h2 class="text-lg font-semibold mb-4">資金與風險管理</h2>
   <div class="space-y-4">
     <div class="flex justify-between items-center" data-controller="inline-edit">
@@ -21,7 +21,7 @@
       <span class="text-gray-600">期末資金</span>
       <span class="metric-value"><%= number_with_precision(@month_report.ending_capital, precision: 0) %></span>
     </div>
-    <div class="border-t border-gray-200 my-4"></div>
+    <div class="card-divider"></div>
     <div class="flex justify-between">
       <span class="text-gray-600">每筆交易風險金額 (<%= current_user.risk_amount_percentage_per_trade %>%)</span>
       <span class="metric-value-sm"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100, precision: 0) %></span>

@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6">
+  <div class="flex justify-between items-center mb-6 animate-in">
     <div class="flex items-center gap-4">
-      <h1 class="text-2xl font-bold">每日交易紀錄</h1>
+      <h1>每日交易紀錄</h1>
       <%= link_to "新增交易記錄",
           new_trade_log_path,
           class: "ml-4 btn #{@trade_logs.present? || @selected_date > Date.today ? 'btn-ghost' : 'btn-success'}",
@@ -20,16 +20,18 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Capital & Risk Management -->
-    <%= render 'capital_risk_management' %>
+    <div class="animate-in animate-in-1">
+      <%= render 'capital_risk_management' %>
+    </div>
     <!-- Daily Risk Highlights -->
-    <div class="card p-6">
+    <div class="card card-risk p-6 animate-in animate-in-2">
       <h2 class="text-lg font-semibold mb-4">風險指標</h2>
 
       <div class="space-y-4">
         <div class="flex justify-between items-center">
           <% max_daily_trades = 8 %>
           <span class="text-gray-700">交易次數: (< <%= max_daily_trades %>)</span>
-          <span class="font-medium <%= @statistics[:trade_count] >= max_daily_trades ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+          <span class="font-medium <%= @statistics[:trade_count] >= max_daily_trades ? 'risk-danger' : '' %>">
             <%= @statistics[:trade_count] %>
             <% if @statistics[:trade_count] >= max_daily_trades %>
               (>= <%= max_daily_trades %>)
@@ -39,7 +41,7 @@
         <div class="flex justify-between items-center">
           <% max_consecutive_losses = 3 %>
           <span class="text-gray-700">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
-          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'text-red-600 font-bold' : 'text-gray-900' %>">
+          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'risk-danger' : '' %>">
             <%= @statistics[:max_consecutive_losses] %>
             <% if @statistics[:max_consecutive_losses] >= max_consecutive_losses %>
               (>= <%= max_consecutive_losses %>)
@@ -53,11 +55,11 @@
           <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / risk_amount * 100).round %>
           <span class="font-medium <%=
             if risk_percentage >= 100
-              'text-red-600 font-bold'
+              'risk-danger'
             elsif risk_percentage >= 61.8
-              'text-yellow-600 font-bold'
+              'risk-caution'
             else
-              'text-gray-900'
+              ''
             end
           %>">
             <%= number_with_precision(max_loss, precision: 0) %>
@@ -74,13 +76,13 @@
           <% quota = @month_report.ending_capital.zero? ? 0 : (total_net_pnl < 0 ? risk_amount + total_net_pnl : risk_amount) %>
           <span class="font-medium <%=
             if total_net_pnl < 0 && quota <= 0
-              'text-red-600 font-bold'
+              'risk-danger'
             elsif total_net_pnl < 0 && quota <= risk_amount * 0.382
-              'text-yellow-600 font-bold'
+              'risk-caution'
             elsif total_net_pnl >= 0
               'text-green-600'
             else
-              'text-gray-900'
+              ''
             end
           %>">
             <%= number_with_precision(total_net_pnl, precision: 0) %>
@@ -95,11 +97,13 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
     <!-- Trading Performance -->
-    <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
+    <div class="animate-in animate-in-3">
+      <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
+    </div>
   </div>
 
-  <div class="card overflow-hidden mt-6">
-    <div class="bg-gray-50 border-b border-gray-200">
+  <div class="card card-data overflow-hidden mt-6 animate-in animate-in-4">
+    <div class="summary-bar">
       <div class="px-6 py-4 flex justify-end">
         <div class="flex items-center gap-8">
           <div class="text-sm text-gray-900">
@@ -111,7 +115,7 @@
           <div class="text-sm text-gray-900">
             交易稅：<%= number_with_precision(@trade_logs.sum { |log| log.tax || 0 }, precision: 0) %>
           </div>
-          <div class="text-sm <%= @trade_logs.sum { |log| log.net_pnl || 0 } >= 0 ? 'text-green-600' : 'text-red-600' %>">
+          <div class="text-sm font-semibold <%= @trade_logs.sum { |log| log.net_pnl || 0 } >= 0 ? 'text-green-600' : 'text-red-600' %>">
             淨損益：<%= number_with_precision(@trade_logs.sum { |log| log.net_pnl || 0 }, precision: 0) %>
           </div>
         </div>

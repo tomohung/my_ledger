@@ -10,12 +10,12 @@
   {
     name: "獲利 > 風險",
     data: profit_large_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
-    color: "#F59E0B"
+    color: "#C8850F"
   },
   {
     name: "獲利 ≤ 風險",
     data: profit_small_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
-    color: "#FBBF24"
+    color: "#E8A830"
   },
   {
     name: "虧損 ≤ 風險",
@@ -25,7 +25,7 @@
   {
     name: "虧損 > 風險",
     data: loss_large_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
-    color: "#EF4444"
+    color: "#D43B3B"
   }
 ],
     xtitle: "星期",

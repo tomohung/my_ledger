@@ -1,6 +1,6 @@
 <div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">整體績效總覽</h1>
+  <div class="flex justify-between items-center mb-6 animate-in">
+    <h1>整體績效總覽</h1>
     <%= form_tag overall_trade_summaries_path, method: :get, class: "flex items-center gap-4" do %>
       <div class="flex items-center gap-2">
         <%= label_tag :start_date, "起始日期", class: "text-gray-600 text-sm" %>
@@ -15,24 +15,24 @@
 
   <%# Summary stats row %>
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-    <div class="card p-4 text-center">
-      <div class="text-sm text-gray-500 mb-1">總交易次數</div>
-      <div class="text-2xl font-bold"><%= @statistics[:trade_count] %></div>
+    <div class="card stat-card stat-card-accent p-4 text-center animate-in animate-in-1">
+      <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">總交易次數</div>
+      <div class="metric-value"><%= @statistics[:trade_count] %></div>
     </div>
-    <div class="card p-4 text-center">
-      <div class="text-sm text-gray-500 mb-1">勝率</div>
-      <div class="text-2xl font-bold"><%= number_to_percentage(@statistics[:win_rate], precision: 1) %></div>
+    <div class="card stat-card stat-card-accent p-4 text-center animate-in animate-in-2">
+      <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">勝率</div>
+      <div class="metric-value"><%= number_to_percentage(@statistics[:win_rate], precision: 1) %></div>
     </div>
-    <div class="card p-4 text-center">
-      <div class="text-sm text-gray-500 mb-1">總淨損益</div>
+    <div class="card stat-card p-4 text-center animate-in animate-in-3">
       <% total_net = @statistics[:total_net_profit] %>
-      <div class="text-2xl font-bold <%= total_net >= 0 ? 'text-green-500' : 'text-red-500' %>">
+      <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">總淨損益</div>
+      <div class="metric-value <%= total_net >= 0 ? 'text-green-500' : 'text-red-500' %>">
         <%= number_with_precision(total_net, precision: 0) %>
       </div>
     </div>
-    <div class="card p-4 text-center">
-      <div class="text-sm text-gray-500 mb-1">平均盈虧比</div>
-      <div class="text-2xl font-bold"><%= @statistics[:avg_profit_loss_ratio] %></div>
+    <div class="card stat-card stat-card-accent p-4 text-center animate-in animate-in-4">
+      <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">平均盈虧比</div>
+      <div class="metric-value"><%= @statistics[:avg_profit_loss_ratio] %></div>
     </div>
   </div>
 
@@ -45,11 +45,11 @@
     <% accumulated_pnl_data[date] = date.future? ? nil : accumulated_pnl %>
   <% end %>
 
-  <div class="card p-6 mt-6">
+  <div class="card card-chart p-6 mt-6 animate-in animate-in-5">
     <h2 class="text-lg font-semibold mb-4">累積損益走勢</h2>
     <% chart_values = accumulated_pnl_data.values.compact %>
     <%= area_chart accumulated_pnl_data,
-      colors: ["#F59E0B"],
+      colors: ["#C8850F"],
       xtitle: "日期",
       ytitle: "累積損益",
       ymin: chart_values.any? ? chart_values.min : 0,
@@ -64,11 +64,11 @@
   <% positive_data = all_trade_dates.each_with_object({}) { |d, h| h[d] = [daily_pnl_by_date[d], 0].max } %>
   <% negative_data = all_trade_dates.each_with_object({}) { |d, h| h[d] = [daily_pnl_by_date[d], 0].min } %>
 
-  <div class="card p-6 mt-6">
+  <div class="card card-chart p-6 mt-6 animate-in animate-in-6">
     <h2 class="text-lg font-semibold mb-4">每日損益</h2>
     <%= column_chart [
-      { name: "獲利", data: positive_data, color: "#F59E0B" },
-      { name: "虧損", data: negative_data, color: "#EF4444" }
+      { name: "獲利", data: positive_data, color: "#C8850F" },
+      { name: "虧損", data: negative_data, color: "#D43B3B" }
     ], xtitle: "日期", ytitle: "損益", stacked: true %>
   </div>
 

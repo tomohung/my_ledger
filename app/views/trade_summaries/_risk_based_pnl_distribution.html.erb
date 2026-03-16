@@ -25,18 +25,18 @@
 <%# Split data into positive and negative %>
 <% positive_data, negative_data = sorted_distribution.partition { |k, v| k >= 0 }.map(&:to_h) %>
 
-<div class="card p-6">
+<div class="card card-chart p-6">
   <h2 class="text-lg font-semibold mb-4">每日損益風險分布</h2>
   <%= column_chart [
     {
       name: "獲利",
       data: positive_data,
-      color: "#F59E0B"
+      color: "#C8850F"
     },
     {
       name: "虧損",
       data: negative_data,
-      color: "#EF4444"
+      color: "#D43B3B"
     }
   ],
       xtitle: "風險倍數 (R)",

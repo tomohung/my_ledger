@@ -16,18 +16,18 @@ end %>
 <% positive_data = monthly_data.transform_values { |v| v > 0 ? v : 0 } %>
 <% negative_data = monthly_data.transform_values { |v| v < 0 ? v : 0 } %>
 
-<div class="card p-6">
+<div class="card card-chart p-6">
   <h2 class="text-lg font-semibold mb-4">每日損益</h2>
   <%= column_chart [
     {
       name: "獲利",
       data: positive_data,
-      color: "#F59E0B"
+      color: "#C8850F"
     },
     {
       name: "虧損",
       data: negative_data,
-      color: "#EF4444"
+      color: "#D43B3B"
     }
   ],
       xtitle: "日期",
