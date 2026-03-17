@@ -1,24 +1,23 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6 animate-in">
-    <div class="flex items-center gap-4">
+<div class="container mx-auto px-2 md:px-4 py-6 md:py-8">
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6 animate-in page-header">
+    <div class="flex items-center gap-3">
       <h1>每日交易紀錄</h1>
       <%= link_to "新增交易記錄",
           new_trade_log_path,
-          class: "ml-4 btn #{@trade_logs.present? || @selected_date > Date.today ? 'btn-ghost' : 'btn-success'}",
+          class: "btn btn-sm md:btn #{@trade_logs.present? || @selected_date > Date.today ? 'btn-ghost' : 'btn-success'}",
           disabled: @trade_logs.present? || @selected_date > Date.today %>
     </div>
-    <%= form_tag daily_trade_summaries_path, method: :get, class: "flex items-center gap-4", data: { controller: "date-nav" } do %>
-      <div class="flex items-center gap-2">
-        <%= link_to "前一天", daily_trade_summaries_path(date: @selected_date - 1.day), class: "btn btn-ghost" %>
-        <%= label_tag :date, "選擇日期" %>
-        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300", data: { action: "change->date-nav#change" } %>
-        <span class="text-gray-700 font-bold"><%= t('date.day_names')[@selected_date.wday] %></span>
-        <%= link_to "後一天", daily_trade_summaries_path(date: @selected_date + 1.day), class: "btn btn-ghost" %>
+    <%= form_tag daily_trade_summaries_path, method: :get, class: "flex items-center", data: { controller: "date-nav" } do %>
+      <div class="flex items-center gap-2 date-nav-controls">
+        <%= link_to "前一天", daily_trade_summaries_path(date: @selected_date - 1.day), class: "btn btn-ghost btn-sm" %>
+        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300 text-sm w-36", data: { action: "change->date-nav#change" } %>
+        <span class="text-gray-700 font-bold text-sm"><%= t('date.day_names')[@selected_date.wday] %></span>
+        <%= link_to "後一天", daily_trade_summaries_path(date: @selected_date + 1.day), class: "btn btn-ghost btn-sm" %>
       </div>
     <% end %>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <!-- Capital & Risk Management -->
     <div class="animate-in animate-in-1">
       <%= render 'capital_risk_management' %>
@@ -27,33 +26,33 @@
     <div class="card card-risk p-6 animate-in animate-in-2">
       <h2 class="text-lg font-semibold mb-4">風險指標</h2>
 
-      <div class="space-y-4">
-        <div class="flex justify-between items-center">
+      <div class="space-y-3 md:space-y-4">
+        <div class="flex justify-between items-center gap-2">
           <% max_daily_trades = 8 %>
-          <span class="text-gray-700">交易次數: (< <%= max_daily_trades %>)</span>
-          <span class="font-medium <%= @statistics[:trade_count] >= max_daily_trades ? 'risk-danger' : '' %>">
+          <span class="text-gray-700 text-sm">交易次數: (< <%= max_daily_trades %>)</span>
+          <span class="font-medium text-sm whitespace-nowrap <%= @statistics[:trade_count] >= max_daily_trades ? 'risk-danger' : '' %>">
             <%= @statistics[:trade_count] %>
             <% if @statistics[:trade_count] >= max_daily_trades %>
               (>= <%= max_daily_trades %>)
             <% end %>
           </span>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center gap-2">
           <% max_consecutive_losses = 3 %>
-          <span class="text-gray-700">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
-          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'risk-danger' : '' %>">
+          <span class="text-gray-700 text-sm">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
+          <span class="font-medium text-sm whitespace-nowrap <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'risk-danger' : '' %>">
             <%= @statistics[:max_consecutive_losses] %>
             <% if @statistics[:max_consecutive_losses] >= max_consecutive_losses %>
               (>= <%= max_consecutive_losses %>)
             <% end %>
           </span>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center gap-2">
           <% max_loss = @statistics[:max_loss] %>
           <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
-          <span class="text-gray-700">當日單筆最大虧損: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
+          <span class="text-gray-700 text-sm">當日單筆最大虧損: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
           <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / risk_amount * 100).round %>
-          <span class="font-medium <%=
+          <span class="font-medium text-sm whitespace-nowrap <%=
             if risk_percentage >= 100
               'risk-danger'
             elsif risk_percentage >= 61.8
@@ -64,17 +63,17 @@
           %>">
             <%= number_with_precision(max_loss, precision: 0) %>
             <% if risk_amount > 0 %>
-              (<%= risk_percentage %>% of risk)
+              (<%= risk_percentage %>%)
             <% end %>
           </span>
         </div>
 
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center gap-2">
           <% total_net_pnl = @statistics[:total_net_profit] %>
           <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100 %>
-          <span class="text-gray-700">當日淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
+          <span class="text-gray-700 text-sm">當日淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
           <% quota = @month_report.ending_capital.zero? ? 0 : (total_net_pnl < 0 ? risk_amount + total_net_pnl : risk_amount) %>
-          <span class="font-medium <%=
+          <span class="font-medium text-sm whitespace-nowrap <%=
             if total_net_pnl < 0 && quota <= 0
               'risk-danger'
             elsif total_net_pnl < 0 && quota <= risk_amount * 0.382
@@ -87,7 +86,7 @@
           %>">
             <%= number_with_precision(total_net_pnl, precision: 0) %>
             <% if total_net_pnl < 0 && risk_amount > 0 %>
-              (剩餘配額: <%= number_with_precision(quota, precision: 0) %>)
+              (剩餘: <%= number_with_precision(quota, precision: 0) %>)
             <% end %>
           </span>
         </div>
@@ -95,32 +94,32 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <!-- Trading Performance -->
     <div class="animate-in animate-in-3">
       <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
     </div>
   </div>
 
-  <div class="card card-data overflow-hidden mt-6 animate-in animate-in-4">
+  <div class="card card-data overflow-hidden mt-4 md:mt-6 animate-in animate-in-4">
     <div class="summary-bar">
-      <div class="px-6 py-4 flex justify-end">
-        <div class="flex items-center gap-8">
-          <div class="text-sm text-gray-900">
-            損益：<%= number_with_precision(@trade_logs.sum { |log| log.gross_pnl || 0 }, precision: 0) %>
-          </div>
-          <div class="text-sm text-gray-900">
-            手續費：<%= number_with_precision(@trade_logs.sum { |log| log.commission || 0 }, precision: 0) %>
-          </div>
-          <div class="text-sm text-gray-900">
-            交易稅：<%= number_with_precision(@trade_logs.sum { |log| log.tax || 0 }, precision: 0) %>
-          </div>
-          <div class="text-sm font-semibold <%= @trade_logs.sum { |log| log.net_pnl || 0 } >= 0 ? 'text-green-600' : 'text-red-600' %>">
-            淨損益：<%= number_with_precision(@trade_logs.sum { |log| log.net_pnl || 0 }, precision: 0) %>
-          </div>
+      <div class="px-3 md:px-6 py-3 md:py-4 flex flex-wrap justify-end gap-3 md:gap-8">
+        <div class="text-xs md:text-sm text-gray-900">
+          損益：<%= number_with_precision(@trade_logs.sum { |log| log.gross_pnl || 0 }, precision: 0) %>
+        </div>
+        <div class="text-xs md:text-sm text-gray-900">
+          手續費：<%= number_with_precision(@trade_logs.sum { |log| log.commission || 0 }, precision: 0) %>
+        </div>
+        <div class="text-xs md:text-sm text-gray-900">
+          交易稅：<%= number_with_precision(@trade_logs.sum { |log| log.tax || 0 }, precision: 0) %>
+        </div>
+        <div class="text-xs md:text-sm font-semibold <%= @trade_logs.sum { |log| log.net_pnl || 0 } >= 0 ? 'text-green-600' : 'text-red-600' %>">
+          淨損益：<%= number_with_precision(@trade_logs.sum { |log| log.net_pnl || 0 }, precision: 0) %>
         </div>
       </div>
     </div>
-    <%= render 'trade_logs_table', active_logs: @trade_logs %>
+    <div class="overflow-x-auto">
+      <%= render 'trade_logs_table', active_logs: @trade_logs %>
+    </div>
   </div>
 </div>

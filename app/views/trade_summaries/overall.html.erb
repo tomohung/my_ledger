@@ -1,36 +1,38 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6 animate-in">
+<div class="container mx-auto px-2 md:px-4 py-6 md:py-8">
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6 animate-in page-header">
     <h1>整體績效總覽</h1>
-    <%= form_tag overall_trade_summaries_path, method: :get, class: "flex items-center gap-4" do %>
-      <div class="flex items-center gap-2">
+    <%= form_tag overall_trade_summaries_path, method: :get, class: "date-range-form flex items-center gap-2" do %>
+      <div class="flex flex-wrap items-center gap-2">
         <%= label_tag :start_date, "起始日期", class: "text-gray-600 text-sm" %>
-        <%= date_field_tag :start_date, @start_date, class: "rounded border-gray-300 text-sm" %>
+        <%= date_field_tag :start_date, @start_date, class: "rounded border-gray-300 text-sm w-36" %>
         <%= label_tag :end_date, "終點日期", class: "text-gray-600 text-sm" %>
-        <%= date_field_tag :end_date, @end_date, class: "rounded border-gray-300 text-sm" %>
-        <%= submit_tag "套用", class: "btn btn-primary btn-sm" %>
-        <%= link_to "全部", overall_trade_summaries_path, class: "btn btn-ghost btn-sm" %>
+        <%= date_field_tag :end_date, @end_date, class: "rounded border-gray-300 text-sm w-36" %>
+        <div class="flex gap-2">
+          <%= submit_tag "套用", class: "btn btn-primary btn-sm" %>
+          <%= link_to "全部", overall_trade_summaries_path, class: "btn btn-ghost btn-sm" %>
+        </div>
       </div>
     <% end %>
   </div>
 
   <%# Summary stats row %>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-    <div class="card stat-card stat-card-accent p-4 text-center animate-in animate-in-1">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
+    <div class="card stat-card stat-card-accent p-3 md:p-4 text-center animate-in animate-in-1">
       <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">總交易次數</div>
       <div class="metric-value"><%= @statistics[:trade_count] %></div>
     </div>
-    <div class="card stat-card stat-card-accent p-4 text-center animate-in animate-in-2">
+    <div class="card stat-card stat-card-accent p-3 md:p-4 text-center animate-in animate-in-2">
       <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">勝率</div>
       <div class="metric-value"><%= number_to_percentage(@statistics[:win_rate], precision: 1) %></div>
     </div>
-    <div class="card stat-card p-4 text-center animate-in animate-in-3">
+    <div class="card stat-card p-3 md:p-4 text-center animate-in animate-in-3">
       <% total_net = @statistics[:total_net_profit] %>
       <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">總淨損益</div>
       <div class="metric-value <%= total_net >= 0 ? 'text-green-500' : 'text-red-500' %>">
         <%= number_with_precision(total_net, precision: 0) %>
       </div>
     </div>
-    <div class="card stat-card stat-card-accent p-4 text-center animate-in animate-in-4">
+    <div class="card stat-card stat-card-accent p-3 md:p-4 text-center animate-in animate-in-4">
       <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">平均盈虧比</div>
       <div class="metric-value"><%= @statistics[:avg_profit_loss_ratio] %></div>
     </div>
@@ -45,7 +47,7 @@
     <% accumulated_pnl_data[date] = date.future? ? nil : accumulated_pnl %>
   <% end %>
 
-  <div class="card card-chart p-6 mt-6 animate-in animate-in-5">
+  <div class="card card-chart p-6 mt-4 md:mt-6 animate-in animate-in-5">
     <h2 class="text-lg font-semibold mb-4">累積損益走勢</h2>
     <% chart_values = accumulated_pnl_data.values.compact %>
     <%= area_chart accumulated_pnl_data,
@@ -64,7 +66,7 @@
   <% positive_data = all_trade_dates.each_with_object({}) { |d, h| h[d] = [daily_pnl_by_date[d], 0].max } %>
   <% negative_data = all_trade_dates.each_with_object({}) { |d, h| h[d] = [daily_pnl_by_date[d], 0].min } %>
 
-  <div class="card card-chart p-6 mt-6 animate-in animate-in-6">
+  <div class="card card-chart p-6 mt-4 md:mt-6 animate-in animate-in-6">
     <h2 class="text-lg font-semibold mb-4">每日損益</h2>
     <%= column_chart [
       { name: "獲利", data: positive_data, color: "#C8850F" },
@@ -73,13 +75,13 @@
   </div>
 
   <%# Performance stats %>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <%= render 'trading_performance', statistics: @buy_statistics, title: '(買入)' %>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <%= render 'trading_performance', statistics: @sell_statistics, title: '(賣出)' %>
   </div>
 

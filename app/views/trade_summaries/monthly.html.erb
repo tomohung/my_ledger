@@ -1,19 +1,16 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6 animate-in">
-    <div class="flex items-center gap-4">
-      <h1>每月交易摘要</h1>
-    </div>
-    <%= form_tag monthly_trade_summaries_path, method: :get, class: "flex items-center gap-4", data: { controller: "date-nav" } do %>
-      <div class="flex items-center gap-2">
-        <%= link_to "前一個月", monthly_trade_summaries_path(date: @selected_date - 1.month), class: "btn btn-ghost" %>
-        <%= label_tag :date, "選擇日期" %>
-        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300", data: { action: "change->date-nav#change" } %>
-        <%= link_to "後一個月", monthly_trade_summaries_path(date: @selected_date + 1.month), class: "btn btn-ghost" %>
+<div class="container mx-auto px-2 md:px-4 py-6 md:py-8">
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6 animate-in page-header">
+    <h1>每月交易摘要</h1>
+    <%= form_tag monthly_trade_summaries_path, method: :get, class: "flex items-center", data: { controller: "date-nav" } do %>
+      <div class="flex items-center gap-2 date-nav-controls">
+        <%= link_to "前一個月", monthly_trade_summaries_path(date: @selected_date - 1.month), class: "btn btn-ghost btn-sm" %>
+        <%= date_field_tag :date, @selected_date, class: "rounded border-gray-300 text-sm w-36", data: { action: "change->date-nav#change" } %>
+        <%= link_to "後一個月", monthly_trade_summaries_path(date: @selected_date + 1.month), class: "btn btn-ghost btn-sm" %>
       </div>
     <% end %>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <!-- Capital & Risk Management -->
     <div class="animate-in animate-in-1">
       <%= render 'capital_risk_management' %>
@@ -22,43 +19,43 @@
     <!-- Monthly Risk Information -->
     <div class="card card-risk p-6 animate-in animate-in-2">
       <h2 class="text-lg font-semibold mb-4">本月風險管理</h2>
-      <div class="space-y-4">
-        <div class="flex justify-between items-center">
+      <div class="space-y-3 md:space-y-4">
+        <div class="flex justify-between items-center gap-2">
           <% max_consecutive_losses = 6 %>
-          <span class="text-gray-700">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
-          <span class="font-medium <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'risk-danger' : '' %>">
+          <span class="text-gray-700 text-sm">最大連續虧損次數: (< <%= max_consecutive_losses %>)</span>
+          <span class="font-medium text-sm whitespace-nowrap <%= @statistics[:max_consecutive_losses] >= max_consecutive_losses ? 'risk-danger' : '' %>">
             <%= @statistics[:max_consecutive_losses] %>
             <% if @statistics[:max_consecutive_losses] >= max_consecutive_losses %>
               (>= <%= max_consecutive_losses %>)
             <% end %>
           </span>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center gap-2">
           <% max_consecutive_loss_days = 3 %>
-          <span class="text-gray-700">本月最多連續虧損天數: (< <%= max_consecutive_loss_days %>)</span>
-          <span class="font-medium <%= @statistics[:max_consecutive_loss_days] >= max_consecutive_loss_days ? 'risk-danger' : '' %>">
+          <span class="text-gray-700 text-sm">本月最多連續虧損天數: (< <%= max_consecutive_loss_days %>)</span>
+          <span class="font-medium text-sm whitespace-nowrap <%= @statistics[:max_consecutive_loss_days] >= max_consecutive_loss_days ? 'risk-danger' : '' %>">
             <%= @statistics[:max_consecutive_loss_days] %>
             <% if @statistics[:max_consecutive_loss_days] >= max_consecutive_loss_days %>
               (>= <%= max_consecutive_loss_days %>)
             <% end %>
           </span>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center gap-2">
           <% max_win_rate = 40 %>
-          <span class="text-gray-700">勝率: (< <%= max_win_rate %> %)</span>
-          <span class="font-medium <%= @statistics[:win_rate] <= max_win_rate ? 'risk-danger' : '' %>">
+          <span class="text-gray-700 text-sm">勝率: (< <%= max_win_rate %> %)</span>
+          <span class="font-medium text-sm whitespace-nowrap <%= @statistics[:win_rate] <= max_win_rate ? 'risk-danger' : '' %>">
             <%= number_to_percentage(@statistics[:win_rate], precision: 1) %>
             <% if @statistics[:win_rate] <= max_win_rate %>
               (<= <%= max_win_rate %>%)
             <% end %>
           </span>
         </div>
-        <div class="flex justify-between">
+        <div class="flex justify-between gap-2">
           <% total_net_pnl = @trade_logs.sum { |log| log.net_pnl.to_f } %>
           <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_month / 100 %>
           <% quota = @month_report.ending_capital.zero? ? 0 : (total_net_pnl < 0 ? risk_amount + total_net_pnl : risk_amount) %>
-          <span class="text-gray-700">本月淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
-          <span class="font-medium <%=
+          <span class="text-gray-700 text-sm">本月淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
+          <span class="font-medium text-sm whitespace-nowrap <%=
             if total_net_pnl > 0
               'text-green-600'
             elsif quota <= 0
@@ -71,7 +68,7 @@
           %>">
             <%= number_with_precision(total_net_pnl, precision: 0) %>
             <% if total_net_pnl < 0 && @month_report.ending_capital > 0 %>
-              (剩餘配額: <%= number_with_precision(quota, precision: 0) %>)
+              (剩餘: <%= number_with_precision(quota, precision: 0) %>)
             <% end %>
           </span>
         </div>
@@ -79,14 +76,14 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 gap-6 mt-6">
+  <div class="grid grid-cols-1 gap-4 md:gap-6 mt-4 md:mt-6">
     <!-- Daily PNL Chart -->
     <div class="animate-in animate-in-3">
       <%= render 'daily_pnl_chart' %>
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <div class="animate-in animate-in-4">
       <!-- Accumulated PNL Chart -->
       <%= render 'accumulated_pnl_chart' %>
@@ -98,20 +95,22 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <!-- Trading Performance -->
     <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <!-- Trading Performance -->
     <%= render 'trading_performance', statistics: @buy_statistics, title: '(買入)' %>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <!-- Trading Performance -->
     <%= render 'trading_performance', statistics: @sell_statistics, title: '(賣出)' %>
   </div>
 
-  <div class="card card-data overflow-hidden mt-6 animate-in animate-in-6">
-    <%= render 'trade_logs_table', active_logs: @trade_logs.select { |log| log.net_pnl.present? }.sort_by(&:net_pnl) %>
+  <div class="card card-data overflow-hidden mt-4 md:mt-6 animate-in animate-in-6">
+    <div class="overflow-x-auto">
+      <%= render 'trade_logs_table', active_logs: @trade_logs.select { |log| log.net_pnl.present? }.sort_by(&:net_pnl) %>
+    </div>
   </div>
 </div>
