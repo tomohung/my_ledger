@@ -5,6 +5,7 @@ class TradeSummariesController < ApplicationController
   include TimezoneHandling
 
   before_action :set_selected_date, only: [:daily, :weekly, :monthly]
+  before_action :set_trade_type_filter
 
   def overall
     first_trade_date = current_user.trade_logs.minimum(:trade_date) || Date.today
@@ -12,6 +13,7 @@ class TradeSummariesController < ApplicationController
     @end_date = params[:end_date]&.to_date || Date.today
 
     @trade_logs = current_user.trade_logs
+      .by_trade_type(@trade_type)
       .where(trade_date: @start_date..@end_date)
       .includes(:broker_account)
 
@@ -26,6 +28,7 @@ class TradeSummariesController < ApplicationController
 
   def daily
     @trade_logs = current_user.trade_logs
+      .by_trade_type(@trade_type)
       .where(trade_date: @selected_date)
       .includes(:broker_account)
 
@@ -38,6 +41,7 @@ class TradeSummariesController < ApplicationController
     week_end = @selected_date.end_of_week
 
     @trade_logs = current_user.trade_logs
+      .by_trade_type(@trade_type)
       .where(trade_date: week_start..week_end)
       .includes(:broker_account)
 
@@ -50,6 +54,7 @@ class TradeSummariesController < ApplicationController
     month_end = @selected_date.end_of_month
 
     @trade_logs = current_user.trade_logs
+      .by_trade_type(@trade_type)
       .where(trade_date: month_start..month_end)
       .includes(:broker_account)
 
@@ -83,6 +88,10 @@ class TradeSummariesController < ApplicationController
 
   def set_selected_date
     @selected_date = params[:date]&.to_date || Date.today
+  end
+
+  def set_trade_type_filter
+    @trade_type = params[:trade_type].presence
   end
 
   def initial_capital_params

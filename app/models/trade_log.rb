@@ -19,6 +19,9 @@
 #  broker_account_id :integer          not null
 #  buy_quantity      :integer
 #  sell_quantity     :integer
+#  strike_price      :decimal(10, 2)
+#  call_put          :string
+#  trade_type        :string           default("futures"), not null
 #
 # Indexes
 #
@@ -26,6 +29,7 @@
 #  index_trade_logs_on_contract_month     (contract_month)
 #  index_trade_logs_on_product_name       (product_name)
 #  index_trade_logs_on_trade_date         (trade_date)
+#  index_trade_logs_on_trade_type         (trade_type)
 #  index_trade_logs_on_user_id            (user_id)
 #
 # Foreign Keys
@@ -37,6 +41,10 @@
 class TradeLog < ApplicationRecord
   belongs_to :user
   belongs_to :broker_account
+
+  scope :futures, -> { where(trade_type: "futures") }
+  scope :options, -> { where(trade_type: "options") }
+  scope :by_trade_type, ->(type) { type.present? ? where(trade_type: type) : all }
 
   def self.import_from_csv_string(broker_account, csv_string)
     # Clean up Excel-style formatting after successful parse
@@ -50,10 +58,17 @@ class TradeLog < ApplicationRecord
       # Skip header and summary rows
       next if row["商品名稱"] == "台幣小計"
 
+      strike = row["履約價格"].presence
+      cp = row["C/P"].presence
+      type = (strike && cp) ? "options" : "futures"
+
       create!(
         trade_date: Date.parse(row["交易日期"]),
         product_name: row["商品名稱"],
         contract_month: row["年月"],
+        strike_price: strike&.to_f,
+        call_put: cp,
+        trade_type: type,
         price: row["成交價格"].presence&.to_f,
         gross_pnl: row["損益"].presence&.to_f,
         commission: row["手續費"].presence&.to_f,
