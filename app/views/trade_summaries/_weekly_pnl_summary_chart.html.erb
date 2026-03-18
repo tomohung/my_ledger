@@ -22,17 +22,24 @@
     library: {
       scales: {
         x: {
-          title: {
-            display: true,
-            text: "星期"
-          }
+          title: { display: true, text: "星期" }
         },
         y: {
-          title: {
-            display: true,
-            text: "淨損益"
-          },
+          title: { display: true, text: "淨損益" },
           beginAtZero: true
+        }
+      },
+      plugins: {
+        tooltip: {
+          backgroundColor: '#1A1714',
+          titleColor: '#E8DFD0',
+          bodyColor: '#E8E4DD',
+          borderColor: '#2A2520',
+          borderWidth: 1,
+          cornerRadius: 8,
+          padding: 12,
+          titleFont: { family: 'JetBrains Mono', size: 11 },
+          bodyFont: { family: 'JetBrains Mono', size: 13, weight: 'bold' }
         }
       }
     },

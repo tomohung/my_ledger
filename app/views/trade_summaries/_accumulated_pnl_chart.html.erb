@@ -19,5 +19,20 @@
       ymin: daily_pnl_data.values.compact.min,
       ymax: daily_pnl_data.values.compact.max,
       points: true,
-      curve: true %>
+      curve: true,
+      library: {
+        plugins: {
+          tooltip: {
+            backgroundColor: '#1A1714',
+            titleColor: '#E8DFD0',
+            bodyColor: '#E8E4DD',
+            borderColor: '#2A2520',
+            borderWidth: 1,
+            cornerRadius: 8,
+            padding: 12,
+            titleFont: { family: 'JetBrains Mono', size: 11 },
+            bodyFont: { family: 'JetBrains Mono', size: 13, weight: 'bold' }
+          }
+        }
+      } %>
 </div>

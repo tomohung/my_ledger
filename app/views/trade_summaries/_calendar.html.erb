@@ -36,11 +36,8 @@
       %>
       <div class="relative">
         <%= link_to daily_trade_summaries_path(date: date),
-            class: "block text-center py-2 rounded #{is_selected_week ? 'bg-indigo-100' : ''} #{!is_current_month ? 'text-gray-400' : ''} #{is_today ? 'font-bold' : ''}" do %>
+            class: "block text-center py-2 rounded #{is_selected_week ? 'cal-selected-week' : ''} #{!is_current_month ? 'text-gray-400' : ''} #{is_today ? 'font-bold cal-today' : ''} hover:bg-amber-50 transition-colors" do %>
           <span class="relative z-10"><%= date.day %></span>
-          <% if is_selected_week %>
-            <div class="absolute inset-0 bg-indigo-100 rounded"></div>
-          <% end %>
         <% end %>
       </div>
     <% end %>

@@ -17,9 +17,9 @@
         <% end %>
       </div>
     </div>
-    <div class="flex justify-between">
+    <div class="flex justify-between items-baseline">
       <span class="text-gray-600">期末資金</span>
-      <span class="metric-value"><%= number_with_precision(@month_report.ending_capital, precision: 0) %></span>
+      <span class="metric-value" style="font-family: var(--font-display); font-size: 1.75rem;"><%= number_with_precision(@month_report.ending_capital, precision: 0, delimiter: ',') %></span>
     </div>
     <div class="card-divider"></div>
     <div class="flex justify-between">

@@ -19,6 +19,8 @@
 
   <%= render "trade_type_filter" %>
 
+  <% has_trades = @trade_logs.present? %>
+
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
     <!-- Capital & Risk Management -->
     <div class="animate-in animate-in-1">
@@ -101,25 +103,40 @@
     <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
   </div>
 
-  <div class="card card-data overflow-hidden mt-4 md:mt-6 animate-in animate-in-4">
-    <div class="summary-bar">
-      <div class="px-3 md:px-6 py-3 md:py-4 flex flex-wrap justify-end gap-3 md:gap-8">
-        <div class="text-xs md:text-sm text-gray-900">
-          損益：<%= number_with_precision(@trade_logs.sum { |log| log.gross_pnl || 0 }, precision: 0) %>
-        </div>
-        <div class="text-xs md:text-sm text-gray-900">
-          手續費：<%= number_with_precision(@trade_logs.sum { |log| log.commission || 0 }, precision: 0) %>
-        </div>
-        <div class="text-xs md:text-sm text-gray-900">
-          交易稅：<%= number_with_precision(@trade_logs.sum { |log| log.tax || 0 }, precision: 0) %>
-        </div>
-        <div class="text-xs md:text-sm font-semibold <%= @trade_logs.sum { |log| log.net_pnl || 0 } >= 0 ? 'text-green-600' : 'text-red-600' %>">
-          淨損益：<%= number_with_precision(@trade_logs.sum { |log| log.net_pnl || 0 }, precision: 0) %>
+  <% if has_trades %>
+    <div class="card card-data overflow-hidden mt-4 md:mt-6 animate-in animate-in-4">
+      <div class="summary-bar">
+        <div class="px-3 md:px-6 py-3 md:py-4 flex flex-wrap justify-end gap-3 md:gap-8">
+          <div class="text-xs md:text-sm text-gray-900">
+            損益：<%= number_with_precision(@trade_logs.sum { |log| log.gross_pnl || 0 }, precision: 0) %>
+          </div>
+          <div class="text-xs md:text-sm text-gray-900">
+            手續費：<%= number_with_precision(@trade_logs.sum { |log| log.commission || 0 }, precision: 0) %>
+          </div>
+          <div class="text-xs md:text-sm text-gray-900">
+            交易稅：<%= number_with_precision(@trade_logs.sum { |log| log.tax || 0 }, precision: 0) %>
+          </div>
+          <% total_net = @trade_logs.sum { |log| log.net_pnl || 0 } %>
+          <div class="text-xs md:text-sm font-semibold <%= total_net >= 0 ? 'text-green-600' : 'text-red-600' %>">
+            淨損益：<%= number_with_precision(total_net, precision: 0) %>
+          </div>
         </div>
       </div>
+      <div class="overflow-x-auto">
+        <%= render 'trade_logs_table', active_logs: @trade_logs %>
+      </div>
     </div>
-    <div class="overflow-x-auto">
-      <%= render 'trade_logs_table', active_logs: @trade_logs %>
+  <% else %>
+    <!-- Empty State -->
+    <div class="empty-state mt-6 animate-in animate-in-4">
+      <div class="empty-state-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <div class="empty-state-title"><%= @selected_date.strftime('%Y/%m/%d') %> No Trades</div>
+      <div class="empty-state-text">This day has no trading records. Import a broker CSV or navigate to a date with trades.</div>
+      <%= link_to "Import Trades", new_trade_log_path, class: "btn btn-primary" %>
     </div>
-  </div>
+  <% end %>
 </div>

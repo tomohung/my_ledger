@@ -47,6 +47,8 @@
   --shadow-card: 0 1px 3px rgba(26, 23, 20, 0.04), 0 1px 2px rgba(26, 23, 20, 0.02);
   --shadow-card-hover: 0 8px 24px rgba(26, 23, 20, 0.08), 0 2px 6px rgba(26, 23, 20, 0.04);
   --shadow-nav-dropdown: 0 12px 36px rgba(0, 0, 0, 0.25);
+  --shadow-hero-glow-profit: 0 0 60px rgba(27, 138, 74, 0.15), 0 0 20px rgba(27, 138, 74, 0.08);
+  --shadow-hero-glow-loss: 0 0 60px rgba(212, 59, 59, 0.15), 0 0 20px rgba(212, 59, 59, 0.08);
 }
 
 /* ── Page background ───────────────────────────────────── */
@@ -56,15 +58,16 @@ body {
   color: var(--color-text-primary);
 }
 
-/* Subtle noise texture overlay on body */
+/* Subtle noise texture overlay on body — paper-like grain */
 body::before {
   content: "";
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 512px 512px;
 }
 
 /* ── Page Load Animations ──────────────────────────────── */
@@ -109,14 +112,17 @@ body::before {
 /* ── Cards ─────────────────────────────────────────────── */
 .card {
   background: var(--color-surface);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(200, 133, 15, 0.02) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(245, 243, 239, 0.3) 0%, transparent 40%);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-card-hover);
 }
 
@@ -149,12 +155,14 @@ body::before {
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.2;
+  font-variant-numeric: tabular-nums;
 }
 .metric-value-sm {
   font-family: var(--font-mono);
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Typography ────────────────────────────────────────── */
@@ -168,22 +176,108 @@ h1 {
 
 h2.card-title,
 .card h2 {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-text-tertiary);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: var(--color-text-secondary);
   margin-bottom: 1rem;
 }
 
 /* Display h2 in cards that use text-lg — override to styled version */
 .card .text-lg.font-semibold {
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: var(--color-text-secondary);
+}
+
+/* Section header — used above card groups */
+.section-header {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+}
+
+/* ── Hero P&L Display ─────────────────────────────────── */
+.hero-pnl {
+  position: relative;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.hero-pnl::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.hero-pnl-profit {
+  background: linear-gradient(135deg, #F0FDF4 0%, var(--color-surface) 50%, #ECFDF5 100%);
+  border-color: rgba(27, 138, 74, 0.15);
+  box-shadow: var(--shadow-hero-glow-profit);
+}
+
+.hero-pnl-loss {
+  background: linear-gradient(135deg, #FEF2F2 0%, var(--color-surface) 50%, #FFF1F2 100%);
+  border-color: rgba(212, 59, 59, 0.15);
+  box-shadow: var(--shadow-hero-glow-loss);
+}
+
+.hero-pnl-neutral {
+  background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-surface) 50%, #FDF6E9 100%);
+  border-color: rgba(200, 133, 15, 0.15);
+}
+
+.hero-pnl-label {
+  font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   color: var(--color-text-tertiary);
+  margin-bottom: 0.5rem;
+}
+
+.hero-pnl-value {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-pnl-value.profit { color: var(--color-profit); }
+.hero-pnl-value.loss { color: var(--color-loss); }
+.hero-pnl-value.neutral { color: var(--color-accent); }
+
+.hero-pnl-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  margin-top: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 768px) {
+  .hero-pnl {
+    padding: 2.5rem 2rem;
+  }
+  .hero-pnl-value {
+    font-size: 4rem;
+  }
 }
 
 /* ── Table refinement ──────────────────────────────────── */
@@ -222,18 +316,6 @@ h2.card-title,
 }
 
 /* ── Button system ─────────────────────────────────────── */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
-  text-decoration: none;
-}
 .btn-sm {
   padding: 0.25rem 0.75rem;
   font-size: 0.8125rem;
@@ -357,6 +439,136 @@ h2.card-title,
   margin: 0 0.25rem;
 }
 
+/* ── Filter pills (trade type tabs) ───────────────────── */
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.filter-pill-inactive {
+  background-color: rgba(200, 133, 15, 0.06);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+.filter-pill-inactive:hover {
+  background-color: rgba(200, 133, 15, 0.12);
+  color: var(--color-text-primary);
+  border-color: var(--color-accent);
+}
+
+.filter-pill-active {
+  background-color: var(--color-accent);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 2px 8px var(--color-accent-glow);
+}
+
+/* ── Calendar amber theme ─────────────────────────────── */
+.cal-selected-week {
+  background-color: rgba(200, 133, 15, 0.1);
+}
+
+.cal-today {
+  position: relative;
+}
+
+.cal-today::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+}
+
+/* ── Empty state ──────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: var(--color-surface);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.empty-state-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(200, 133, 15, 0.08) 0%, rgba(232, 168, 48, 0.08) 100%);
+  margin-bottom: 1rem;
+}
+
+.empty-state-icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--color-accent);
+}
+
+.empty-state-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-text {
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+  margin-bottom: 1.25rem;
+  max-width: 24rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Chart tooltip customization ──────────────────────── */
+/* Chart.js custom tooltip class — applied via Chartkick library options */
+.chart-container canvas {
+  border-radius: var(--radius-md);
+}
+
+/* ── Button micro-interactions ────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+  transition-duration: 0.1s;
+}
+
+/* ── Full-width chart (Overall page) ──────────────────── */
+.chart-featured {
+  position: relative;
+}
+
+.chart-featured .card {
+  border-left: none;
+  border-top: 3px solid var(--color-accent);
+}
+
 /* ── Summary stat cards (Overall page) ─────────────────── */
 .stat-card {
   position: relative;
@@ -398,6 +610,13 @@ h2.card-title,
 /* Smooth transitions for Turbo page loads */
 .turbo-progress-bar {
   background-color: var(--color-accent);
+  height: 3px;
+}
+
+/* Turbo page transition fade */
+[data-turbo-preview] {
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
 }
 
 /* Summary bar at top of trade tables */
@@ -514,5 +733,26 @@ h2.card-title,
   .btn {
     padding: 0.375rem 0.75rem;
     font-size: 0.8125rem;
+  }
+
+  /* Hero PnL: tighter on mobile */
+  .hero-pnl {
+    padding: 1.5rem 1rem;
+  }
+  .hero-pnl-value {
+    font-size: 2.5rem;
+  }
+
+  /* Empty state: tighter */
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+  .empty-state-icon {
+    width: 3rem;
+    height: 3rem;
+  }
+  .empty-state-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 }

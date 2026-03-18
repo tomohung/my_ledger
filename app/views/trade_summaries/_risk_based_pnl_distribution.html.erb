@@ -45,20 +45,25 @@
       library: {
         scales: {
           x: {
-            title: {
-              display: true,
-              text: "風險倍數 (R)"
-            }
+            title: { display: true, text: "風險倍數 (R)" }
           },
           y: {
-            title: {
-              display: true,
-              text: "交易天數"
-            },
+            title: { display: true, text: "交易天數" },
             beginAtZero: true,
-            ticks: {
-              stepSize: 1
-            }
+            ticks: { stepSize: 1 }
+          }
+        },
+        plugins: {
+          tooltip: {
+            backgroundColor: '#1A1714',
+            titleColor: '#E8DFD0',
+            bodyColor: '#E8E4DD',
+            borderColor: '#2A2520',
+            borderWidth: 1,
+            cornerRadius: 8,
+            padding: 12,
+            titleFont: { family: 'JetBrains Mono', size: 11 },
+            bodyFont: { family: 'JetBrains Mono', size: 13, weight: 'bold' }
           }
         }
       } %>
