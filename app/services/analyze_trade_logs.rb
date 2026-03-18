@@ -216,7 +216,7 @@ class AnalyzeTradeLogs
       {
         net_pnl: trades.sum(&:net_pnl),
         trade_count: total,
-        win_rate: total > 0 ? (wins.to_f / total * 100).round(1) : 0
+        win_rate: (total > 0) ? (wins.to_f / total * 100).round(1) : 0
       }
     end
   end
@@ -231,8 +231,8 @@ class AnalyzeTradeLogs
       {
         net_pnl: trades.sum(&:net_pnl),
         trade_count: total,
-        win_rate: total > 0 ? (wins.to_f / total * 100).round(1) : 0,
-        avg_pnl: total > 0 ? (trades.sum(&:net_pnl) / total).round(0) : 0
+        win_rate: (total > 0) ? (wins.to_f / total * 100).round(1) : 0,
+        avg_pnl: (total > 0) ? (trades.sum(&:net_pnl) / total).round(0) : 0
       }
     end.sort_by { |_, v| -v[:net_pnl] }.to_h
   end
