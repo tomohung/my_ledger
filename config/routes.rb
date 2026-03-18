@@ -16,7 +16,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "trade_summaries#daily"
 
-  resources :trade_logs, only: [:new, :create, :index, :destroy]
+  resources :trade_logs, only: [:new, :create, :index, :destroy] do
+    collection do
+      delete :batch_destroy
+    end
+  end
   resources :trade_summaries, only: [] do
     collection do
       get :daily

@@ -271,6 +271,16 @@ h2.card-title,
   box-shadow: 0 2px 8px rgba(27, 138, 74, 0.2);
 }
 
+/* Danger: red for destructive actions */
+.btn-danger {
+  background-color: #DC2626;
+  color: #FFFFFF;
+}
+.btn-danger:hover {
+  background-color: #B91C1C;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+}
+
 /* Cancel: muted */
 .btn-cancel {
   background-color: var(--color-bg);

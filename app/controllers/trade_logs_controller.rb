@@ -43,6 +43,15 @@ class TradeLogsController < ApplicationController
     redirect_to trade_logs_path
   end
 
+  def batch_destroy
+    ids = Array(params[:ids])
+    trade_logs = current_user.trade_logs.where(id: ids)
+    count = trade_logs.count
+    trade_logs.destroy_all
+    flash[:notice] = "已刪除 #{count} 筆交易紀錄"
+    redirect_to trade_logs_path
+  end
+
   private
 
   def set_broker_account

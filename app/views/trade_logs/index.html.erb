@@ -1,7 +1,14 @@
-<div class="container mx-auto px-2 md:px-4 py-6 md:py-8">
+<div class="container mx-auto px-2 md:px-4 py-6 md:py-8" data-controller="batch-select">
   <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 animate-in">
     <h1>交易紀錄列表</h1>
     <div class="flex flex-wrap gap-3 items-center">
+      <div class="hidden items-center gap-2" data-batch-select-target="actions">
+        <%= form_with url: batch_destroy_trade_logs_path, method: :delete, class: "inline" do |f| %>
+          <button type="submit" class="btn btn-danger" data-action="click->batch-select#deleteSelected">
+            刪除所選 (<span data-batch-select-target="count">0</span>)
+          </button>
+        <% end %>
+      </div>
       <%= link_to "新增交易紀錄", new_trade_log_path, class: "btn btn-success" %>
     </div>
   </div>
@@ -11,6 +18,9 @@
       <table class="data-table min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
+            <th class="px-3 md:px-6 py-3">
+              <input type="checkbox" data-batch-select-target="selectAll" data-action="change->batch-select#selectAllChanged" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            </th>
             <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
             <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">交易日期</th>
             <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">券商帳戶</th>
@@ -30,6 +40,9 @@
         <tbody class="bg-white divide-y divide-gray-200">
           <% @trade_logs.each_with_index do |trade_log, index| %>
             <tr class="hover:bg-gray-50">
+              <td class="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap">
+                <input type="checkbox" value="<%= trade_log.id %>" data-batch-select-target="checkbox" data-action="change->batch-select#checkboxChanged" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+              </td>
               <td class="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-sm text-gray-500"><%= (@pagy.from + index) %></td>
               <td class="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-sm text-gray-900"><%= trade_log.trade_date %></td>
               <td class="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-sm text-gray-900"><%= trade_log.broker_account.name %></td>
