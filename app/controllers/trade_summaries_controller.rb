@@ -9,7 +9,7 @@ class TradeSummariesController < ApplicationController
 
   def overall
     first_trade_date = current_user.trade_logs.minimum(:trade_date) || Date.today
-    @start_date = params[:start_date]&.to_date || first_trade_date
+    @start_date = params[:start_date]&.to_date || [first_trade_date, 1.year.ago.to_date + 1.day].max
     @end_date = params[:end_date]&.to_date || Date.today
 
     @trade_logs = current_user.trade_logs
