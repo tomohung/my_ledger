@@ -100,7 +100,7 @@ body::before {
 
 /* Staggered entrance for cards */
 .animate-in {
-  animation: fadeInUp 0.4s ease-out both;
+  animation: fadeInUp 0.4s ease-out backwards;
 }
 .animate-in-1 { animation-delay: 0.05s; }
 .animate-in-2 { animation-delay: 0.1s; }
