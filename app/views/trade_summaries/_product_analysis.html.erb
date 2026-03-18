@@ -1,0 +1,60 @@
+<% pnl_by_product = statistics[:pnl_by_product] || {} %>
+<% if pnl_by_product.any? %>
+  <div class="card card-chart p-6">
+    <h2 class="text-lg font-semibold mb-4">商品別分析</h2>
+    <% positive_data = pnl_by_product.select { |_, v| v[:net_pnl] >= 0 }.transform_values { |v| v[:net_pnl] } %>
+    <% negative_data = pnl_by_product.select { |_, v| v[:net_pnl] < 0 }.transform_values { |v| v[:net_pnl] } %>
+
+    <%= column_chart [
+      { name: "獲利", data: positive_data, color: "#C8850F" },
+      { name: "虧損", data: negative_data, color: "#D43B3B" }
+    ],
+      xtitle: "商品",
+      ytitle: "淨損益",
+      stacked: true,
+      library: {
+        plugins: {
+          tooltip: {
+            backgroundColor: '#1A1714',
+            titleColor: '#E8DFD0',
+            bodyColor: '#E8E4DD',
+            borderColor: '#2A2520',
+            borderWidth: 1,
+            cornerRadius: 8,
+            padding: 12,
+            titleFont: { family: 'JetBrains Mono', size: 11 },
+            bodyFont: { family: 'JetBrains Mono', size: 13, weight: 'bold' }
+          }
+        }
+      } %>
+
+    <div class="mt-4 overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b">
+            <th class="text-left py-2 text-gray-500">商品</th>
+            <th class="text-right py-2 text-gray-500">交易次數</th>
+            <th class="text-right py-2 text-gray-500">勝率</th>
+            <th class="text-right py-2 text-gray-500">平均損益</th>
+            <th class="text-right py-2 text-gray-500">淨損益</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% pnl_by_product.each do |product, data| %>
+            <tr class="border-b border-gray-100">
+              <td class="py-2"><%= product %></td>
+              <td class="text-right py-2"><%= data[:trade_count] %></td>
+              <td class="text-right py-2"><%= data[:win_rate] %>%</td>
+              <td class="text-right py-2 font-medium <%= data[:avg_pnl] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                <%= number_with_precision(data[:avg_pnl], precision: 0, delimiter: ',') %>
+              </td>
+              <td class="text-right py-2 font-medium <%= data[:net_pnl] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                <%= number_with_precision(data[:net_pnl], precision: 0, delimiter: ',') %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

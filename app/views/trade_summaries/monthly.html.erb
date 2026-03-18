@@ -97,6 +97,16 @@
     </div>
   </div>
 
+  <%# Weekday & Product Analysis %>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
+    <div class="animate-in animate-in-3">
+      <%= render 'weekday_analysis', statistics: @statistics %>
+    </div>
+    <div class="animate-in animate-in-4">
+      <%= render 'product_analysis', statistics: @statistics %>
+    </div>
+  </div>
+
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6 animate-in animate-in-3">
     <!-- Trading Performance -->
     <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>

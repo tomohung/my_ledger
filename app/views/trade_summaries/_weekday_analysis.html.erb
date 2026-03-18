@@ -1,0 +1,59 @@
+<% pnl_by_weekday = statistics[:pnl_by_weekday] || {} %>
+<% if pnl_by_weekday.any? %>
+  <div class="card card-chart p-6">
+    <h2 class="text-lg font-semibold mb-4">星期別分析</h2>
+    <% weekday_names = ['日', '一', '二', '三', '四', '五', '六'] %>
+    <% positive_data = weekday_names.map.with_index { |name, i| [name, pnl_by_weekday.dig(i, :net_pnl)&.positive? ? pnl_by_weekday[i][:net_pnl] : 0] } %>
+    <% negative_data = weekday_names.map.with_index { |name, i| [name, pnl_by_weekday.dig(i, :net_pnl)&.negative? ? pnl_by_weekday[i][:net_pnl] : 0] } %>
+
+    <%= column_chart [
+      { name: "獲利", data: positive_data, color: "#C8850F" },
+      { name: "虧損", data: negative_data, color: "#D43B3B" }
+    ],
+      xtitle: "星期",
+      ytitle: "淨損益",
+      stacked: true,
+      library: {
+        plugins: {
+          tooltip: {
+            backgroundColor: '#1A1714',
+            titleColor: '#E8DFD0',
+            bodyColor: '#E8E4DD',
+            borderColor: '#2A2520',
+            borderWidth: 1,
+            cornerRadius: 8,
+            padding: 12,
+            titleFont: { family: 'JetBrains Mono', size: 11 },
+            bodyFont: { family: 'JetBrains Mono', size: 13, weight: 'bold' }
+          }
+        }
+      } %>
+
+    <div class="mt-4 overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b">
+            <th class="text-left py-2 text-gray-500">星期</th>
+            <th class="text-right py-2 text-gray-500">交易次數</th>
+            <th class="text-right py-2 text-gray-500">勝率</th>
+            <th class="text-right py-2 text-gray-500">淨損益</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% weekday_names.each_with_index do |name, i| %>
+            <% next unless pnl_by_weekday[i] %>
+            <% data = pnl_by_weekday[i] %>
+            <tr class="border-b border-gray-100">
+              <td class="py-2">週<%= name %></td>
+              <td class="text-right py-2"><%= data[:trade_count] %></td>
+              <td class="text-right py-2"><%= data[:win_rate] %>%</td>
+              <td class="text-right py-2 font-medium <%= data[:net_pnl] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                <%= number_with_precision(data[:net_pnl], precision: 0, delimiter: ',') %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

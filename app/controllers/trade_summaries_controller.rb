@@ -21,9 +21,10 @@ class TradeSummariesController < ApplicationController
     @buy_trades = active_trades.select { |trade| trade.buy_quantity.to_i.positive? }
     @sell_trades = active_trades.select { |trade| trade.sell_quantity.to_i.positive? }
 
-    @statistics = AnalyzeTradeLogs.new(@trade_logs).call
-    @buy_statistics = AnalyzeTradeLogs.new(@buy_trades).call
-    @sell_statistics = AnalyzeTradeLogs.new(@sell_trades).call
+    initial_capital = current_user.initial_capital.to_f
+    @statistics = AnalyzeTradeLogs.new(@trade_logs, initial_capital: initial_capital).call
+    @buy_statistics = AnalyzeTradeLogs.new(@buy_trades, initial_capital: initial_capital).call
+    @sell_statistics = AnalyzeTradeLogs.new(@sell_trades, initial_capital: initial_capital).call
   end
 
   def daily
@@ -32,8 +33,9 @@ class TradeSummariesController < ApplicationController
       .where(trade_date: @selected_date)
       .includes(:broker_account)
 
-    @statistics = AnalyzeTradeLogs.new(@trade_logs).call
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
+    initial_capital = @month_report.initial_capital.to_f
+    @statistics = AnalyzeTradeLogs.new(@trade_logs, initial_capital: initial_capital).call
   end
 
   def weekly
@@ -45,8 +47,9 @@ class TradeSummariesController < ApplicationController
       .where(trade_date: week_start..week_end)
       .includes(:broker_account)
 
-    @statistics = AnalyzeTradeLogs.new(@trade_logs).call
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
+    initial_capital = @month_report.initial_capital.to_f
+    @statistics = AnalyzeTradeLogs.new(@trade_logs, initial_capital: initial_capital).call
   end
 
   def monthly
@@ -62,10 +65,11 @@ class TradeSummariesController < ApplicationController
     @buy_trades = active_trades.select { |trade| trade.buy_quantity.to_i.positive? }
     @sell_trades = active_trades.select { |trade| trade.sell_quantity.to_i.positive? }
 
-    @statistics = AnalyzeTradeLogs.new(@trade_logs).call
-    @buy_statistics = AnalyzeTradeLogs.new(@buy_trades).call
-    @sell_statistics = AnalyzeTradeLogs.new(@sell_trades).call
     @month_report = MonthReport.generate_for_month(current_user, @selected_date.beginning_of_month)
+    initial_capital = @month_report.initial_capital.to_f
+    @statistics = AnalyzeTradeLogs.new(@trade_logs, initial_capital: initial_capital).call
+    @buy_statistics = AnalyzeTradeLogs.new(@buy_trades, initial_capital: initial_capital).call
+    @sell_statistics = AnalyzeTradeLogs.new(@sell_trades, initial_capital: initial_capital).call
   end
 
   def update_initial_capital

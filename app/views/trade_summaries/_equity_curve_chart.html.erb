@@ -1,0 +1,39 @@
+<% equity_data = statistics[:equity_curve] || {} %>
+<% if equity_data.any? %>
+  <div class="card card-chart p-6">
+    <h2 class="text-lg font-semibold mb-2">資金曲線 (Equity Curve)</h2>
+    <% if statistics[:max_drawdown] > 0 %>
+      <p class="text-sm text-gray-500 mb-4">
+        最大回撤: <%= number_with_precision(statistics[:max_drawdown], precision: 0, delimiter: ',') %>
+        <% if statistics[:max_drawdown_percentage] > 0 %>
+          (<%= statistics[:max_drawdown_percentage] %>%)
+        <% end %>
+      </p>
+    <% end %>
+    <% chart_values = equity_data.values.compact %>
+    <%= area_chart equity_data,
+      colors: ["#C8850F"],
+      xtitle: "日期",
+      ytitle: "資金",
+      ymin: chart_values.any? ? chart_values.min * 0.99 : 0,
+      ymax: chart_values.any? ? chart_values.max * 1.01 : 0,
+      points: equity_data.size <= 60,
+      curve: true,
+      library: {
+        elements: { line: { borderWidth: 2.5 } },
+        plugins: {
+          tooltip: {
+            backgroundColor: '#1A1714',
+            titleColor: '#E8DFD0',
+            bodyColor: '#E8E4DD',
+            borderColor: '#2A2520',
+            borderWidth: 1,
+            cornerRadius: 8,
+            padding: 12,
+            titleFont: { family: 'JetBrains Mono', size: 11 },
+            bodyFont: { family: 'JetBrains Mono', size: 13, weight: 'bold' }
+          }
+        }
+      } %>
+  </div>
+<% end %>

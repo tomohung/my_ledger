@@ -76,5 +76,27 @@
       <span class="text-gray-600">最大連續虧損次數</span>
       <span class="text-red-600 font-medium" style="font-family: var(--font-display); font-size: 1.125rem;"><%= statistics[:max_consecutive_losses] %></span>
     </div>
+    <div class="card-divider"></div>
+    <div class="flex justify-between items-baseline">
+      <span class="text-gray-600">獲利因子 (Profit Factor)</span>
+      <span class="font-medium <%= statistics[:profit_factor] >= 1.5 ? 'text-green-600' : statistics[:profit_factor] >= 1.0 ? 'text-amber-600' : 'text-red-600' %>" style="font-family: var(--font-display); font-size: 1.125rem;">
+        <%= statistics[:profit_factor] %>
+      </span>
+    </div>
+    <div class="flex justify-between items-baseline">
+      <span class="text-gray-600">期望值 (Expectancy)</span>
+      <span class="metric-value-sm <%= statistics[:expectancy] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+        <%= number_with_precision(statistics[:expectancy], precision: 0, delimiter: ',') %>
+      </span>
+    </div>
+    <div class="flex justify-between items-baseline">
+      <span class="text-gray-600">最大回撤 (Max Drawdown)</span>
+      <span class="text-red-600 font-medium" style="font-family: var(--font-display); font-size: 1.125rem;">
+        <%= number_with_precision(statistics[:max_drawdown], precision: 0, delimiter: ',') %>
+        <% if statistics[:max_drawdown_percentage] > 0 %>
+          <span class="text-sm">(<%= statistics[:max_drawdown_percentage] %>%)</span>
+        <% end %>
+      </span>
+    </div>
   </div>
 </div>
