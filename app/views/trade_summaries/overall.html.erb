@@ -111,13 +111,13 @@
   </div>
 
   <%# Performance stats %>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6 animate-in animate-in-3">
     <%= render 'trading_performance', statistics: @statistics, title: '(總計)' %>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6 animate-in animate-in-4">
     <%= render 'trading_performance', statistics: @buy_statistics, title: '(買入)' %>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6 animate-in animate-in-5">
     <%= render 'trading_performance', statistics: @sell_statistics, title: '(賣出)' %>
   </div>
 
