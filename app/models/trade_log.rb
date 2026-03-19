@@ -94,7 +94,7 @@ class TradeLog < ApplicationRecord
   def self.detect_csv_format(csv_string)
     cleaned_csv = csv_string.gsub(/="([^"]*)"/, '\1')
     headers = CSV.parse_line(cleaned_csv)
-    if headers&.include?("委託序號") && headers&.include?("成交時間")
+    if headers&.include?("委託序號") && headers.include?("成交時間")
       :trade_time
     else
       :import
