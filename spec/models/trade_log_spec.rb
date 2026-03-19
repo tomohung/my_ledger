@@ -22,6 +22,7 @@
 #  strike_price      :decimal(10, 2)
 #  call_put          :string
 #  trade_type        :string           default("futures"), not null
+#  trade_time        :string
 #
 # Indexes
 #
@@ -127,6 +128,72 @@ RSpec.describe TradeLog, type: :model do
         expect(put_trade.strike_price).to eq(20000)
         expect(put_trade.call_put).to eq("P")
       end
+    end
+  end
+
+  describe ".detect_csv_format" do
+    it "returns :trade_time when headers contain 委託序號 and 成交時間" do
+      csv = "委託序號,成交時間,商品名稱\n12345,08:45:01,小台指\n"
+      expect(TradeLog.detect_csv_format(csv)).to eq(:trade_time)
+    end
+
+    it "returns :import for standard import CSV" do
+      csv = "項次,交易日期,商品名稱,年月,履約價格,C/P,結算價,買口數,賣口數,成交價格,權利金收支,損益,手續費,交易稅,淨損益,幣別,委託書號,\n"
+      expect(TradeLog.detect_csv_format(csv)).to eq(:import)
+    end
+  end
+
+  describe ".update_times_from_csv_string" do
+    let(:user) { create(:user) }
+    let(:broker_account) { create(:broker_account, user: user) }
+    let!(:trade1) { create(:trade_log, user: user, broker_account: broker_account, order_id: "ABC01") }
+    let!(:trade2) { create(:trade_log, user: user, broker_account: broker_account, order_id: "ABC02") }
+
+    let(:csv_data) do
+      <<~CSV
+        委託序號,成交時間,商品名稱
+        ABC01,08:45:01,小台指
+        ABC02,09:00:15,小台指
+        ABC99,10:00:00,小台指
+      CSV
+    end
+
+    it "updates trade_time for matching order_ids" do
+      result = TradeLog.update_times_from_csv_string(user, csv_data)
+
+      expect(result[:updated_count]).to eq(2)
+      expect(result[:not_found_count]).to eq(1)
+      expect(result[:failure_count]).to eq(0)
+
+      expect(trade1.reload.trade_time).to eq("08:45:01")
+      expect(trade2.reload.trade_time).to eq("09:00:15")
+    end
+
+    it "does not update trades belonging to other users" do
+      other_user = create(:user)
+      other_broker = create(:broker_account, user: other_user)
+      create(:trade_log, user: other_user, broker_account: other_broker, order_id: "ABC01")
+
+      result = TradeLog.update_times_from_csv_string(other_user, csv_data)
+      expect(result[:updated_count]).to eq(1)
+      expect(trade1.reload.trade_time).to be_nil
+    end
+
+    it "updates all trades with the same order_id" do
+      trade1_dup = create(:trade_log, user: user, broker_account: broker_account, order_id: "ABC01")
+      csv = "委託序號,成交時間,商品名稱\nABC01,08:45:01,小台指\n"
+
+      result = TradeLog.update_times_from_csv_string(user, csv)
+      expect(result[:updated_count]).to eq(2)
+      expect(trade1.reload.trade_time).to eq("08:45:01")
+      expect(trade1_dup.reload.trade_time).to eq("08:45:01")
+    end
+
+    it "handles Excel-style formatted CSV" do
+      excel_csv = "委託序號,成交時間,商品名稱\n=\"ABC01\",=\"08:45:01\",=\"小台指\"\n"
+      result = TradeLog.update_times_from_csv_string(user, excel_csv)
+      expect(result[:updated_count]).to eq(1)
+      expect(trade1.reload.trade_time).to eq("08:45:01")
     end
   end
 

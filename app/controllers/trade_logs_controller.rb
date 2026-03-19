@@ -1,7 +1,6 @@
 class TradeLogsController < ApplicationController
   include Pagy::Method
 
-  before_action :set_broker_account, only: [:create]
   before_action :set_trade_log, only: [:destroy]
 
   def index
@@ -21,20 +20,32 @@ class TradeLogsController < ApplicationController
 
     if csv_content.blank?
       flash.now[:alert] = "請貼上 CSV 內容"
+      @broker_accounts = current_user.broker_accounts
       render :new
       return
     end
 
-    result = TradeLog.import_from_csv_string(@broker_account, csv_content)
-
-    if result[:success_count] > 0
-      flash[:notice] = "成功匯入 #{result[:success_count]} 筆交易資料，失敗 #{result[:failure_count]} 筆。"
+    if TradeLog.detect_csv_format(csv_content) == :trade_time
+      result = TradeLog.update_times_from_csv_string(current_user, csv_content)
+      flash[:notice] = "成功更新 #{result[:updated_count]} 筆成交時間，未找到 #{result[:not_found_count]} 筆，失敗 #{result[:failure_count]} 筆。"
       redirect_to new_trade_log_path
     else
-      flash.now[:alert] = "匯入失敗"
-      @broker_accounts = current_user.broker_accounts
-      render :new
+      @broker_account = current_user.broker_accounts.find(params[:broker_account_id])
+      result = TradeLog.import_from_csv_string(@broker_account, csv_content)
+
+      if result[:success_count] > 0
+        flash[:notice] = "成功匯入 #{result[:success_count]} 筆交易資料，失敗 #{result[:failure_count]} 筆。"
+        redirect_to new_trade_log_path
+      else
+        flash.now[:alert] = "匯入失敗"
+        @broker_accounts = current_user.broker_accounts
+        render :new
+      end
     end
+  rescue ActiveRecord::RecordNotFound
+    flash.now[:alert] = "券商帳戶不存在"
+    @broker_accounts = current_user.broker_accounts
+    render :new
   end
 
   def destroy
@@ -53,13 +64,6 @@ class TradeLogsController < ApplicationController
   end
 
   private
-
-  def set_broker_account
-    @broker_account = current_user.broker_accounts.find(params[:broker_account_id])
-  rescue ActiveRecord::RecordNotFound
-    flash.now[:alert] = "券商帳戶不存在"
-    redirect_to new_trade_log_path
-  end
 
   def set_trade_log
     @trade_log = current_user.trade_logs.find(params[:id])

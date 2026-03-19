@@ -22,6 +22,7 @@
 #  strike_price      :decimal(10, 2)
 #  call_put          :string
 #  trade_type        :string           default("futures"), not null
+#  trade_time        :string
 #
 # Indexes
 #
@@ -88,5 +89,43 @@ class TradeLog < ApplicationRecord
     end
 
     {success_count: success_count, failure_count: failure_count}
+  end
+
+  def self.detect_csv_format(csv_string)
+    cleaned_csv = csv_string.gsub(/="([^"]*)"/, '\1')
+    headers = CSV.parse_line(cleaned_csv)
+    if headers&.include?("委託序號") && headers&.include?("成交時間")
+      :trade_time
+    else
+      :import
+    end
+  end
+
+  def self.update_times_from_csv_string(user, csv_string)
+    cleaned_csv = csv_string.gsub(/="([^"]*)"/, '\1')
+    csv = CSV.parse(cleaned_csv, headers: true)
+
+    updated_count = 0
+    not_found_count = 0
+    failure_count = 0
+
+    csv.each do |row|
+      order_id = row["委託序號"].presence
+      trade_time = row["成交時間"].presence
+      next unless order_id && trade_time
+
+      trade_logs = user.trade_logs.where(order_id: order_id)
+      if trade_logs.any?
+        count = trade_logs.update_all(trade_time: trade_time)
+        updated_count += count
+      else
+        not_found_count += 1
+      end
+    rescue => e
+      failure_count += 1
+      Rails.logger.error("Error updating trade time for order #{order_id}: #{e.message}")
+    end
+
+    {updated_count: updated_count, not_found_count: not_found_count, failure_count: failure_count}
   end
 end

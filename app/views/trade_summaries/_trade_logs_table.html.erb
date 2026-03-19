@@ -3,6 +3,7 @@
     <tr>
       <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">券商帳戶</th>
       <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">交易日期</th>
+      <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">成交時間</th>
       <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">商品名稱</th>
       <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">合約月份</th>
       <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">履約價格</th>
@@ -26,6 +27,9 @@
         </td>
         <td class="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-sm text-gray-900">
           <%= link_to trade_log.trade_date&.strftime('%Y/%m/%d'), daily_trade_summaries_path(date: trade_log.trade_date), class: "text-amber-700 hover:text-amber-900 hover:underline transition-colors" %>
+        </td>
+        <td class="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
+          <%= trade_log.trade_time %>
         </td>
         <td class="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-sm text-gray-900">
           <%= trade_log.product_name %>

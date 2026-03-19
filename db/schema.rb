@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_18_024426) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_19_091315) do
   create_table "broker_accounts", force: :cascade do |t|
     t.string "account_number"
     t.string "broker"
@@ -65,6 +65,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_024426) do
     t.decimal "strike_price", precision: 10, scale: 2
     t.decimal "tax", precision: 10, scale: 2
     t.date "trade_date", null: false
+    t.string "trade_time"
     t.string "trade_type", default: "futures", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false

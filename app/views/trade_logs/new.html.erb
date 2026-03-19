@@ -13,6 +13,7 @@
 
     <div class="space-y-2">
       <%= form.label :csv_content, "請貼上 CSV 內容", class: "block text-sm font-medium text-gray-700" %>
+      <p class="text-xs text-gray-500 mt-1">支援兩種格式：匯入交易紀錄（含「委託書號」）或更新成交時間（含「委託序號」與「成交時間」），系統會自動判斷。</p>
       <%= form.text_area :csv_content, rows: 20, cols: 100,
           class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 font-mono" %>
     </div>
