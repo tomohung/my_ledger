@@ -1,6 +1,10 @@
 <div class="flex items-center gap-1.5 mt-3 md:mt-0">
   <%
-    current_params = request.query_parameters.except("trade_type")
+    safe_params = {
+      date: params[:date],
+      start_date: params[:start_date],
+      end_date: params[:end_date]
+    }.compact
     tabs = [
       { label: "全部", value: nil },
       { label: "期貨", value: "futures" },
@@ -9,7 +13,7 @@
   %>
   <% tabs.each do |tab| %>
     <% active = @trade_type == tab[:value] %>
-    <% link_params = tab[:value] ? current_params.merge(trade_type: tab[:value]) : current_params %>
-    <%= link_to tab[:label], url_for(link_params), class: "filter-pill #{active ? 'filter-pill-active' : 'filter-pill-inactive'}" %>
+    <% link_params = tab[:value] ? safe_params.merge(trade_type: tab[:value]) : safe_params %>
+    <%= link_to tab[:label], request.path + "?" + link_params.to_query, class: "filter-pill #{active ? 'filter-pill-active' : 'filter-pill-inactive'}" %>
   <% end %>
 </div>
