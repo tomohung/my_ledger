@@ -11,20 +11,20 @@
 
 /* ── CSS Custom Properties ─────────────────────────────── */
 :root {
-  --color-bg: #FFFBF7;
+  --color-bg: #F8FAFC;
   --color-surface: #FFFFFF;
-  --color-surface-hover: #FFF8F2;
-  --color-border: #F0E6DA;
-  --color-border-subtle: #F7F0E8;
+  --color-surface-hover: #F1F5F9;
+  --color-border: #E2E8F0;
+  --color-border-subtle: #F1F5F9;
 
-  --color-text-primary: #292018;
-  --color-text-secondary: #5C4A36;
-  --color-text-tertiary: #A08B74;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94A3B8;
 
-  --color-accent: #EA580C;
-  --color-accent-hover: #C2410C;
-  --color-accent-light: #FFF7ED;
-  --color-accent-glow: rgba(234, 88, 12, 0.15);
+  --color-accent: #1E40AF;
+  --color-accent-hover: #1E3A8A;
+  --color-accent-light: #EFF6FF;
+  --color-accent-glow: rgba(30, 64, 175, 0.12);
 
   /* 台灣慣例：紅漲綠跌 */
   --color-profit: #DC2626;
@@ -34,8 +34,8 @@
   --color-warning: #D97706;
   --color-warning-bg: rgba(217, 119, 6, 0.08);
 
-  --color-nav-bg: #C2410C;
-  --color-nav-border: #9A3412;
+  --color-nav-bg: #1E3A8A;
+  --color-nav-border: #1E40AF;
 
   --font-display: "Noto Sans TC", system-ui, sans-serif;
   --font-body: "Noto Sans TC", system-ui, sans-serif;
@@ -45,8 +45,8 @@
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
 
-  --shadow-card: 0 1px 3px rgba(234, 88, 12, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
-  --shadow-card-hover: 0 8px 24px rgba(234, 88, 12, 0.1), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-card-hover: 0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
   --shadow-nav-dropdown: 0 12px 36px rgba(0, 0, 0, 0.2);
   --shadow-hero-glow-profit: 0 0 40px rgba(220, 38, 38, 0.12), 0 0 16px rgba(220, 38, 38, 0.06);
   --shadow-hero-glow-loss: 0 0 40px rgba(22, 163, 74, 0.12), 0 0 16px rgba(22, 163, 74, 0.06);
@@ -124,7 +124,7 @@ body {
 }
 
 .card-chart {
-  border-left: 3px solid #FB923C;
+  border-left: 3px solid #60A5FA;
 }
 
 .card-risk {
@@ -221,8 +221,8 @@ h2.card-title,
 }
 
 .hero-pnl-neutral {
-  background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-surface) 50%, #FFF7ED 100%);
-  border-color: rgba(234, 88, 12, 0.15);
+  background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-surface) 50%, #EFF6FF 100%);
+  border-color: rgba(30, 64, 175, 0.12);
 }
 
 .hero-pnl-label {
@@ -390,7 +390,7 @@ h2.card-title,
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  background: linear-gradient(135deg, #FFFFFF 0%, #FED7AA 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #BFDBFE 100%);
   border-radius: 0.5rem;
   color: var(--color-accent);
   font-family: var(--font-display);
@@ -437,13 +437,13 @@ h2.card-title,
 }
 
 .filter-pill-inactive {
-  background-color: rgba(234, 88, 12, 0.06);
+  background-color: rgba(30, 64, 175, 0.06);
   color: var(--color-text-secondary);
   border-color: var(--color-border);
 }
 
 .filter-pill-inactive:hover {
-  background-color: rgba(234, 88, 12, 0.12);
+  background-color: rgba(30, 64, 175, 0.12);
   color: var(--color-text-primary);
   border-color: var(--color-accent);
 }
@@ -457,7 +457,7 @@ h2.card-title,
 
 /* ── Calendar blue theme ─────────────────────────────── */
 .cal-selected-week {
-  background-color: rgba(234, 88, 12, 0.1);
+  background-color: rgba(30, 64, 175, 0.08);
 }
 
 .cal-today {
@@ -492,7 +492,7 @@ h2.card-title,
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(234, 88, 12, 0.1) 0%, rgba(251, 146, 60, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(30, 64, 175, 0.08) 0%, rgba(96, 165, 250, 0.08) 100%);
   margin-bottom: 1rem;
 }
 
@@ -605,7 +605,7 @@ h2.card-title,
 
 /* Summary bar at top of trade tables */
 .summary-bar {
-  background: linear-gradient(180deg, #FFFAF5 0%, var(--color-surface) 100%);
+  background: linear-gradient(180deg, #F8FAFC 0%, var(--color-surface) 100%);
   border-bottom: 1px solid var(--color-border);
 }
 

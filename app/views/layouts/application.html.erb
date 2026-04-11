@@ -26,7 +26,7 @@
   </head>
 
   <body data-controller="timezone">
-    <nav class="fixed top-0 left-0 right-0 z-50" style="background: linear-gradient(135deg, #9A3412 0%, #C2410C 100%); border-bottom: 1px solid #7C2D12;" data-controller="mobile-menu">
+    <nav class="fixed top-0 left-0 right-0 z-50" style="background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%); border-bottom: 1px solid #172554;" data-controller="mobile-menu">
       <div class="container mx-auto px-3 md:px-5">
         <div class="flex justify-between items-center h-14">
           <div class="flex items-center">
@@ -56,9 +56,9 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              <div class="hidden absolute right-0 mt-2 w-48 rounded-lg py-1" style="background-color: #7C2D12; border: 1px solid #9A3412; box-shadow: var(--shadow-nav-dropdown);" data-dropdown-target="menu">
-                <%= link_to "設定", edit_user_path, class: "block px-4 py-2.5 text-sm text-orange-200 hover:text-white hover:bg-white/10 transition-colors" %>
-                <%= button_to "登出", session_path(Current.session), method: :delete, class: "block w-full text-left px-4 py-2.5 text-sm text-orange-200 hover:text-white hover:bg-white/10 transition-colors" %>
+              <div class="hidden absolute right-0 mt-2 w-48 rounded-lg py-1" style="background-color: #172554; border: 1px solid #1E3A8A; box-shadow: var(--shadow-nav-dropdown);" data-dropdown-target="menu">
+                <%= link_to "設定", edit_user_path, class: "block px-4 py-2.5 text-sm text-blue-200 hover:text-white hover:bg-white/10 transition-colors" %>
+                <%= button_to "登出", session_path(Current.session), method: :delete, class: "block w-full text-left px-4 py-2.5 text-sm text-blue-200 hover:text-white hover:bg-white/10 transition-colors" %>
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@
 
       <%# Mobile slide-out menu %>
       <div class="hidden fixed inset-0 bg-black/50 z-40" data-mobile-menu-target="overlay" data-action="click->mobile-menu#close"></div>
-      <div class="fixed top-0 right-0 bottom-0 w-64 z-50 translate-x-full transition-transform duration-200 ease-out" style="background: linear-gradient(180deg, #C2410C 0%, #9A3412 100%); border-left: 1px solid #7C2D12;" data-mobile-menu-target="menu">
+      <div class="fixed top-0 right-0 bottom-0 w-64 z-50 translate-x-full transition-transform duration-200 ease-out" style="background: linear-gradient(180deg, #1E40AF 0%, #1E3A8A 100%); border-left: 1px solid #172554;" data-mobile-menu-target="menu">
         <div class="flex items-center justify-between h-14 px-4 border-b" style="border-color: rgba(255,255,255,0.2);">
           <span class="logo-text text-base">選單</span>
           <button class="p-2 text-white/70 hover:text-white" data-action="click->mobile-menu#close" aria-label="Close">
@@ -84,7 +84,7 @@
           </button>
         </div>
         <div class="py-3">
-          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-orange-300">報表總覽</div>
+          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-blue-300">報表總覽</div>
           <%= link_to "每日", daily_trade_summaries_path, class: "mobile-nav-link #{current_page?(daily_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
           <%= link_to "每週", weekly_trade_summaries_path, class: "mobile-nav-link #{current_page?(weekly_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
           <%= link_to "每月", monthly_trade_summaries_path, class: "mobile-nav-link #{current_page?(monthly_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
@@ -92,13 +92,13 @@
 
           <div class="my-2 mx-4" style="border-top: 1px solid rgba(255,255,255,0.15);"></div>
 
-          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-orange-300">交易資料</div>
+          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-blue-300">交易資料</div>
           <%= link_to "交易紀錄", trade_logs_path, class: "mobile-nav-link #{current_page?(trade_logs_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
           <%= link_to "走勢圖", new_trade_plot_path, class: "mobile-nav-link #{current_page?(new_trade_plot_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
 
           <div class="my-2 mx-4" style="border-top: 1px solid rgba(255,255,255,0.15);"></div>
 
-          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-orange-300"><%= current_user.name %></div>
+          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-blue-300"><%= current_user.name %></div>
           <%= link_to "設定", edit_user_path, class: "mobile-nav-link", data: { action: "click->mobile-menu#close" } %>
           <%= button_to "登出", session_path(Current.session), method: :delete, class: "mobile-nav-link w-full text-left", data: { action: "click->mobile-menu#close" } %>
         </div>

@@ -79,7 +79,7 @@
       <h2 class="text-lg font-semibold mb-4">累積損益走勢</h2>
       <% chart_values = accumulated_pnl_data.values.compact %>
       <%= area_chart accumulated_pnl_data,
-        colors: ["#EA580C"],
+        colors: ["#1E40AF"],
         xtitle: "日期",
         ytitle: "累積損益",
         ymin: chart_values.any? ? chart_values.min : 0,

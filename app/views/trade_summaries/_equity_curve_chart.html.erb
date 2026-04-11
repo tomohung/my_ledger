@@ -12,7 +12,7 @@
     <% end %>
     <% chart_values = equity_data.values.compact %>
     <%= area_chart equity_data,
-      colors: ["#EA580C"],
+      colors: ["#1E40AF"],
       xtitle: "日期",
       ytitle: "資金",
       ymin: chart_values.any? ? chart_values.min * 0.99 : 0,

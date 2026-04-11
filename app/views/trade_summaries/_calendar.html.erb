@@ -36,7 +36,7 @@
       %>
       <div class="relative">
         <%= link_to daily_trade_summaries_path(date: date),
-            class: "block text-center py-2 rounded #{is_selected_week ? 'cal-selected-week' : ''} #{!is_current_month ? 'text-gray-400' : ''} #{is_today ? 'font-bold cal-today' : ''} hover:bg-orange-50 transition-colors" do %>
+            class: "block text-center py-2 rounded #{is_selected_week ? 'cal-selected-week' : ''} #{!is_current_month ? 'text-gray-400' : ''} #{is_today ? 'font-bold cal-today' : ''} hover:bg-blue-50 transition-colors" do %>
           <span class="relative z-10"><%= date.day %></span>
         <% end %>
       </div>
