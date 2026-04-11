@@ -12,7 +12,7 @@
     <% end %>
     <% chart_values = equity_data.values.compact %>
     <%= area_chart equity_data,
-      colors: ["#C8850F"],
+      colors: ["#EA580C"],
       xtitle: "日期",
       ytitle: "資金",
       ymin: chart_values.any? ? chart_values.min * 0.99 : 0,
@@ -23,10 +23,10 @@
         elements: { line: { borderWidth: 2.5 } },
         plugins: {
           tooltip: {
-            backgroundColor: '#1A1714',
-            titleColor: '#E8DFD0',
-            bodyColor: '#E8E4DD',
-            borderColor: '#2A2520',
+            backgroundColor: '#1E293B',
+            titleColor: '#E2E8F0',
+            bodyColor: '#F1F5F9',
+            borderColor: '#334155',
             borderWidth: 1,
             cornerRadius: 8,
             padding: 12,

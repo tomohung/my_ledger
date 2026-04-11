@@ -48,7 +48,7 @@
       <span class="text-gray-700">本週淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
       <span class="font-medium <%=
         if total_net_pnl > 0
-          'text-green-600'
+          'text-profit'
         elsif quota <= 0
           'risk-danger'
         elsif quota <= risk_amount * 0.382

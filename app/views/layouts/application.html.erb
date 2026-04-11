@@ -19,14 +19,14 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body data-controller="timezone">
-    <nav class="fixed top-0 left-0 right-0 z-50" style="background-color: #141210; border-bottom: 1px solid #2A2520;" data-controller="mobile-menu">
+    <nav class="fixed top-0 left-0 right-0 z-50" style="background: linear-gradient(135deg, #9A3412 0%, #C2410C 100%); border-bottom: 1px solid #7C2D12;" data-controller="mobile-menu">
       <div class="container mx-auto px-3 md:px-5">
         <div class="flex justify-between items-center h-14">
           <div class="flex items-center">
@@ -38,15 +38,15 @@
           <%# Desktop nav %>
           <div class="hidden md:flex items-center space-x-2">
             <div class="flex items-center space-x-1">
-              <%= link_to "Daily", daily_trade_summaries_path, class: "#{current_page?(daily_trade_summaries_path) ? 'nav-link-active' : 'nav-link'}" %>
-              <%= link_to "Weekly", weekly_trade_summaries_path, class: "#{current_page?(weekly_trade_summaries_path) ? 'nav-link-active' : 'nav-link'}" %>
-              <%= link_to "Monthly", monthly_trade_summaries_path, class: "#{current_page?(monthly_trade_summaries_path) ? 'nav-link-active' : 'nav-link'}" %>
-              <%= link_to "Overall", overall_trade_summaries_path, class: "#{current_page?(overall_trade_summaries_path) ? 'nav-link-active' : 'nav-link'}" %>
+              <%= link_to "每日", daily_trade_summaries_path, class: "#{current_page?(daily_trade_summaries_path) ? 'nav-link-active' : 'nav-link'}" %>
+              <%= link_to "每週", weekly_trade_summaries_path, class: "#{current_page?(weekly_trade_summaries_path) ? 'nav-link-active' : 'nav-link'}" %>
+              <%= link_to "每月", monthly_trade_summaries_path, class: "#{current_page?(monthly_trade_summaries_path) ? 'nav-link-active' : 'nav-link'}" %>
+              <%= link_to "總覽", overall_trade_summaries_path, class: "#{current_page?(overall_trade_summaries_path) ? 'nav-link-active' : 'nav-link'}" %>
             </div>
             <div class="nav-separator"></div>
             <div class="flex items-center space-x-1">
-              <%= link_to "Trade Logs", trade_logs_path, class: "#{current_page?(trade_logs_path) ? 'nav-link-active' : 'nav-link'}" %>
-              <%= link_to "Trade Plots", new_trade_plot_path, class: "#{current_page?(new_trade_plot_path) ? 'nav-link-active' : 'nav-link'}" %>
+              <%= link_to "交易紀錄", trade_logs_path, class: "#{current_page?(trade_logs_path) ? 'nav-link-active' : 'nav-link'}" %>
+              <%= link_to "走勢圖", new_trade_plot_path, class: "#{current_page?(new_trade_plot_path) ? 'nav-link-active' : 'nav-link'}" %>
             </div>
             <div class="nav-separator"></div>
             <div class="relative" data-controller="dropdown">
@@ -56,15 +56,15 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              <div class="hidden absolute right-0 mt-2 w-48 rounded-lg py-1" style="background-color: #1E1B18; border: 1px solid #2A2520; box-shadow: var(--shadow-nav-dropdown);" data-dropdown-target="menu">
-                <%= link_to "Settings", edit_user_path, class: "block px-4 py-2.5 text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-colors" %>
-                <%= button_to "Logout", session_path(Current.session), method: :delete, class: "block w-full text-left px-4 py-2.5 text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-colors" %>
+              <div class="hidden absolute right-0 mt-2 w-48 rounded-lg py-1" style="background-color: #7C2D12; border: 1px solid #9A3412; box-shadow: var(--shadow-nav-dropdown);" data-dropdown-target="menu">
+                <%= link_to "設定", edit_user_path, class: "block px-4 py-2.5 text-sm text-orange-200 hover:text-white hover:bg-white/10 transition-colors" %>
+                <%= button_to "登出", session_path(Current.session), method: :delete, class: "block w-full text-left px-4 py-2.5 text-sm text-orange-200 hover:text-white hover:bg-white/10 transition-colors" %>
               </div>
             </div>
           </div>
 
           <%# Mobile hamburger button %>
-          <button class="md:hidden p-2 text-gray-400 hover:text-gray-200 transition-colors" data-action="click->mobile-menu#toggle" aria-label="Menu">
+          <button class="md:hidden p-2 text-white/70 hover:text-white transition-colors" data-action="click->mobile-menu#toggle" aria-label="Menu">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -74,33 +74,33 @@
 
       <%# Mobile slide-out menu %>
       <div class="hidden fixed inset-0 bg-black/50 z-40" data-mobile-menu-target="overlay" data-action="click->mobile-menu#close"></div>
-      <div class="fixed top-0 right-0 bottom-0 w-64 z-50 translate-x-full transition-transform duration-200 ease-out" style="background-color: #141210; border-left: 1px solid #2A2520;" data-mobile-menu-target="menu">
-        <div class="flex items-center justify-between h-14 px-4 border-b" style="border-color: #2A2520;">
-          <span class="logo-text text-base">Menu</span>
-          <button class="p-2 text-gray-400 hover:text-gray-200" data-action="click->mobile-menu#close" aria-label="Close">
+      <div class="fixed top-0 right-0 bottom-0 w-64 z-50 translate-x-full transition-transform duration-200 ease-out" style="background: linear-gradient(180deg, #C2410C 0%, #9A3412 100%); border-left: 1px solid #7C2D12;" data-mobile-menu-target="menu">
+        <div class="flex items-center justify-between h-14 px-4 border-b" style="border-color: rgba(255,255,255,0.2);">
+          <span class="logo-text text-base">選單</span>
+          <button class="p-2 text-white/70 hover:text-white" data-action="click->mobile-menu#close" aria-label="Close">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
         <div class="py-3">
-          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-gray-600">Dashboard</div>
-          <%= link_to "Daily", daily_trade_summaries_path, class: "mobile-nav-link #{current_page?(daily_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
-          <%= link_to "Weekly", weekly_trade_summaries_path, class: "mobile-nav-link #{current_page?(weekly_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
-          <%= link_to "Monthly", monthly_trade_summaries_path, class: "mobile-nav-link #{current_page?(monthly_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
-          <%= link_to "Overall", overall_trade_summaries_path, class: "mobile-nav-link #{current_page?(overall_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
+          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-orange-300">報表總覽</div>
+          <%= link_to "每日", daily_trade_summaries_path, class: "mobile-nav-link #{current_page?(daily_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
+          <%= link_to "每週", weekly_trade_summaries_path, class: "mobile-nav-link #{current_page?(weekly_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
+          <%= link_to "每月", monthly_trade_summaries_path, class: "mobile-nav-link #{current_page?(monthly_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
+          <%= link_to "總覽", overall_trade_summaries_path, class: "mobile-nav-link #{current_page?(overall_trade_summaries_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
 
-          <div class="my-2 mx-4" style="border-top: 1px solid #2A2520;"></div>
+          <div class="my-2 mx-4" style="border-top: 1px solid rgba(255,255,255,0.15);"></div>
 
-          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-gray-600">Data</div>
-          <%= link_to "Trade Logs", trade_logs_path, class: "mobile-nav-link #{current_page?(trade_logs_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
-          <%= link_to "Trade Plots", new_trade_plot_path, class: "mobile-nav-link #{current_page?(new_trade_plot_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
+          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-orange-300">交易資料</div>
+          <%= link_to "交易紀錄", trade_logs_path, class: "mobile-nav-link #{current_page?(trade_logs_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
+          <%= link_to "走勢圖", new_trade_plot_path, class: "mobile-nav-link #{current_page?(new_trade_plot_path) ? 'mobile-nav-link-active' : ''}", data: { action: "click->mobile-menu#close" } %>
 
-          <div class="my-2 mx-4" style="border-top: 1px solid #2A2520;"></div>
+          <div class="my-2 mx-4" style="border-top: 1px solid rgba(255,255,255,0.15);"></div>
 
-          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-gray-600"><%= current_user.name %></div>
-          <%= link_to "Settings", edit_user_path, class: "mobile-nav-link", data: { action: "click->mobile-menu#close" } %>
-          <%= button_to "Logout", session_path(Current.session), method: :delete, class: "mobile-nav-link w-full text-left", data: { action: "click->mobile-menu#close" } %>
+          <div class="px-4 py-1.5 text-xs uppercase tracking-wider text-orange-300"><%= current_user.name %></div>
+          <%= link_to "設定", edit_user_path, class: "mobile-nav-link", data: { action: "click->mobile-menu#close" } %>
+          <%= button_to "登出", session_path(Current.session), method: :delete, class: "mobile-nav-link w-full text-left", data: { action: "click->mobile-menu#close" } %>
         </div>
       </div>
     </nav>

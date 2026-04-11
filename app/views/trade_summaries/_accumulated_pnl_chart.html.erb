@@ -13,7 +13,7 @@
 <div class="card card-chart p-6">
   <h2 class="text-lg font-semibold mb-4">本月累積損益走勢</h2>
     <%= area_chart daily_pnl_data,
-      colors: ["#C8850F"],
+      colors: ["#EA580C"],
       xtitle: "日期",
       ytitle: "累積損益",
       ymin: daily_pnl_data.values.compact.min,
@@ -23,10 +23,10 @@
       library: {
         plugins: {
           tooltip: {
-            backgroundColor: '#1A1714',
-            titleColor: '#E8DFD0',
-            bodyColor: '#E8E4DD',
-            borderColor: '#2A2520',
+            backgroundColor: '#1E293B',
+            titleColor: '#E2E8F0',
+            bodyColor: '#F1F5F9',
+            borderColor: '#334155',
             borderWidth: 1,
             cornerRadius: 8,
             padding: 12,

@@ -83,7 +83,7 @@
             elsif total_net_pnl < 0 && quota <= risk_amount * 0.382
               'risk-caution'
             elsif total_net_pnl >= 0
-              'text-green-600'
+              'text-profit'
             else
               ''
             end
@@ -117,7 +117,7 @@
             交易稅：<%= number_with_precision(@trade_logs.sum { |log| log.tax || 0 }, precision: 0) %>
           </div>
           <% total_net = @trade_logs.sum { |log| log.net_pnl || 0 } %>
-          <div class="text-xs md:text-sm font-semibold <%= total_net >= 0 ? 'text-green-600' : 'text-red-600' %>">
+          <div class="text-xs md:text-sm font-semibold <%= total_net >= 0 ? 'text-profit' : 'text-loss' %>">
             淨損益：<%= number_with_precision(total_net, precision: 0) %>
           </div>
         </div>

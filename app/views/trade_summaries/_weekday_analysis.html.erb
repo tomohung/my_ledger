@@ -7,8 +7,8 @@
     <% negative_data = weekday_names.map.with_index { |name, i| [name, pnl_by_weekday.dig(i, :net_pnl)&.negative? ? pnl_by_weekday[i][:net_pnl] : 0] } %>
 
     <%= column_chart [
-      { name: "獲利", data: positive_data, color: "#C8850F" },
-      { name: "虧損", data: negative_data, color: "#D43B3B" }
+      { name: "獲利", data: positive_data, color: "#DC2626" },
+      { name: "虧損", data: negative_data, color: "#16A34A" }
     ],
       xtitle: "星期",
       ytitle: "淨損益",
@@ -16,10 +16,10 @@
       library: {
         plugins: {
           tooltip: {
-            backgroundColor: '#1A1714',
-            titleColor: '#E8DFD0',
-            bodyColor: '#E8E4DD',
-            borderColor: '#2A2520',
+            backgroundColor: '#1E293B',
+            titleColor: '#E2E8F0',
+            bodyColor: '#F1F5F9',
+            borderColor: '#334155',
             borderWidth: 1,
             cornerRadius: 8,
             padding: 12,
@@ -47,7 +47,7 @@
               <td class="py-2">週<%= name %></td>
               <td class="text-right py-2"><%= data[:trade_count] %></td>
               <td class="text-right py-2"><%= data[:win_rate] %>%</td>
-              <td class="text-right py-2 font-medium <%= data[:net_pnl] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+              <td class="text-right py-2 font-medium <%= data[:net_pnl] >= 0 ? 'text-profit' : 'text-loss' %>">
                 <%= number_with_precision(data[:net_pnl], precision: 0, delimiter: ',') %>
               </td>
             </tr>

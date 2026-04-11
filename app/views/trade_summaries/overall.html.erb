@@ -31,7 +31,7 @@
     </div>
     <div class="card stat-card p-3 md:p-4 text-center animate-in animate-in-3 <%= total_net >= 0 ? 'stat-card-profit' : 'stat-card-loss' %>">
       <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">總淨損益</div>
-      <div class="metric-value <%= total_net >= 0 ? 'text-green-500' : 'text-red-500' %>" style="font-family: var(--font-display); font-size: 2rem;">
+      <div class="metric-value <%= total_net >= 0 ? 'text-profit' : 'text-loss' %>" style="font-family: var(--font-display); font-size: 2rem;">
         <%= number_with_precision(total_net, precision: 0, delimiter: ',') %>
       </div>
     </div>
@@ -44,15 +44,15 @@
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
     <div class="card stat-card stat-card-accent p-3 md:p-4 text-center animate-in animate-in-2">
       <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">獲利因子</div>
-      <div class="metric-value <%= @statistics[:profit_factor] >= 1.5 ? 'text-green-500' : @statistics[:profit_factor] >= 1.0 ? 'text-amber-500' : 'text-red-500' %>" style="font-family: var(--font-display); font-size: 2rem;"><%= @statistics[:profit_factor] %></div>
+      <div class="metric-value <%= @statistics[:profit_factor] >= 1.5 ? 'text-profit' : @statistics[:profit_factor] >= 1.0 ? 'text-amber-600' : 'text-loss' %>" style="font-family: var(--font-display); font-size: 2rem;"><%= @statistics[:profit_factor] %></div>
     </div>
     <div class="card stat-card stat-card-accent p-3 md:p-4 text-center animate-in animate-in-3">
       <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">期望值</div>
-      <div class="metric-value <%= @statistics[:expectancy] >= 0 ? 'text-green-500' : 'text-red-500' %>" style="font-family: var(--font-display); font-size: 2rem;"><%= number_with_precision(@statistics[:expectancy], precision: 0, delimiter: ',') %></div>
+      <div class="metric-value <%= @statistics[:expectancy] >= 0 ? 'text-profit' : 'text-loss' %>" style="font-family: var(--font-display); font-size: 2rem;"><%= number_with_precision(@statistics[:expectancy], precision: 0, delimiter: ',') %></div>
     </div>
     <div class="card stat-card p-3 md:p-4 text-center animate-in animate-in-4">
       <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">最大回撤</div>
-      <div class="metric-value text-red-500" style="font-family: var(--font-display); font-size: 2rem;">
+      <div class="metric-value text-loss" style="font-family: var(--font-display); font-size: 2rem;">
         <%= number_with_precision(@statistics[:max_drawdown], precision: 0, delimiter: ',') %>
         <% if @statistics[:max_drawdown_percentage] > 0 %>
           <span class="text-sm">(<%= @statistics[:max_drawdown_percentage] %>%)</span>
@@ -61,7 +61,7 @@
     </div>
     <div class="card stat-card stat-card-accent p-3 md:p-4 text-center animate-in animate-in-5">
       <div class="text-xs uppercase tracking-wider text-gray-500 mb-1">最大連續虧損天</div>
-      <div class="metric-value text-red-500" style="font-family: var(--font-display); font-size: 2rem;"><%= @statistics[:max_consecutive_loss_days] %></div>
+      <div class="metric-value text-loss" style="font-family: var(--font-display); font-size: 2rem;"><%= @statistics[:max_consecutive_loss_days] %></div>
     </div>
   </div>
 
@@ -79,7 +79,7 @@
       <h2 class="text-lg font-semibold mb-4">累積損益走勢</h2>
       <% chart_values = accumulated_pnl_data.values.compact %>
       <%= area_chart accumulated_pnl_data,
-        colors: ["#C8850F"],
+        colors: ["#EA580C"],
         xtitle: "日期",
         ytitle: "累積損益",
         ymin: chart_values.any? ? chart_values.min : 0,
@@ -90,10 +90,10 @@
           elements: { line: { borderWidth: 2.5 } },
           plugins: {
             tooltip: {
-              backgroundColor: '#1A1714',
-              titleColor: '#E8DFD0',
-              bodyColor: '#E8E4DD',
-              borderColor: '#2A2520',
+              backgroundColor: '#1E293B',
+              titleColor: '#E2E8F0',
+              bodyColor: '#F1F5F9',
+              borderColor: '#334155',
               borderWidth: 1,
               cornerRadius: 8,
               padding: 12,
@@ -114,16 +114,16 @@
   <div class="card card-chart p-6 mt-4 md:mt-6 animate-in animate-in-6">
     <h2 class="text-lg font-semibold mb-4">每日損益</h2>
     <%= column_chart [
-      { name: "獲利", data: positive_data, color: "#C8850F" },
-      { name: "虧損", data: negative_data, color: "#D43B3B" }
+      { name: "獲利", data: positive_data, color: "#DC2626" },
+      { name: "虧損", data: negative_data, color: "#16A34A" }
     ], xtitle: "日期", ytitle: "損益", stacked: true,
     library: {
       plugins: {
         tooltip: {
-          backgroundColor: '#1A1714',
-          titleColor: '#E8DFD0',
-          bodyColor: '#E8E4DD',
-          borderColor: '#2A2520',
+          backgroundColor: '#1E293B',
+          titleColor: '#E2E8F0',
+          bodyColor: '#F1F5F9',
+          borderColor: '#334155',
           borderWidth: 1,
           cornerRadius: 8,
           padding: 12,
