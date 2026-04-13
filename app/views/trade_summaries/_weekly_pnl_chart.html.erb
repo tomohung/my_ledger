@@ -10,22 +10,22 @@
   {
     name: "獲利 > 風險",
     data: profit_large_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
-    color: "#DC2626"
+    color: "#1E40AF"
   },
   {
     name: "獲利 ≤ 風險",
     data: profit_small_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
-    color: "#F87171"
+    color: "#93C5FD"
   },
   {
     name: "虧損 ≤ 風險",
     data: loss_small_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
-    color: "#86EFAC"
+    color: "#FCA5A5"
   },
   {
     name: "虧損 > 風險",
     data: loss_large_risk.map { |log| [log.trade_date.wday, log.net_pnl] },
-    color: "#16A34A"
+    color: "#DC2626"
   }
 ],
     xtitle: "星期",

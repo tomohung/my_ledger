@@ -7,8 +7,8 @@
     <% negative_data = weekday_names.map.with_index { |name, i| [name, pnl_by_weekday.dig(i, :net_pnl)&.negative? ? pnl_by_weekday[i][:net_pnl] : 0] } %>
 
     <%= column_chart [
-      { name: "獲利", data: positive_data, color: "#DC2626" },
-      { name: "虧損", data: negative_data, color: "#16A34A" }
+      { name: "獲利", data: positive_data, color: "#1E40AF" },
+      { name: "虧損", data: negative_data, color: "#DC2626" }
     ],
       xtitle: "星期",
       ytitle: "淨損益",

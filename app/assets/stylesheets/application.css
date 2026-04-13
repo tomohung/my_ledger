@@ -26,11 +26,11 @@
   --color-accent-light: #EFF6FF;
   --color-accent-glow: rgba(30, 64, 175, 0.12);
 
-  /* 台灣慣例：紅漲綠跌 */
-  --color-profit: #DC2626;
-  --color-profit-bg: rgba(220, 38, 38, 0.06);
-  --color-loss: #16A34A;
-  --color-loss-bg: rgba(22, 163, 74, 0.06);
+  /* 記帳慣例：獲利黑字(深藍) / 虧損紅字(赤字) */
+  --color-profit: #1E40AF;
+  --color-profit-bg: rgba(30, 64, 175, 0.06);
+  --color-loss: #DC2626;
+  --color-loss-bg: rgba(220, 38, 38, 0.06);
   --color-warning: #D97706;
   --color-warning-bg: rgba(217, 119, 6, 0.08);
 
@@ -48,8 +48,8 @@
   --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
   --shadow-card-hover: 0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
   --shadow-nav-dropdown: 0 12px 36px rgba(0, 0, 0, 0.2);
-  --shadow-hero-glow-profit: 0 0 40px rgba(220, 38, 38, 0.12), 0 0 16px rgba(220, 38, 38, 0.06);
-  --shadow-hero-glow-loss: 0 0 40px rgba(22, 163, 74, 0.12), 0 0 16px rgba(22, 163, 74, 0.06);
+  --shadow-hero-glow-profit: 0 0 40px rgba(30, 64, 175, 0.12), 0 0 16px rgba(30, 64, 175, 0.06);
+  --shadow-hero-glow-loss: 0 0 40px rgba(220, 38, 38, 0.12), 0 0 16px rgba(220, 38, 38, 0.06);
 }
 
 /* ── Semantic color utilities ─────────────────────────── */
@@ -209,14 +209,14 @@ h2.card-title,
 }
 
 .hero-pnl-profit {
-  background: linear-gradient(135deg, #FEF2F2 0%, #FFFBEB 30%, var(--color-surface) 60%, #FFF1F2 100%);
-  border-color: rgba(220, 38, 38, 0.2);
+  background: linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 30%, var(--color-surface) 60%, #EFF6FF 100%);
+  border-color: rgba(30, 64, 175, 0.2);
   box-shadow: var(--shadow-hero-glow-profit);
 }
 
 .hero-pnl-loss {
-  background: linear-gradient(135deg, #F0FDF4 0%, var(--color-surface) 50%, #ECFDF5 100%);
-  border-color: rgba(22, 163, 74, 0.15);
+  background: linear-gradient(135deg, #FEF2F2 0%, var(--color-surface) 50%, #FFF1F2 100%);
+  border-color: rgba(220, 38, 38, 0.15);
   box-shadow: var(--shadow-hero-glow-loss);
 }
 
@@ -326,14 +326,14 @@ h2.card-title,
   border-color: var(--color-text-tertiary);
 }
 
-/* Success: red (profit color in Taiwan) */
+/* Success: same as primary (profit = accent blue in this palette) */
 .btn-success {
   background-color: var(--color-profit);
   color: #FFFFFF;
 }
 .btn-success:hover {
-  background-color: #B91C1C;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 2px 8px var(--color-accent-glow);
 }
 
 /* Danger: red for destructive actions */

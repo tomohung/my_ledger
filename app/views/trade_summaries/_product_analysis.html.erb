@@ -6,8 +6,8 @@
     <% negative_data = pnl_by_product.select { |_, v| v[:net_pnl] < 0 }.transform_values { |v| v[:net_pnl] } %>
 
     <%= column_chart [
-      { name: "獲利", data: positive_data, color: "#DC2626" },
-      { name: "虧損", data: negative_data, color: "#16A34A" }
+      { name: "獲利", data: positive_data, color: "#1E40AF" },
+      { name: "虧損", data: negative_data, color: "#DC2626" }
     ],
       xtitle: "商品",
       ytitle: "淨損益",
