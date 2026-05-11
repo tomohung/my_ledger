@@ -24,19 +24,19 @@
     <div class="card-divider"></div>
     <div class="flex justify-between">
       <span class="text-gray-600">每筆交易風險金額 (<%= current_user.risk_amount_percentage_per_trade %>%)</span>
-      <span class="metric-value-sm"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100, precision: 0) %></span>
+      <span class="metric-value-sm"><%= number_with_precision(@month_report.initial_capital * current_user.risk_amount_percentage_per_trade / 100, precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">每日風險金額 (<%= current_user.risk_amount_percentage_per_day %>%)</span>
-      <span class="metric-value-sm"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100, precision: 0) %></span>
+      <span class="metric-value-sm"><%= number_with_precision(@month_report.initial_capital * current_user.risk_amount_percentage_per_day / 100, precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">每週風險金額 (<%= current_user.risk_amount_percentage_per_week %>%)</span>
-      <span class="metric-value-sm"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_week / 100, precision: 0) %></span>
+      <span class="metric-value-sm"><%= number_with_precision(@month_report.initial_capital * current_user.risk_amount_percentage_per_week / 100, precision: 0) %></span>
     </div>
     <div class="flex justify-between">
       <span class="text-gray-600">每月風險金額 (<%= current_user.risk_amount_percentage_per_month %>%)</span>
-      <span class="metric-value-sm"><%= number_with_precision(@month_report.ending_capital * current_user.risk_amount_percentage_per_month / 100, precision: 0) %></span>
+      <span class="metric-value-sm"><%= number_with_precision(@month_report.initial_capital * current_user.risk_amount_percentage_per_month / 100, precision: 0) %></span>
     </div>
   </div>
 </div>

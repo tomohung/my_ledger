@@ -23,8 +23,8 @@
     </div>
     <div class="flex justify-between items-center">
       <% max_loss = @statistics[:max_loss] %>
-      <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
-      <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / risk_amount * 100).round %>
+      <% risk_amount = @month_report.initial_capital * current_user.risk_amount_percentage_per_trade / 100 %>
+      <% risk_percentage = @month_report.initial_capital.zero? ? 0 : (max_loss.abs.to_f / risk_amount * 100).round %>
       <span class="text-gray-700">當週單筆最大虧損: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
       <span class="font-medium <%=
         if risk_percentage >= 100
@@ -36,15 +36,15 @@
         end
       %>">
         <%= number_with_precision(max_loss, precision: 0) %>
-        <% if @month_report.ending_capital > 0 %>
+        <% if @month_report.initial_capital > 0 %>
           (<%= risk_percentage %>% of risk)
         <% end %>
       </span>
     </div>
     <div class="flex justify-between">
       <% total_net_pnl = @trade_logs.sum { |log| log.net_pnl.to_f } %>
-      <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_week / 100 %>
-      <% quota = @month_report.ending_capital.zero? ? 0 : (total_net_pnl < 0 ? risk_amount + total_net_pnl : risk_amount) %>
+      <% risk_amount = @month_report.initial_capital * current_user.risk_amount_percentage_per_week / 100 %>
+      <% quota = @month_report.initial_capital.zero? ? 0 : (total_net_pnl < 0 ? risk_amount + total_net_pnl : risk_amount) %>
       <span class="text-gray-700">本週淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
       <span class="font-medium <%=
         if total_net_pnl > 0
@@ -58,7 +58,7 @@
         end
       %>">
         <%= number_with_precision(total_net_pnl, precision: 0) %>
-        <% if total_net_pnl < 0 && @month_report.ending_capital > 0 %>
+        <% if total_net_pnl < 0 && @month_report.initial_capital > 0 %>
           (剩餘配額: <%= number_with_precision(quota, precision: 0) %>)
         <% end %>
       </span>

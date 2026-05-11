@@ -54,8 +54,8 @@
         </div>
         <div class="flex justify-between gap-2">
           <% total_net_pnl = @trade_logs.sum { |log| log.net_pnl.to_f } %>
-          <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_month / 100 %>
-          <% quota = @month_report.ending_capital.zero? ? 0 : (total_net_pnl < 0 ? risk_amount + total_net_pnl : risk_amount) %>
+          <% risk_amount = @month_report.initial_capital * current_user.risk_amount_percentage_per_month / 100 %>
+          <% quota = @month_report.initial_capital.zero? ? 0 : (total_net_pnl < 0 ? risk_amount + total_net_pnl : risk_amount) %>
           <span class="text-gray-700 text-sm">本月淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
           <span class="font-medium text-sm whitespace-nowrap <%=
             if total_net_pnl > 0
@@ -69,7 +69,7 @@
             end
           %>">
             <%= number_with_precision(total_net_pnl, precision: 0) %>
-            <% if total_net_pnl < 0 && @month_report.ending_capital > 0 %>
+            <% if total_net_pnl < 0 && @month_report.initial_capital > 0 %>
               (剩餘: <%= number_with_precision(quota, precision: 0) %>)
             <% end %>
           </span>

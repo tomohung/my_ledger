@@ -1,5 +1,5 @@
 <% active_logs = @trade_logs.select { |log| log.net_pnl.present? } %>
-<% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
+<% risk_amount = @month_report.initial_capital * current_user.risk_amount_percentage_per_trade / 100 %>
 
 <% profit_large_risk = active_logs.select { |log| log.net_pnl >= 0 && log.net_pnl > risk_amount } %>
 <% profit_small_risk = active_logs.select { |log| log.net_pnl >= 0 && log.net_pnl <= risk_amount } %>

@@ -53,9 +53,9 @@
         </div>
         <div class="flex justify-between items-center gap-2">
           <% max_loss = @statistics[:max_loss] %>
-          <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_trade / 100 %>
+          <% risk_amount = @month_report.initial_capital * current_user.risk_amount_percentage_per_trade / 100 %>
           <span class="text-gray-700 text-sm">當日單筆最大虧損: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
-          <% risk_percentage = @month_report.ending_capital.zero? ? 0 : (max_loss.abs.to_f / risk_amount * 100).round %>
+          <% risk_percentage = @month_report.initial_capital.zero? ? 0 : (max_loss.abs.to_f / risk_amount * 100).round %>
           <span class="font-medium text-sm whitespace-nowrap <%=
             if risk_percentage >= 100
               'risk-danger'
@@ -74,9 +74,9 @@
 
         <div class="flex justify-between items-center gap-2">
           <% total_net_pnl = @statistics[:total_net_profit] %>
-          <% risk_amount = @month_report.ending_capital * current_user.risk_amount_percentage_per_day / 100 %>
+          <% risk_amount = @month_report.initial_capital * current_user.risk_amount_percentage_per_day / 100 %>
           <span class="text-gray-700 text-sm">當日淨損益: (< <%= number_with_precision(risk_amount, precision: 0) %>)</span>
-          <% quota = @month_report.ending_capital.zero? ? 0 : (total_net_pnl < 0 ? risk_amount + total_net_pnl : risk_amount) %>
+          <% quota = @month_report.initial_capital.zero? ? 0 : (total_net_pnl < 0 ? risk_amount + total_net_pnl : risk_amount) %>
           <span class="font-medium text-sm whitespace-nowrap <%=
             if total_net_pnl < 0 && quota <= 0
               'risk-danger'
