@@ -19,7 +19,15 @@
     </div>
     <div class="flex justify-between items-baseline">
       <span class="text-gray-600">期末資金</span>
-      <span class="metric-value" style="font-family: var(--font-display); font-size: 1.75rem;"><%= number_with_precision(@month_report.ending_capital, precision: 0, delimiter: ',') %></span>
+      <span class="metric-value flex items-baseline gap-2" style="font-family: var(--font-display); font-size: 1.75rem;">
+        <%= number_with_precision(@month_report.ending_capital, precision: 0, delimiter: ',') %>
+        <% if @month_report.initial_capital.to_f > 0 %>
+          <% performance_pct = @month_report.total_net_pnl / @month_report.initial_capital * 100 %>
+          <span class="text-base <%= performance_pct >= 0 ? 'text-green-600' : 'text-red-600' %>">
+            (<%= performance_pct >= 0 ? '+' : '' %><%= number_with_precision(performance_pct, precision: 2) %>%)
+          </span>
+        <% end %>
+      </span>
     </div>
     <div class="card-divider"></div>
     <div class="flex justify-between">
