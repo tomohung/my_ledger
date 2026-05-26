@@ -8,8 +8,10 @@
 <% daily_pnl = @trade_logs.group_by(&:trade_date).transform_values { |logs| logs.sum { |log| log.net_pnl.to_f } } %>
 
 <%# Create a hash with all dates in the month, defaulting to 0 for dates with no trades %>
+<% weekday_names = %w[日 一 二 三 四 五 六] %>
 <% monthly_data = all_dates.each_with_object({}) do |date, hash|
-  hash[date.strftime('%m-%d')] = daily_pnl[date] || 0
+  label = "#{date.strftime('%m-%d')} (#{weekday_names[date.wday]})"
+  hash[label] = daily_pnl[date] || 0
 end %>
 
 <%# Split data into positive and negative, ensuring all dates are present in both datasets %>
