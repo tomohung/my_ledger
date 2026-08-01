@@ -41,7 +41,7 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 gem "csv", "~> 3.3.6"
-gem "pagy", "~> 43.5"
+gem "pagy", "~> 43.6"
 
 gem "tailwindcss-rails"
 gem "chartkick"
