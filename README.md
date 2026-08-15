@@ -8,12 +8,6 @@ weekday, product and risk multiple.
 
 Built and run for myself. It has been in daily use since April 2025.
 
-<!--
-  TODO: add a dashboard screenshot here — it is the single most useful thing
-  this README is missing. Suggested: docs/dashboard.png, then
-  ![Dashboard](docs/dashboard.png)
--->
-
 ## What it does
 
 **Import.** `ParseTradeReport` reads broker CSV exports with Chinese-language column
