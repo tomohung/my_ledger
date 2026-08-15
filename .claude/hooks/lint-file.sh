@@ -7,6 +7,6 @@ if [ -z "$CLAUDE_FILE_PATH" ]; then
 fi
 
 if echo "$CLAUDE_FILE_PATH" | grep -qE '\.rb$'; then
-  cd /Users/tomohung/Projects/my_ledger
+  cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}" || exit 0
   bundle exec standardrb "$CLAUDE_FILE_PATH" 2>&1
 fi

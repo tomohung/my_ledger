@@ -45,6 +45,6 @@ This is a Rails 8 trading journal application for tracking trades and analyzing 
 - Aggregate failures enabled by default
 
 **Deployment**
-- Kamal to Docker on `ledger.tomohung.com`
+- Kamal to Docker on a single host; hostname/IP/registry come from env vars (see `config/deploy.yml`)
 - SQLite3 as the primary database (persistent volume in production)
 - Solid Queue / Cache / Cable for background jobs, caching, WebSockets

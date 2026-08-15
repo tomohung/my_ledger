@@ -10,7 +10,7 @@ if [ -z "$COMMAND" ] || ! echo "$COMMAND" | grep -q 'git commit'; then
   exit 0
 fi
 
-cd /Users/tomohung/Projects/my_ledger
+cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}" || exit 0
 
 # Ensure Ruby/bundler are available
 export PATH="$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH"
