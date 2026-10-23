@@ -9,7 +9,7 @@ bin/setup              # Initial setup (installs deps, prepares DB)
 bin/dev                # Start dev server (Rails + Tailwind CSS watcher)
 bundle exec rspec      # Run full test suite
 bundle exec rspec spec/path/to/file_spec.rb  # Run a single test file
-bin/rubocop            # Ruby linting (StandardRB / Omakase style)
+bundle exec standardrb # Ruby linting (StandardRB)
 bin/brakeman --no-pager  # Security vulnerability scan
 bundle exec annotaterb   # Annotate models with schema info
 ```

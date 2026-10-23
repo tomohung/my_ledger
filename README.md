@@ -80,7 +80,7 @@ bin/dev       # Rails server + Tailwind watcher
 ```bash
 bundle exec rspec                    # full suite
 bundle exec rspec spec/models        # a subset
-bin/rubocop                          # StandardRB
+bundle exec standardrb               # lint (StandardRB)
 bin/brakeman --no-pager              # security scan
 ```
 

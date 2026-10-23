@@ -10,7 +10,7 @@
           {
             "type": "command",
             "command": ".claude/hooks/lint-file.sh",
-            "statusMessage": "Running rubocop lint..."
+            "statusMessage": "Running standardrb lint..."
           }
         ]
       }
