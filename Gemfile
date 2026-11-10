@@ -55,7 +55,7 @@ group :development, :test do
 
   gem "standard", require: false
   gem "annotaterb", require: false
-  gem "rspec-rails", "~> 8.0"
+  gem "rspec-rails", "~> 8.1"
   gem "factory_bot_rails", "~> 6.5"
 end
 
